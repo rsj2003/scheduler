@@ -1,0 +1,25 @@
+*{margin: 0; padding: 0; box-sizing: border-box; color: inherit; text-decoration: none; font-family: 'Noto Sans KR';}
+html{color: #333;}
+img{width: 100%; height: 100%;}
+
+.none{display: none!important;}
+.flex{display: flex;}
+
+.po-rel{position: relative;}
+.po-abs{position: absolute;}
+
+.pointer{cursor: pointer;}
+
+.bottom-10{padding-bottom: 10px;}
+.bottom-20{padding-bottom: 20px;}
+.bottom-30{padding-bottom: 30px;}
+.bottom-40{padding-bottom: 40px;}
+.bottom-50{padding-bottom: 50px;}
+.bottom-60{padding-bottom: 60px;}
+.bottom-70{padding-bottom: 70px;}
+.bottom-80{padding-bottom: 80px;}
+.bottom-90{padding-bottom: 90px;}
+.bottom-100{padding-bottom: 100px;}
+
+input{outline: none;}
+button, input[type="button"], input[type="submit"]{cursor: pointer;}

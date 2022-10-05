@@ -11,7 +11,9 @@ $register.addEventListener("click", e => {
 })
 
 const app = e => {
-  $wrap.classList.add("page-loaded");
+  setTimeout(e => {
+    $wrap.classList.add("page-loaded");
+  }, 1)
 }
 
 app();

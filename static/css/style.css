@@ -1,44 +1,58 @@
-/* #cff0da */
-/* #88dba3 */
-/* #dadbdb */
-/* #dadbdb */
+/* #B1D7B4 */
+/* #7FB77E */
+/* #F7F6DC */
+/* #FFC090 */
+/* #D6D6D6 */
 .ac-if{width: 0px; height: 0px; border: 0px; overflow: hidden;}
 .mobile{display: none;}
 #wrap{width: 100%; height: 100%; left: 0; top: 0; position: absolute;}
 
 #background, #form-background{width: 100%; height: 100%; position: absolute; left: 0; top: 0;}
-#background{background: #dadbdb;}
+#background{background: #D6D6D6;}
 #form-background{background: #fff;}
 #background .grid, #form-background .grid{position: absolute; left: 0; top: 0; height: 100%; box-shadow: 0 0 20px #3333;}
 #background .grid{width: calc(50% - 105px);}
 #form-background .grid{width: calc(50% - 100px);}
 .page-loaded #background .grid, .page-loaded #form-background .grid{transition: .8s;}
-#background .grid{background: #88dba3;}
-#form-background .grid{width: calc(50% - 100px); background: #cff0da; overflow: hidden; z-index: 5;}
+#background .grid{background: #7FB77E;}
+#form-background .grid{width: calc(50% - 100px); background: #B1D7B4; overflow: hidden; z-index: 5;}
 .register #background .grid{width: calc(50% + 105px);}
 .register #form-background .grid{width: calc(50% + 100px);}
 
-.change-button{font-size: 24px; padding: 6px 20px; border: 1px solid; border-radius: 40px; position: absolute; top: 55%; cursor: pointer; user-select: none; z-index: 15;}
-.page-loaded .change-button{transition: background .25s, color .25s, left .8s, right .8s;}
-#register{border-color: #fff; color: #fff; left: calc(calc(50% - 100px) / 2);; transform: translateX(-50%);}
-#register:hover{background: #fff; color: #cff0da;}
-#login{border-color: #cff0da; color: #cff0da; right: calc(calc(-50% + 100px) / 2); transform: translateX(50%);}
-#login:hover{background: #cff0da; color: #fff;}
-.register #register{left: calc(calc(-50% + 100px) / 2);}
-.register #login{right: calc(calc(50% - 100px) / 2);}
+.change-button-group{position: absolute; bottom: 70px; z-index: 15; display: flex; flex-direction: column; align-items: center; gap: 20px; height: calc(100% - 70px); justify-content: flex-end;}
+.change-button-group p{font-size: 50px; writing-mode: vertical-rl; transform: rotate(180deg); font-weight: bold;}
+.change-button{font-size: 24px; padding: 6px 20px; border: 1px solid; border-radius: 40px; cursor: pointer; user-select: none; display: inline-block;}
+.page-loaded .change-button{transition: .25s;}
+.page-loaded .change-button-group{transition: .8s;}
+#register-group{left: calc(calc(50% - 100px) / 2); transform: translateX(-50%); color: #fff;}
+#register{border-color: #fff; color: #fff;}
+#register:hover{background: #fff; color: #B1D7B4;}
+#login-group{right: calc(calc(-50% + 100px) / 2); transform: translateX(50%); color: #B1D7B4;}
+#login{border-color: #B1D7B4; color: #B1D7B4;}
+#login:hover{background: #B1D7B4; color: #fff;}
+.register #register-group{left: calc(calc(-50% + 100px) / 2);}
+.register #login-group{right: calc(calc(50% - 100px) / 2);}
 
-#input-wrap{width: 740px; height: 450px; overflow: hidden; position: absolute; border-radius: 20px 0 0 20px; box-shadow: 0 0 40px #3338; left: 50%; top: 50%; transform: translate(-50%, -50%);}
-#input-wrap form{position: absolute; left: 260px; width: 480px; height: 100%; padding: 50px 90px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;}
-.page-loaded #input-wrap form{transition: .8s;}
-.register #input-wrap form{left: 0;}
+#input-wrap{width: 740px; height: 450px; overflow: hidden; position: absolute; border-radius: 20px 0 0 20px; box-shadow: 0 0 40px #3338; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #fff;}
+#input-wrap #form-group, #input-wrap #register-form{position: absolute; left: 260px; width: 480px; height: 100%;}
+#input-wrap form{position: absolute; left: 0; width: 100%; height: 100%; padding: 50px 90px; display: flex; flex-direction: column; justify-content: space-between; align-items: center;}
+#input-wrap #form-group, .page-loaded #input-wrap form{transition: .8s;}
+.register #input-wrap #form-group, .register #input-wrap #register-form{left: 0;}
 #input-wrap h2{text-align: center; font-size: 40px;}
 #input-wrap .flex{flex-direction: column; align-items: center;}
 #input-wrap .input-group{display: flex; flex-direction: column; align-items: flex-start; width: 100%; padding-top: 12px; font-size: 18px;}
 #input-wrap input{font-size: 20px; padding: 3px 16px; border-radius: 40px; border: 1px solid #aaa; width: 100%; margin-top: 5px;}
-#input-wrap input[type="submit"]{width: 200px; border-color: #88dba3; background: #88dba3; color: #fff;}
+#input-wrap input[type="text"], #input-wrap input[type="password"], #input-wrap input[type="email"]{box-shadow: inset 2px 2px 1px #aaa8;}
+#input-wrap input[type="submit"]{width: 200px; border-color: #7FB77E; background: #7FB77E; color: #fff;}
 .page-loaded #input-wrap input[type="submit"]{transition: .25s;}
 #input-wrap .input-other{font-size: 14px; padding-top: 5px; display: flex; width: 100%; justify-content: space-between;}
-#login-form input[type="submit"]:hover{background: #fff; color: #88dba3;}
+#login-form input[type="submit"]:hover{background: #fff; color: #7FB77E;}
 #register-form{color: #fff;}
-#register-form input[type="submit"]{background: #fff; color: #cff0da; border-color: #fff;}
-#register-form input[type="submit"]:hover{background: #cff0da; color: #fff;}
+#register-form input[type="submit"]{background: #fff; color: #B1D7B4; border-color: #fff;}
+#register-form input[type="submit"]:hover{background: #B1D7B4; color: #fff;}
+
+#form-group>*{background: #fff;}
+/* #form-group>*::after{position: absolute; content: ""; display: block; background-color: #fff; right: 0; bottom: 0; width: 150px; height: 150px; background: #6da; transform-style: preserve-3d; transform: rotateX();} */
+.page-loaded #form-group>*::after{transition: .8s;}
+#form-group .to-back{border-radius: 0 0 150px 0; box-shadow: 1px 1px 15px #3333; overflow: hidden;}
+#form-group .to-back::after{width: 150px; height: 150px; box-shadow: -1px -1px 15px #3333;}

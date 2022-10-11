@@ -10,6 +10,8 @@ const render = (re, html, data = {}) => {
     data.user = req.session.user;
   }
 
+  html = `${html}.html`;
+
   return res.render(html, data);
 }
 
@@ -22,22 +24,41 @@ const toActionPage = (res, page) => {
   }));
 }
 
+const returnPage = (res, alert = "") => {
+  return res.redirect(url.format({
+    pathname: "/alert",
+    query: {
+      alert
+    }
+  }));
+}
+
 router.get("/", function(req, res, next) {
   if(req.session.user) {
-    render({res, req}, "home.html");
+    render({res, req}, "index");
   }else {
-    render({res, req}, "index.html");
+    render({res, req}, "login");
   }
 })
 
 router.get("/action", function(req, res, next) {
   const page = req.query.page;
-  render({res, req}, "action.html", {page});
+  render({res, req}, "action", {page});
+})
+
+router.get("/alert", function(req, res, next) {
+  const alert = req.query.alert;
+  render({res, req}, "alert", {alert});
 })
 
 router.post("/login-action", function(req, res, next) {
-  req.session.user = {id: req.body.id};
-  toActionPage(res, "/");
+  const param = req.body;
+  if(param.id.trim() == "") {
+    returnPage(res, "id를 입력해주세요.");
+  }else {
+    req.session.user = {id: param.id};
+    toActionPage(res, "/");
+  }
 })
 
 router.post("/logout-action", function(req, res, next) {

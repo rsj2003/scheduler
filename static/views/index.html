@@ -4,17 +4,77 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>schedule</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <h1>home</h1>
-  <p>id: <%= user.id %></p>
-  <form id="logout-form" action="/logout-action" method="post" target="action-if">
-    <input type="submit" value="Logout">
-  </form>
+  <div id="wrap">
+    <div id="background">
+      <div class="grid"></div>
+    </div>
+    <div id="input-wrap">
+      <div id="form-background">
+        <div class="grid">
+          <form id="register-form">
+            <div class="flex">
+              <h2>Register</h2>
+              <span class="input-group">
+                <span>Id</span>
+                <input type="text" name="id">
+              </span>
+              <span class="input-group">
+                <span>Password</span>
+                <input type="password" name="password">
+              </span>
+              <span class="input-group">
+                <span>Email</span>
+                <input type="email" name="email">
+              </span>
+            </div>
+            <div>
+              <p class="alert"></p>
+              <input type="submit" value="register">
+            </div>
+          </form>
+          <div id="today-month"></div>
+        </div>
+      </div>
+      <div id="register-group" class="change-button-group">
+        <p>Team<br>Scheduling</p>
+        <div id="register" class="change-button">Register</div>
+      </div>
+      <div id="login-group" class="change-button-group">
+        <p>Welcom<br>to visit</p>
+        <div id="login" class="change-button">Login</div>
+      </div>
+      <div id="form-group">
+        <form id="login-form">
+          <div class="flex">
+            <h2>Login</h2>
+            <span class="input-group">
+              <span>Id</span>
+              <input type="text" name="id">
+            </span>
+            <span class="input-group">
+              <span>Password</span>
+              <input type="password" name="password">
+            </span>
+            <span class="input-other">
+              <a href="#" class="mobile">Register</a>
+              <a href="#" class="forgot-password">forgot password?</a>
+            </span>
+          </div>
+          <div>
+            <p class="alert"></p>
+            <input type="submit" value="Login">
+          </div>
+        </form>
+      </div>
+      <div id="today-date"></div>
+    </div>
+  </div>
   <iframe id="ac-if" name="action-if" class="ac-if"></iframe>
-  <script src="index.js"></script>
+  <script src="/js/login.js"></script>
 </body>
 </html>

@@ -51,5 +51,5 @@ io.sockets.on("connection", function(socket) {
 })
 
 server.listen(port, function() {
-  console.log("server stating..");
+  console.log("server starting..");
 })

@@ -1,5 +1,6 @@
 const express = require("express");
 const url = require("url");
+const concat = require("concat-stream");
 const router = express.Router();
 
 const render = (re, html, data = {}) => {
@@ -15,55 +16,65 @@ const render = (re, html, data = {}) => {
   return res.render(html, data);
 }
 
-const toActionPage = (res, page) => {
-  return res.redirect(url.format({
-    pathname: "/action",
-    query: {
-      page
-    }
-  }));
-}
+router.get("/", function(req, res) {
+  render({res, req}, "index");
+})
 
-const returnPage = (res, alert = "") => {
-  return res.redirect(url.format({
-    pathname: "/alert",
-    query: {
-      alert
-    }
-  }));
-}
+router.post("/register-action", function(req, res, next) {
+  let body = [];
 
-router.get("/", function(req, res, next) {
-  if(req.session.user) {
-    render({res, req}, "index");
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.id = param.id.trim();
+
+  if(param.id == "") {
+    res.send({alert: "id를 입력해주세요."});
   }else {
-    render({res, req}, "login");
+    res.send({state: "SUCCESS", id: param.id});
   }
 })
 
-router.get("/action", function(req, res, next) {
-  const page = req.query.page;
-  render({res, req}, "action", {page});
-})
-
-router.get("/alert", function(req, res, next) {
-  const alert = req.query.alert;
-  render({res, req}, "alert", {alert});
-})
-
 router.post("/login-action", function(req, res, next) {
+  let body = [];
+
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+
+    next();
+  })
+}, function(req, res) {
   const param = req.body;
+  
   if(param.id.trim() == "") {
-    returnPage(res, "id를 입력해주세요.");
+    res.send({alert: "id를 입력해주세요."});
   }else {
     req.session.user = {id: param.id};
-    toActionPage(res, "/");
+    res.send({state: "SUCCESS"});
   }
 })
 
 router.post("/logout-action", function(req, res, next) {
+  let body = [];
+
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+
+    next();
+  })
+}, function(req, res) {
   req.session.user = null;
-  toActionPage(res, "/");
+  res.send({state: "SUCCESS"});
 })
 
 module.exports = router;

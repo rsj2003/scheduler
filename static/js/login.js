@@ -7,6 +7,7 @@ const $alertPop = document.querySelectorAll(".alert-pop");
 const $loginForm = document.querySelector("#login-form");
 const $registerForm = document.querySelector("#register-form");
 const $backgroundGrid = document.querySelector("#background .grid");
+const $backgroundGridBackground = document.querySelector("#background .grid-background");
 const $formBackgroundGrid = document.querySelector("#form-background .grid");
 const $registerGroup = document.querySelector("#register-group");
 const $loginGroup = document.querySelector("#login-group");
@@ -14,37 +15,68 @@ const $formGroup = document.querySelector("#form-group");
 const $inputWrap = document.querySelector("#input-wrap");
 const $todayMonth = document.querySelector("#today-month");
 const $todayDate = document.querySelector("#today-date");
+const $logout = document.querySelector("#logout");
 
 const loginToMain = e => {
-  const datetime = new Date();
-
-  $backgroundGrid.style.width = "300px";
-  $registerForm.style.display = "none";
-  $loginGroup.style.display = "none";
-  $registerGroup.style.left = "-75px";
-  $formGroup.style.left = "760px";
-  $inputWrap.style.transition = ".8s";
   $todayMonth.style.display = "block";
+  $todayMonth.style.fontSize = "125px";
+  $todayMonth.style.left = "130%";
   $todayDate.style.display = "block";
+  $todayDate.style.fontSize = "175px";
+  $todayDate.style.right = "80%";
 
-  $todayMonth.innerHTML = datetime.getMonth() + 1;
-  $todayDate.innerHTML = datetime.getDate();
-  
   setTimeout(e => {
-    $registerGroup.style.display = "none";
-    $formGroup.style.display = "none";
-    $inputWrap.style.transform = "translate(-50%, -50%) rotate(90deg)";
-    $inputWrap.style.width = "580px";
-    $formBackgroundGrid.style.width = "210px";
+    $todayMonth.style.transition = ".8s";
+    $todayDate.style.transition = ".8s";
+  }, 5);
+
+  setTimeout(e => {
+    $backgroundGrid.style.width = "300px";
+    $backgroundGrid.style.boxShadow = "0 0 20px #0000";
+    $backgroundGridBackground.style.width = "calc(100% - 300px)";
+    $backgroundGridBackground.style.left = "300px";
+    $registerForm.style.display = "none";
+    $loginGroup.style.display = "none";
+    $registerGroup.style.left = "-75px";
+    $registerGroup.style.transition = ".8s";
+    $formGroup.style.left = "760px";
+    $formGroup.style.transition = ".8s";
+    $inputWrap.style.transition = ".8s";
+    $todayDate.style.right = "11%";
+    $todayMonth.style.left = "50%";
+    $formBackgroundGrid.style.width = `${$formBackgroundGrid.clientWidth}px`;
     
     setTimeout(e => {
+      $formBackgroundGrid.style.transition = ".8s";
+    }, 5);
+  
+    setTimeout(e => {
+      $backgroundGridBackground.style.zIndex = "2";
+      // $backgroundGridBackground.style.width = "100%";
+      $registerGroup.style.display = "none";
+      $formGroup.style.display = "none";
+      $inputWrap.style.transform = "translate(-50%, -50%) rotate(90deg)";
+      // $inputWrap.style.width = "580px";
+      // $formBackgroundGrid.style.width = "210px";
       $inputWrap.style.width = "220px";
       $inputWrap.style.height = "180px";
       $inputWrap.style.left = "150px";
       $inputWrap.style.top = "160px";
+      $inputWrap.style.boxShadow = "0 0 20px #3338";
       $formBackgroundGrid.style.width = "90px";
+      $todayMonth.style.fontSize = "50px";
+      $todayDate.style.fontSize = "70px";
+      $todayDate.style.right = "0";
+      
+      setTimeout(e => {
+        $backgroundGridBackground.style.left = "0";
+        $backgroundGridBackground.style.width = "300px";
+        $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
+        $wrap.classList.add("main");
+      }, 800)
     }, 800)
-  }, 800)
+  }, 10)
+
 }
 
 const resetAlert = e => {
@@ -130,7 +162,26 @@ $loginForm.addEventListener("submit", e => {
   })
 })
 
+$logout.addEventListener("click", e => {
+  fetch("/logout-action", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") window.top.location.href = "/";
+    else {
+      console.error(res.err);
+    }
+  })
+})
+
 const app = e => {
+  const datetime = new Date();
+  
+  $todayMonth.innerHTML = datetime.getMonth() + 1;
+  $todayDate.innerHTML = datetime.getDate();
+
   setTimeout(e => {
     $wrap.classList.add("page-loaded");
   }, 1)

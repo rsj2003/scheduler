@@ -3,7 +3,7 @@ const url = require("url");
 const concat = require("concat-stream");
 const router = express.Router();
 
-const render = (re, html, data = {}) => {
+const render = (re, html, data = {user: false}) => {
   const req = re.req;
   const res = re.res;
 

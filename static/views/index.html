@@ -4,14 +4,24 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/img/icon.png" type="image/x-icon">
   <title>schedule</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <div id="wrap">
+  <div id="wrap" class="<% if(user) { %>main<% } %>">
     <div id="background">
-      <div class="grid"></div>
+      <div class="grid">
+      </div>
+      <div id="side">
+        <div id="user-data">
+          <div id="id"></div>
+          <div id="name"></div>
+          <button id="logout">logout</button>
+        </div>
+      </div>
+      <div class="grid-background"></div>
     </div>
     <div id="input-wrap">
       <div id="form-background">

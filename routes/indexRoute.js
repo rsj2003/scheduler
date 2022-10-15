@@ -57,7 +57,7 @@ router.post("/login-action", function(req, res, next) {
   if(param.id.trim() == "") {
     res.send({alert: "id를 입력해주세요."});
   }else {
-    req.session.user = {id: param.id};
+    req.session.user = {id: param.id, email: `${param.id}@mail.com`};
     res.send({state: "SUCCESS"});
   }
 })

@@ -16,6 +16,8 @@ const $inputWrap = document.querySelector("#input-wrap");
 const $todayMonth = document.querySelector("#today-month");
 const $todayDate = document.querySelector("#today-date");
 const $logout = document.querySelector("#logout");
+const today = new Date();
+const $date = document.querySelector("#date");
 
 const loginToMain = e => {
   $todayMonth.style.display = "block";
@@ -176,15 +178,35 @@ $logout.addEventListener("click", e => {
   })
 })
 
+const setCalender = (year, month, date) => {
+  const thisMonth = new Date(year, month + 1, 0);
+
+  for(let i = 0; i < 6; i++) {
+    const $calenderLine = document.createElement("div");
+    $calenderLine.classList.add("calender-line");
+
+    for(let j = 0; j < 7; j++) {
+      const $calenderDate = document.createElement("div");
+      $calenderDate.classList.add("calender-date");
+
+      $calenderDate.innerHTML = `<p>${1 + j + i * 7}</p>`;
+
+      $calenderLine.append($calenderDate);
+    }
+
+    $date.append($calenderLine);
+  }
+}
+
 const app = e => {
-  const datetime = new Date();
-  
-  $todayMonth.innerHTML = datetime.getMonth() + 1;
-  $todayDate.innerHTML = datetime.getDate();
+  $todayMonth.innerHTML = today.getMonth() + 1;
+  $todayDate.innerHTML = today.getDate();
 
   setTimeout(e => {
     $wrap.classList.add("page-loaded");
   }, 1)
+
+  setCalender(today.getFullYear(), today.getMonth() + 1, today.getDate());
 }
 
 app();

@@ -16,8 +16,17 @@ const $inputWrap = document.querySelector("#input-wrap");
 const $todayMonth = document.querySelector("#today-month");
 const $todayDate = document.querySelector("#today-date");
 const $logout = document.querySelector("#logout");
-const today = new Date();
 const $date = document.querySelector("#date");
+const $calender = document.querySelector("#calender");
+const today = new Date();
+
+const logined = e => {
+  setTimeout(e => {
+    $calender.style.opacity = "1";
+    $calender.style.transform = "translateX(0)";
+    $calender.style.pointerEvents = "unset";
+  }, 1000);
+}
 
 const loginToMain = e => {
   $todayMonth.style.display = "block";
@@ -75,6 +84,8 @@ const loginToMain = e => {
         $backgroundGridBackground.style.width = "300px";
         $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
         $wrap.classList.add("main");
+
+        logined();
       }, 800)
     }, 800)
   }, 10)
@@ -178,24 +189,96 @@ $logout.addEventListener("click", e => {
   })
 })
 
-const setCalender = (year, month, date) => {
-  const thisMonth = new Date(year, month + 1, 0);
+const colIntoLine = ($line, date, classList = ["calender-date"]) => {
+  const $calenderDate = document.createElement("div");
 
-  for(let i = 0; i < 6; i++) {
+  for(let i = 0; i < classList.length; i++) {
+    $calenderDate.classList.add(classList[i]);
+  }
+
+  $calenderDate.innerHTML = `<p>${date}</p>`;
+  
+  $line.append($calenderDate);
+}
+
+const setCalender = (year, month, date) => {
+  const thisMonth = new Date(year, month, 0);
+  const prevMonth = new Date(year, month - 1, 0);
+  const prevDataMonth = new Date(year, month - 2, 0);
+  const nextMonth = new Date(year, month + 1, 0);
+  const nextDataMonth = new Date(year, month + 2, 0);
+  const monthList = [prevDataMonth, prevMonth, thisMonth, nextMonth, nextDataMonth];
+  let nowMonth = 1;
+  let nowDates = 0;
+  let thisMonthLine = 0;
+
+  
+
+  for(let i = 0; i < 6 * 3; i++) {
     const $calenderLine = document.createElement("div");
     $calenderLine.classList.add("calender-line");
 
-    for(let j = 0; j < 7; j++) {
-      const $calenderDate = document.createElement("div");
-      $calenderDate.classList.add("calender-date");
+    if(i == 0) {
+      for(let j = prevDataMonth.getDate() - prevDataMonth.getDay(); j <= prevDataMonth.getDate(); j++) {
+        colIntoLine($calenderLine, j, ["calender-date", "prev-data-date"]);
+      }
+      
+      for(let j = 0; j < 6 - prevDataMonth.getDay(); j++) {
+        colIntoLine($calenderLine, j + 1, ["calender-date", "prev-date"]);
 
-      $calenderDate.innerHTML = `<p>${1 + j + i * 7}</p>`;
+        nowDates++;
+      }
+    }else {
+      // if(nowMonth == 0 && nowDates < prevMonth.getDate()) {
+      let linePrevDates = 0;
+      let otherDates = monthList[nowMonth].getDate() > nowDates + 7 ? nowDates + 7 : monthList[nowMonth].getDate();
+      let classList = ["calender-date"];
 
-      $calenderLine.append($calenderDate);
+      if(nowMonth == 1) classList.push("prev-date");
+      if(nowMonth == 3) classList.push("next-date");
+
+      console.log(otherDates);
+      for(let j = nowDates; j < otherDates; j++) {
+        colIntoLine($calenderLine, j + 1, classList);
+
+        console.log(nowMonth, j + 1);
+  
+        nowDates++;
+        linePrevDates++;
+      }
+      // }else if(nowMonth == 1 && nowDates < thisMonth.getDate()) {
+
+      // }
+  
+      if(nowDates == monthList[nowMonth].getDate()) {
+        nowMonth++;
+        nowDates = 0;
+        if(nowMonth == 2) thisMonthLine = i;
+        
+        let classList = ["calender-date"];
+        
+        if(nowMonth == 1) classList.push("prev-date");
+        if(nowMonth == 3) classList.push("next-date");
+        
+        if(nowMonth < 5) {
+          for(let j = 0; j < 6 - monthList[nowMonth - 1].getDay(); j++) {
+            colIntoLine($calenderLine, j + 1, classList);
+  
+            nowDates++;
+          }
+        }else {
+          break;
+        }
+      }
     }
+
 
     $date.append($calenderLine);
   }
+
+  $date.style.height = `${91 * 6 * 3}px`;
+  $date.style.top = `-${91 * thisMonthLine}px`;
+  $date.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
 }
 
 const app = e => {
@@ -205,6 +288,10 @@ const app = e => {
   setTimeout(e => {
     $wrap.classList.add("page-loaded");
   }, 1)
+
+  if(user.id) {
+    logined();
+  }
 
   setCalender(today.getFullYear(), today.getMonth() + 1, today.getDate());
 }

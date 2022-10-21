@@ -20,6 +20,16 @@ router.get("/", function(req, res) {
   render({res, req}, "index");
 })
 
+router.post("/userData-action", function(req, res, next) {
+  let result = {};
+
+  if(req.session.user) {
+    result = req.session.user;
+  }
+
+  res.send({user: result});
+})
+
 router.post("/register-action", function(req, res, next) {
   let body = [];
 
@@ -58,7 +68,7 @@ router.post("/login-action", function(req, res, next) {
     res.send({alert: "id를 입력해주세요."});
   }else {
     req.session.user = {id: param.id, email: `${param.id}@mail.com`};
-    res.send({state: "SUCCESS"});
+    res.send({state: "SUCCESS", user: req.session.user});
   }
 })
 

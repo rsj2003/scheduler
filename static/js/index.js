@@ -50,7 +50,7 @@ const logined = e => {
 
       setTimeout(e => {
         $calendarSide.style.left = "0";
-      }, 300);
+      }, 250);
     }, 1000);
   }
 }

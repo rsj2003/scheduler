@@ -80,12 +80,13 @@
 #wrap.main #form-group{display: none;}
 
 /* #wrap.main #user-data{} */
-#wrap.main.page-loaded #user-data{transition: .8s .5s; opacity: 1; pointer-events: unset;}
-#user-data{background: #fff9; width: 100%; height: 100px; border-radius: 20px; padding: 17px 20px; opacity: 0; pointer-events: none; box-shadow: 0 0 10px #3336;}
+#user-data{background: #fff9; width: 100%; height: 100px; border-radius: 20px; padding: 17px 20px; opacity: 0; pointer-events: none; box-shadow: 0 0 10px #3336; transform: scale(.9);}
+#wrap.main.page-loaded #user-data{transition: .8s .5s; opacity: 1; pointer-events: unset; transform: scale(1);}
 #logout{border: none; background: none; padding-top: 9px; font-size: 14px; color: #777; transition: .15s;}
 #logout:hover{color: #555;}
 
-#today-todo{display: grid; width: 100%; height: calc(100% - 180px); grid-template-columns: 1fr; grid-template-rows: 60px 1fr; margin-top: 40px; border-radius: 20px; overflow: hidden;}
+#today-todo{display: grid; width: 100%; height: calc(100% - 180px); grid-template-columns: 1fr; grid-template-rows: 60px 1fr; margin-top: 40px; border-radius: 20px; overflow: hidden; transform: scale(.9); pointer-events: none; opacity: 0;}
+#wrap.main.page-loaded #today-todo{transition: .8s .75s; opacity: 1; pointer-events: unset; transform: scale(1);}
 #todo-header{background: #B1D7B499; display: flex; font-size: 24px; color: #fff; justify-content: center; align-items: center;}
 #todo-content{background: #fff9;}
 
@@ -121,7 +122,7 @@
 .prev-date.today p, .prev-data-date.today p, .next-date.today p, .next-data-date.today p{background: #7FB77E; color: #fff;}
 
 #month-area{display: flex; padding: 10px 24px; font-weight: bold; align-items: center;}
-#this-month{font-size: 38px; padding: 0 10px;}
+#this-month{font-size: 38px; width: 160px; text-align: center;}
 #prev-month, #next-month{font-size: 27px; padding: 3px 13px; border-radius: 10px; vertical-align: middle; cursor: pointer; user-select: none;}
 .page-loaded #prev-month, .page-loaded #next-month {transition: .5s;}
 #prev-month:hover, #next-month:hover {box-shadow: 0 0 5px #3338;}

@@ -24,6 +24,13 @@ const app = e => {
     logined();
   }
 
+  page.w = window.innerWidth;
+  page.h = window.innerHeight;
+  page.x = w / 2;
+  page.y = h / 2;
+
+  
+
   setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
 }
 

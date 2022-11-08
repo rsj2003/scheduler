@@ -4,6 +4,7 @@ const $alertPop = document.querySelectorAll(".alert-pop");
 const $backgroundGrid = document.querySelector("#background .grid");
 const $backgroundGridBackground = document.querySelector("#background .grid-background");
 const $calendar = document.querySelector("#calendar");
+const $calendarDateRel = document.querySelector("#date-rel");
 const $calendarSide = document.querySelector("#calendar-side");
 const $calendarArea = document.querySelector("#calendar-area");
 const $date = document.querySelector("#date");
@@ -15,6 +16,7 @@ const $thisMonth = document.querySelector("#this-month");
 const $prevMonth = document.querySelector("#prev-month");
 const $nextMonth = document.querySelector("#next-month");
 const today = new Date();
+const page = {x: 0, y: 0, w: 0, h: 0};
 let calendarMonth = undefined;
 let isLogined = false;
 let prevTop = 0;
@@ -67,6 +69,8 @@ const colIntoLine = ($line, year, month, date, classList = ["calendar-date"]) =>
     $calendarDate.classList.add(classList[i]);
   }
 
+  if(date.toString().length == 1) date = `0${date}`;
+
   $calendarDate.innerHTML = `<span class="flex"><p>${date}</p></span>`;
   
   $line.append($calendarDate);
@@ -111,7 +115,7 @@ const setCalendar = (year, month) => {
 
     if(i == 0) {
       for(let j = prevDataMonth.getDate() - prevDataMonth.getDay(); j <= prevDataMonth.getDate(); j++) {
-        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j, ["calendar-date", "prev-data-date"]);
+        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth(), j, ["calendar-date", "prev-data-date"]);
       }
       
       for(let j = 0; j < 6 - prevDataMonth.getDay(); j++) {
@@ -177,7 +181,7 @@ const setCalendar = (year, month) => {
   moveMonth = false;
 }
 
-$prevMonth.addEventListener("click", e => {
+const prevMonthAni = e => {
   if(!moveMonth) {
     moveMonth = true;
 
@@ -223,9 +227,9 @@ $prevMonth.addEventListener("click", e => {
       }, 800);
     }, 1);
   }
-})
+}
 
-$nextMonth.addEventListener("click", e => {
+const nextMonthAni = e => {
   if(!moveMonth) {
     moveMonth = true;
 
@@ -270,5 +274,21 @@ $nextMonth.addEventListener("click", e => {
         setCalendar(thisCalendarYear, thisCalendarMonth);
       }, 800);
     }, 1);
+  }
+}
+
+$prevMonth.addEventListener("click", e => {
+  prevMonthAni();
+})
+
+$nextMonth.addEventListener("click", e => {
+  nextMonthAni();
+})
+
+$calendarDateRel.addEventListener("wheel", e => {
+  if(e.wheelDelta > 0) {
+    prevMonthAni();
+  }else {
+    nextMonthAni();
   }
 })

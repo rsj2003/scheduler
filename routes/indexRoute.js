@@ -4,7 +4,7 @@ const concat = require("concat-stream");
 const router = express.Router();
 const mysql = require("mysql");
 const conn = mysql.createConnection({
-  host: 'localhost',
+  host: '158.247.239.116',
   user: 'dongyang',
   password: 'slm*123',
   database: 'scheduler'

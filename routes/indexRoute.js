@@ -81,10 +81,11 @@ router.post("/login-action", function(req, res, next) {
   }else {
     conn.connect();
     
-    conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${param.password}'`).then(res => {
-      console.log(res);
+    conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${param.password}'`, (err, result, fields) => {
+      if(err) throw err;
+      console.log(result);
       req.session.user = {id: param.id, email: `${param.id}@mail.com`};
-      res.send({state: "SUCCESS", user: req.session.user});
+      result.send({state: "SUCCESS", user: req.session.user});
     })
 
     conn.end();

@@ -77,7 +77,7 @@ router.post("/register-action", function(req, res, next) {
       if(err) throw err;
 
       if(result.length > 0) {
-        res.send({state: "MESSAGE", message: "This id is already in use."});
+        res.send({alert: "이미 사용중인 id입니다."});
       }else {
         conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`)
         res.send({state: "SUCCESS", id: param.id});

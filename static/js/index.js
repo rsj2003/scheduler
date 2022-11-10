@@ -87,6 +87,8 @@ const setCalendar = (year, month) => {
   let nowDates = 0;
   let thisMonthLine = 0;
 
+  $calendarDateRel.clientHeight = $calendarDateRel.clientHeight - ($calendarDateRel.clientHeight % 6 + 1);
+
   calendarMonth = new Date(year, month, 0);
 
   let thisCalendarYear = calendarMonth.getFullYear();
@@ -150,7 +152,7 @@ const setCalendar = (year, month) => {
         if(monthList[nowMonth - 1].getDay() == 6) firstDate = 1;
 
         if(nowMonth == 2) thisMonthLine = (i + firstDate);
-        if(nowMonth == 3) nextTop = (i + firstDate) * 110;
+        if(nowMonth == 3) nextTop = (i + firstDate) * ($calendarDateRel.clientHeight + 1) / 6;
         
         let classList = ["calendar-date"];
         
@@ -175,8 +177,8 @@ const setCalendar = (year, month) => {
     $date.append($calendarLine);
   }
 
-  $date.style.height = `${110 * 6 * 3}px`;
-  $date.style.top = `-${110 * thisMonthLine}px`;
+  $date.style.height = `${($calendarDateRel.clientHeight + 1) * 3}px`;
+  $date.style.top = `-${($calendarDateRel.clientHeight + 1) / 6 * thisMonthLine}px`;
   $date.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
   moveMonth = false;
 }
@@ -291,4 +293,8 @@ $calendarDateRel.addEventListener("wheel", e => {
   }else {
     nextMonthAni();
   }
+})
+
+window.addEventListener("resize", e => {
+  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
 })

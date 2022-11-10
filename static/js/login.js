@@ -137,7 +137,7 @@ $loginForm.addEventListener("submit", e => {
       user = res.user;
       
       loginToMain();
-    } else {
+    }else {
       if(res.alert) {
         setAlert(res.alert);
       }

@@ -4,7 +4,8 @@ const concat = require("concat-stream");
 const router = express.Router();
 const mysql = require("mysql");
 const crypto = require("crypto");
-const conn = mysql.createConnection({
+
+const getConn = e => mysql.createConnection({
   host: '158.247.239.116',
   user: 'dongyang',
   password: 'slm*123',
@@ -59,6 +60,7 @@ router.post("/register-action", function(req, res, next) {
   if(param.id == "") {
     res.send({alert: "id를 입력해주세요."});
   }else {
+    const conn = getConn();
     conn.connect();
     
     conn.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result, fields) => {
@@ -92,6 +94,7 @@ router.post("/login-action", function(req, res, next) {
   if(param.id.trim() == "") {
     res.send({alert: "id를 입력해주세요."});
   }else {
+    const conn = getConn();
     conn.connect();
     
     conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {

@@ -3,12 +3,29 @@ const url = require("url");
 const concat = require("concat-stream");
 const router = express.Router();
 const mysql = require("mysql");
+const crypto = require("crypto");
 const conn = mysql.createConnection({
   host: '158.247.239.116',
   user: 'dongyang',
   password: 'slm*123',
   database: 'scheduler'
 })
+
+const cipher = password => {
+  return new Promise((resolve, reject) => {
+    const encrypt = crypto.createCipher("des", "scheduling-scheduler");
+    const encryptResult = encrypt.update(password, "utf8", "base64") + encrypt.final("base64");
+    resolve(encryptResult);
+  })
+}
+
+const dipher = password => {
+  return new Promise((resolve, reject) => {
+    const decode = crypto.createCipher("des", "scheduling-scheduler");
+    const decodeResult = decode.update(password, "base64", "utf8") + decode.final("utf8");
+    resolve(decodeResult);
+  })
+}
 
 const render = (re, html, data = {user: false}) => {
   const req = re.req;
@@ -56,10 +73,18 @@ router.post("/register-action", function(req, res, next) {
   }else {
     conn.connect();
     
-    conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${param.password}', FALSE, now(), now());`)
+    conn.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result, fields) => {
+      if(err) throw err;
+
+      if(result.length > 0) {
+        res.send({state: "MESSAGE", message: "This id is already in use."});
+      }else {
+        conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`)
+        res.send({state: "SUCCESS", id: param.id});
+      }
+    })
 
     conn.end();
-    res.send({state: "SUCCESS", id: param.id});
   }
 })
 
@@ -81,7 +106,7 @@ router.post("/login-action", function(req, res, next) {
   }else {
     conn.connect();
     
-    conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${param.password}'`, (err, result, fields) => {
+    conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {
       if(err) throw err;
       console.log(result);
 

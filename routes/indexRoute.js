@@ -84,6 +84,8 @@ router.post("/register-action", function(req, res, next) {
         conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result, fields) => {
           if(err) throw err;
 
+          console.log("register");
+          console.log({id: param.id, email: param.email});
           res.send({state: "SUCCESS", id: param.id});
         })
         
@@ -120,9 +122,10 @@ router.post("/login-action", function(req, res, next) {
     
     conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {
       if(err) throw err;
-      console.log(result);
-
+      
       if(result.length > 0) {
+        console.log("login");
+        console.log(result[0]);
         let account = result[0];
         req.session.user = account;
         res.send({state: "SUCCESS", user: req.session.user});
@@ -133,6 +136,20 @@ router.post("/login-action", function(req, res, next) {
 
     conn.end();
   }
+})
+router.post("/test-login-action", function(req, res, next) {
+  let body = [];
+
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+
+    next();
+  })
+}, function(req, res) {
+  
+  res.send({state: "SUCCESS", user: {id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0}});
 })
 
 router.post("/logout-action", function(req, res, next) {

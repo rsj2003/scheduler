@@ -110,6 +110,7 @@ $registerForm.addEventListener("submit", e => {
     if(res.state == "SUCCESS") {
       removeRegisterClass();
       $loginForm.id.value = res.id;
+      $loginForm.password.focus();
       setTimeout(e => {
         $registerForm.reset();
       }, 800);
@@ -158,3 +159,17 @@ $logout.addEventListener("click", e => {
     }
   })
 })
+
+const testLogin = e => {
+  fetch("/test-login-action", {
+    method: "POST"
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      user = res.user;
+      
+      loginToMain();
+    }
+  })
+}

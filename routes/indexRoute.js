@@ -13,7 +13,7 @@ const conn = mysql.createConnection({
 
 const cipher = password => {
   return new Promise((resolve, reject) => {
-    const encrypt = crypto.createCipher("des", "scheduling-scheduler");
+    const encrypt = crypto.createCipheriv("des", "scheduling-scheduler");
     const encryptResult = encrypt.update(password, "utf8", "base64") + encrypt.final("base64");
     resolve(encryptResult);
   })
@@ -21,7 +21,7 @@ const cipher = password => {
 
 const dipher = password => {
   return new Promise((resolve, reject) => {
-    const decode = crypto.createCipher("des", "scheduling-scheduler");
+    const decode = crypto.createCipheriv("des", "scheduling-scheduler");
     const decodeResult = decode.update(password, "base64", "utf8") + decode.final("utf8");
     resolve(decodeResult);
   })

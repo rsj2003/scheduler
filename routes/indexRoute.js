@@ -55,11 +55,20 @@ router.post("/register-action", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  param.id = param.id.trim();
+  param.id = param.id.trim().toLocaleLowerCase();
+  param.password = param.password.trim();
+  param.email = param.email.trim();
 
   if(param.id == "") {
     res.send({alert: "id를 입력해주세요."});
+  }else if(param.password == "") {
+    res.send({alert: "비밀번호를를 입력해주세요."});
+  }else if(param.email == "") {
+    res.send({alert: "이메일를 입력해주세요."});
   }else {
+    if(param.id.match(/[^a-z|0-9]/g)) {
+      res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
+    }
     const conn = getConn();
     conn.connect();
     
@@ -90,9 +99,13 @@ router.post("/login-action", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
+  param.id = param.id.trim().toLocaleLowerCase();
+  param.password = param.password.trim();
   
-  if(param.id.trim() == "") {
+  if(param.id == "") {
     res.send({alert: "id를 입력해주세요."});
+  }else if(param.password == "") {
+    res.send({alert: "비밀번호를 입력해주세요."});
   }else {
     const conn = getConn();
     conn.connect();
@@ -105,6 +118,8 @@ router.post("/login-action", function(req, res, next) {
         let account = result[0];
         req.session.user = account;
         res.send({state: "SUCCESS", user: req.session.user});
+      }else {
+        res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
       }
     })
 

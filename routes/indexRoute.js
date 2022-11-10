@@ -5,8 +5,8 @@ const router = express.Router();
 const mysql = require("mysql");
 const conn = mysql.createConnection({
   host: '158.247.239.116',
-  user: 'root',
-  password: '=M8om+hJmasabs-L',
+  user: 'dongyang',
+  password: 'slm*123',
   database: 'scheduler'
 })
 

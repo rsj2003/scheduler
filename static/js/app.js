@@ -26,8 +26,8 @@ const app = e => {
 
   page.w = window.innerWidth;
   page.h = window.innerHeight;
-  page.x = w / 2;
-  page.y = h / 2;
+  page.x = page.w / 2;
+  page.y = page.h / 2;
 
   
 

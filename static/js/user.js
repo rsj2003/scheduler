@@ -1,4 +1,5 @@
 let user = {};
+let schedules  = [];
 
 fetch("/userData-action", {
   method: "POST",

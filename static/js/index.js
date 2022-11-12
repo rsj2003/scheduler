@@ -44,6 +44,10 @@ const setAlert = alert => {
 const logined = e => {
   if(!isLogined) {
     isLogined = true;
+    let widthType = 0;
+
+    if(page.w < 1920) widthType = 1;
+    if(page.w < 1600) widthType = 2;
 
     setTimeout(e => {
       $calendarArea.style.opacity = "1";
@@ -73,11 +77,11 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
   if(date.toString().length == 1) date = `0${date}`;
 
-  while(thisHeight / rows > 24) {
+  while(thisHeight / rows > 25) {
     rows++;
   }
 
-  $calendarDate.innerHTML = `<span class="flex"><p>${date}</p></span>`;
+  $calendarDate.innerHTML = `<span class="flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
   $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
 
   $line.append($calendarDate);

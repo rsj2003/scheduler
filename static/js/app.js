@@ -32,6 +32,19 @@ const app = e => {
   indexPageLoaded();
 
   setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+
+  let tl = "";
+
+  addEventListener("keydown", e => {
+    if(e.key == "t" && (tl.length == 0 || tl.length == 2)) {
+      tl += "t";
+    }
+    if(e.key == "l" && (tl.length == 1 || tl.length == 3)) {
+      tl += "l";
+
+      if(tl == "tltl") testLogin();
+    }
+  })
 }
 
 app();

@@ -57,8 +57,10 @@ const logined = e => {
   }
 }
 
-const colIntoLine = ($line, year, month, date, classList = ["calendar-date"]) => {
+const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
   const $calendarDate = document.createElement("div");
+  const thisHeight = lineHeight / 6;
+  let rows = 1;
 
   if(today.getFullYear() == year && today.getMonth() + 1 == month && today.getDate() == date) {
     classList = JSON.parse(JSON.stringify(classList));
@@ -71,8 +73,13 @@ const colIntoLine = ($line, year, month, date, classList = ["calendar-date"]) =>
 
   if(date.toString().length == 1) date = `0${date}`;
 
+  while(thisHeight / rows > 24) {
+    rows++;
+  }
+
   $calendarDate.innerHTML = `<span class="flex"><p>${date}</p></span>`;
-  
+  $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
+
   $line.append($calendarDate);
 }
 
@@ -83,6 +90,7 @@ const setCalendar = (year, month) => {
   const nextMonth = new Date(year, month + 1, 0);
   const nextDataMonth = new Date(year, month + 2, 0);
   const monthList = [prevDataMonth, prevMonth, thisMonth, nextMonth, nextDataMonth];
+  const calendarHeight = $calendarDateRel.clientHeight + 1;
   let nowMonth = 1;
   let nowDates = 0;
   let thisMonthLine = 0;
@@ -117,11 +125,11 @@ const setCalendar = (year, month) => {
 
     if(i == 0) {
       for(let j = prevDataMonth.getDate() - prevDataMonth.getDay(); j <= prevDataMonth.getDate(); j++) {
-        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth(), j, ["calendar-date", "prev-data-date"]);
+        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth(), j, ["calendar-date", "prev-data-date"], calendarHeight);
       }
       
       for(let j = 0; j < 6 - prevDataMonth.getDay(); j++) {
-        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, ["calendar-date", "prev-date"]);
+        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, ["calendar-date", "prev-date"], calendarHeight);
         
         nowDates++;
       }
@@ -138,7 +146,7 @@ const setCalendar = (year, month) => {
       if(nowMonth == 4) classList.push("next-data-date");
 
       for(let j = nowDates; j < otherDates; j++) {
-        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, classList);
+        colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, classList, calendarHeight);
 
         nowDates++;
       }
@@ -152,7 +160,7 @@ const setCalendar = (year, month) => {
         if(monthList[nowMonth - 1].getDay() == 6) firstDate = 1;
 
         if(nowMonth == 2) thisMonthLine = (i + firstDate);
-        if(nowMonth == 3) nextTop = (i + firstDate) * ($calendarDateRel.clientHeight + 1) / 6;
+        if(nowMonth == 3) nextTop = (i + firstDate) * calendarHeight / 6;
         
         let classList = ["calendar-date"];
         
@@ -163,7 +171,7 @@ const setCalendar = (year, month) => {
         
         if(nowMonth < 5) {
           for(let j = 0; j < 6 - monthList[nowMonth - 1].getDay(); j++) {
-            colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, classList);
+            colIntoLine($calendarLine, monthList[nowMonth].getFullYear(), monthList[nowMonth].getMonth() + 1, j + 1, classList, calendarHeight);
   
             nowDates++;
           }
@@ -177,8 +185,8 @@ const setCalendar = (year, month) => {
     $date.append($calendarLine);
   }
 
-  $date.style.height = `${($calendarDateRel.clientHeight + 1) * 3}px`;
-  $date.style.top = `-${($calendarDateRel.clientHeight + 1) / 6 * thisMonthLine}px`;
+  $date.style.height = `${calendarHeight * 3}px`;
+  $date.style.top = `-${calendarHeight / 6 * thisMonthLine}px`;
   $date.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
   moveMonth = false;
 }
@@ -295,6 +303,8 @@ $calendarDateRel.addEventListener("wheel", e => {
   }
 })
 
-window.addEventListener("resize", e => {
-  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
-})
+const indexPageLoaded = e => {
+  window.addEventListener("resize", e => {
+    setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+  })
+}

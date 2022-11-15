@@ -4,6 +4,7 @@ const concat = require("concat-stream");
 const router = express.Router();
 const mysql = require("mysql");
 const crypto = require("crypto");
+const session = require("express-session");
 
 const getConn = e => mysql.createConnection({
   host: '158.247.239.116',
@@ -120,7 +121,7 @@ router.post("/login-action", function(req, res, next) {
     const conn = getConn();
     conn.connect();
     
-    conn.query(`SELECT id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {
+    conn.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {
       if(err) throw err;
       
       if(result.length > 0) {
@@ -148,8 +149,8 @@ router.post("/test-login-action", function(req, res, next) {
     next();
   })
 }, function(req, res) {
-  
-  res.send({state: "SUCCESS", user: {id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0}});
+  req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0};
+  res.send({state: "SUCCESS", user: req.session.user});
 })
 
 router.post("/logout-action", function(req, res, next) {
@@ -165,6 +166,31 @@ router.post("/logout-action", function(req, res, next) {
 }, function(req, res) {
   req.session.user = null;
   res.send({state: "SUCCESS"});
+})
+
+router.post("/get-schedules", function(req, res, next) {
+  let body = [];
+
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+
+    next();
+  })
+}, function(req, res) {
+  if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: "test"});
+  
+  const conn = getConn();
+  conn.connect();
+    
+  conn.query(`SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}'`, (err, result, fields) => {
+    if(err) throw err;
+
+    res.send({state: "SUCCESS", result: result});
+  })
+
+  conn.end();
 })
 
 module.exports = router;

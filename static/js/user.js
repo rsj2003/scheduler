@@ -1,5 +1,4 @@
 let user = {};
-let schedules  = [];
 
 fetch("/userData-action", {
   method: "POST",
@@ -9,6 +8,6 @@ fetch("/userData-action", {
 .then(res => {
   if(res.user.id) {
     user = res.user;
-    logined();
+    loadSchedules();
   }
 })

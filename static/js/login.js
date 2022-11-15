@@ -70,7 +70,7 @@ const loginToMain = e => {
         $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
         $wrap.classList.add("main");
 
-        logined();
+        loadSchedules();
       }, 800)
     }, 800)
   }, 10)

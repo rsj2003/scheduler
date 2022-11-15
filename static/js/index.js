@@ -22,6 +22,90 @@ let isLogined = false;
 let prevTop = 0;
 let nextTop = 0;
 let moveMonth = false;
+let dateScheduleList = [];
+let schedules  = [{
+  scheduleNo: 1,
+  name: "test",
+  color: "#cdedda",
+  notice: "this is text schedule",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-14 12:00:00",
+  endDate: "2022-11-18 18:00:00"
+},{
+  scheduleNo: 2,
+  name: "test2",
+  color: "#cddaed",
+  notice: "this is text schedule2",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-18 12:00:00",
+  endDate: "2022-11-18 18:00:00"
+},{
+  scheduleNo: 3,
+  name: "test3",
+  color: "#daedcd",
+  notice: "this is text schedule3",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-14 12:00:00",
+  endDate: "2022-11-29 18:00:00"
+},{
+  scheduleNo: 4,
+  name: "test4",
+  color: "#257854",
+  notice: "this is text schedule4",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-21 12:00:00",
+  endDate: "2022-11-21 18:00:00"
+},{
+  scheduleNo: 5,
+  name: "test5",
+  color: "#257854",
+  notice: "this is text schedule5",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-21 12:00:00",
+  endDate: "2022-11-21 18:00:00"
+},{
+  scheduleNo: 6,
+  name: "test6",
+  color: "#257854",
+  notice: "this is text schedule6",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-21 12:00:00",
+  endDate: "2022-11-21 18:00:00"
+},{
+  scheduleNo: 7,
+  name: "test7",
+  color: "#257854",
+  notice: "this is text schedule7",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-21 12:00:00",
+  endDate: "2022-11-21 18:00:00"
+}];
+
+const getTextColorByBackgroundColor = color => {
+  const c = color.substring(1);
+  const rgb = parseInt(c, 16);
+  const r = (rgb >> 16) & 0xff;
+  const g = (rgb >>  8) & 0xff;
+  const b = (rgb >>  0) & 0xff;
+
+  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  return luma < 127.5 ? "#fff" : "#333";
+}
 
 const resetAlert = e => {
   for(let i = 0; i < $alert.length; i++) {
@@ -38,26 +122,6 @@ const setAlert = alert => {
   }
   for(let i = 0; i < $alertPop.length; i++) {
     $alertPop[i].style.display = "block";
-  }
-}
-
-const logined = e => {
-  if(!isLogined) {
-    isLogined = true;
-    let widthType = 0;
-
-    if(page.w < 1920) widthType = 1;
-    if(page.w < 1600) widthType = 2;
-
-    setTimeout(e => {
-      $calendarArea.style.opacity = "1";
-      $calendarArea.style.transform = "scale(1)";
-      $calendarArea.style.pointerEvents = "unset";
-
-      setTimeout(e => {
-        $calendarSide.style.left = "0";
-      }, 250);
-    }, 1000);
   }
 }
 
@@ -81,8 +145,51 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
     rows++;
   }
 
-  $calendarDate.innerHTML = `<span class="flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
+  $calendarDate.innerHTML = `<span class="date flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
   $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
+
+  let insert = 0;
+  let todo = [];
+  for(let i = 0; i < schedules.length; i++) {
+    let schedule = schedules[i];
+
+    if(year == schedule.startDate.year && month == schedule.startDate.month && date == schedule.startDate.date) {
+      insert++;
+      todo.push(schedule);
+
+      if(schedule.startDate.year != schedule.endDate.year || schedule.startDate.month != schedule.endDate.month || schedule.startDate.date != schedule.endDate.date) {
+        if(schedule.startDate.year == schedule.endDate.year && schedule.startDate.month == schedule.endDate.month) {
+          
+        }
+      }
+
+      if(rows - 1 == insert) {
+        const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
+        const $background = $schedule.querySelector("span");
+        const $p = $schedule.querySelector("p");
+
+        $background.style.background = "#ddd";
+        $p.innerText = " ● ● ●";
+        $p.style.fontSize = "10px";
+
+        break;
+
+      }else {
+        const $schedule = document.createElement("span");
+        const $background = document.createElement("span");
+        const $p = document.createElement("p");
+        
+        $schedule.classList.add("schedule");
+        $background.style.background = schedule.color;
+        $p.style.color = getTextColorByBackgroundColor(schedule.color);
+        $p.innerText = schedule.name;
+        
+        $background.append($p);
+        $schedule.append($background);
+        $calendarDate.append($schedule);
+      }
+    }
+  }
 
   $line.append($calendarDate);
 }
@@ -193,6 +300,62 @@ const setCalendar = (year, month) => {
   $date.style.top = `-${calendarHeight / 6 * thisMonthLine}px`;
   $date.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
   moveMonth = false;
+}
+
+const logined = e => {
+  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+
+  if(!isLogined) {
+    isLogined = true;
+    let widthType = 0;
+
+
+    if(page.w < 1920) widthType = 1;
+    if(page.w < 1600) widthType = 2;
+
+    setTimeout(e => {
+      $calendarArea.style.opacity = "1";
+      $calendarArea.style.transform = "scale(1)";
+      $calendarArea.style.pointerEvents = "unset";
+
+      setTimeout(e => {
+        $calendarSide.style.left = "0";
+      }, 250);
+    }, 1000);
+  }
+}
+
+const loadSchedules = e => {
+  fetch("/get-schedules", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      let result = res.result;
+      if(result == "test");
+
+      result = schedules;
+
+      for(let i = 0; i < result.length; i++) {
+        let schedule = result[i];
+        let start = new Date(schedule.startDate);
+        let end = new Date(schedule.endDate);
+
+        schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay(), hour: start.getHours(), minutes: start.getMinutes()};
+        schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay(), hour: end.getHours(), minutes: end.getMinutes()};
+      }
+
+      schedules = result;
+
+      logined();
+    }else {
+      if(res.alert) {
+        setAlert(res.alert);
+      }
+    }
+  })
 }
 
 const prevMonthAni = e => {

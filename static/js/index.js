@@ -23,6 +23,8 @@ let prevTop = 0;
 let nextTop = 0;
 let moveMonth = false;
 let dateScheduleList = [];
+let scheduleLoaded = false;
+let scheduleTrim = 0;
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
@@ -93,6 +95,76 @@ let schedules  = [{
   alert: 0,
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
+},{
+  scheduleNo: 8,
+  name: "test8",
+  color: "#54dfa2",
+  notice: "this is text schedule8",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-16 12:00:00",
+  endDate: "2023-01-22 18:00:00"
+},{
+  scheduleNo: 9,
+  name: "test9",
+  color: "#fa12cd",
+  notice: "this is text schedule9",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-23 12:00:00",
+  endDate: "2023-01-25 18:00:00"
+},{
+  scheduleNo: 10,
+  name: "test10",
+  color: "#caa5fd",
+  notice: "this is text schedule10",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-25 12:00:00",
+  endDate: "2023-01-27 18:00:00"
+},{
+  scheduleNo: 11,
+  name: "test11",
+  color: "#853459",
+  notice: "this is text schedule11",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-26 12:00:00",
+  endDate: "2023-01-31 18:00:00"
+},{
+  scheduleNo: 12,
+  name: "test12",
+  color: "#92cd76",
+  notice: "this is text schedule12",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-28 12:00:00",
+  endDate: "2023-01-29 18:00:00"
+},{
+  scheduleNo: 13,
+  name: "test13",
+  color: "#e5f46d",
+  notice: "this is text schedule13",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-029 12:00:00",
+  endDate: "2023-01-30 18:00:00"
+},{
+  scheduleNo: 14,
+  name: "test14",
+  color: "#5e8cf4",
+  notice: "this is text schedule14",
+  createUser: -1,
+  type: -1,
+  alert: 0,
+  startDate: "2023-01-29 12:00:00",
+  endDate: "2023-02-07 18:00:00"
 }];
 
 const getTextColorByBackgroundColor = color => {
@@ -104,7 +176,7 @@ const getTextColorByBackgroundColor = color => {
 
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-  return luma < 127.5 ? "#fff" : "#333";
+  return luma < 190 ? "#fff" : "#333";
 }
 
 const resetAlert = e => {
@@ -148,45 +220,89 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
   $calendarDate.innerHTML = `<span class="date flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
   $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
 
-  let insert = 0;
-  let todo = [];
-  for(let i = 0; i < schedules.length; i++) {
-    let schedule = schedules[i];
+  if(scheduleLoaded) {
+    if(schedules[year] && schedules[year][month] && schedules[year][month][date * 1]) {
+      const $prevDate = $line.querySelector(".calendar-date:last-of-type");
+      const schedule = schedules[year][month][date * 1];
+      const day = new Date(year, month - 1, date).getDay();
+      let insert = 0;
+      
+      for(let i = 0; i < schedule.length; i++) {
+        const thisSchedule = schedule[i];
+        insert++;
 
-    if(year == schedule.startDate.year && month == schedule.startDate.month && date == schedule.startDate.date) {
-      insert++;
-      todo.push(schedule);
-
-      if(schedule.startDate.year != schedule.endDate.year || schedule.startDate.month != schedule.endDate.month || schedule.startDate.date != schedule.endDate.date) {
-        if(schedule.startDate.year == schedule.endDate.year && schedule.startDate.month == schedule.endDate.month) {
+        if(rows - 1 == insert - scheduleTrim) {
+          const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
+          const $background = $schedule.querySelector("span");
+          const $p = $schedule.querySelector("p");
+  
+          $schedule.classList.add("schedule-more");
+          $schedule.classList.add("schedule-end");
+          $background.style.background = "#bbb";
+          $p.style.color = "#fff";
           
+          if($prevDate) {
+            const $prevSchedule = $prevDate.querySelector(".schedule:last-of-type");
+
+            if($prevSchedule && $prevSchedule.classList.contains("schedule-more")){
+              $schedule.classList.remove("schedule-start");
+              $prevSchedule.classList.remove("schedule-end");
+              $p.innerText = "";
+            }else {
+              const $prevSchedules = $prevDate.querySelectorAll(".schedule");
+              if(rows - 2 == $prevSchedules.length) {
+                $prevSchedule.classList.add("schedule-end");
+              }
+
+              $schedule.classList.add("schedule-start");
+              $p.innerText = "More...";
+            }
+          }else {
+            $schedule.classList.add("schedule-start");
+            $p.innerText = "More...";
+          }
+  
+          break;
+        }else {
+          if(i + 1 <= scheduleTrim) {
+            if(thisSchedule.startDate === "dummy") continue;
+            else scheduleTrim = 0;
+          }
+          const $schedule = document.createElement("span");
+          const $background = document.createElement("span");
+          const $p = document.createElement("p");
+          
+          $schedule.classList.add("schedule");
+
+          if(thisSchedule.startDate !== "dummy") {
+            let $prevSchedule = false;
+
+            if($prevDate && rows - 2 == insert - scheduleTrim) {
+              $prevSchedule = $prevDate.querySelector(".schedule-more");
+            }
+
+            $schedule.classList.add("schedule-date");
+            $background.style.background = thisSchedule.color;
+            $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
+
+            if((thisSchedule.startDate.year == year && thisSchedule.startDate.month == month && thisSchedule.startDate.date == date) || day == 0 || $prevSchedule) {
+              $schedule.classList.add("schedule-start");
+              $p.innerText = thisSchedule.name;
+            }
+            if((thisSchedule.endDate.year == year && thisSchedule.endDate.month == month && thisSchedule.endDate.date == date) || day == 6){
+              $schedule.classList.add("schedule-end");
+            }
+          }else {
+            if(day == 0) {
+              scheduleTrim++;
+              continue;
+            }
+          }
+          
+          $background.append($p);
+          $schedule.append($background);
+          $calendarDate.append($schedule);
         }
-      }
-
-      if(rows - 1 == insert) {
-        const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
-        const $background = $schedule.querySelector("span");
-        const $p = $schedule.querySelector("p");
-
-        $background.style.background = "#ddd";
-        $p.innerText = " ● ● ●";
-        $p.style.fontSize = "10px";
-
-        break;
-
-      }else {
-        const $schedule = document.createElement("span");
-        const $background = document.createElement("span");
-        const $p = document.createElement("p");
-        
-        $schedule.classList.add("schedule");
-        $background.style.background = schedule.color;
-        $p.style.color = getTextColorByBackgroundColor(schedule.color);
-        $p.innerText = schedule.name;
-        
-        $background.append($p);
-        $schedule.append($background);
-        $calendarDate.append($schedule);
       }
     }
   }
@@ -205,6 +321,7 @@ const setCalendar = (year, month) => {
   let nowMonth = 1;
   let nowDates = 0;
   let thisMonthLine = 0;
+  scheduleTrim = 0;
 
   $calendarDateRel.clientHeight = $calendarDateRel.clientHeight - ($calendarDateRel.clientHeight % 6 + 1);
 
@@ -333,21 +450,71 @@ const loadSchedules = e => {
   .then(req => req.json())
   .then(res => {
     if(res.state == "SUCCESS") {
-      let result = res.result;
-      if(result == "test");
+      let result = {};
+      let request = res.result;
 
-      result = schedules;
+      if(request == "test") request = schedules;
 
-      for(let i = 0; i < result.length; i++) {
-        let schedule = result[i];
+      for(let i = 0; i < request.length; i++) {
+        let schedule = request[i];
         let start = new Date(schedule.startDate);
         let end = new Date(schedule.endDate);
 
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay(), hour: start.getHours(), minutes: start.getMinutes()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay(), hour: end.getHours(), minutes: end.getMinutes()};
+        schedule.count = 0;
+        schedule.sort = -1;
+
+        let thisDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        let endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+        while(thisDate <= endDate) {
+          let year = {};
+          let month = {};
+          let date = [];
+          schedule.count++;
+
+          if(result[thisDate.getFullYear()]) {
+            year = result[thisDate.getFullYear()];
+
+            if(year[thisDate.getMonth() + 1]) {
+              month = year[thisDate.getMonth() + 1];
+
+              if(month[thisDate.getDate()]) {
+                date = month[thisDate.getDate()];
+              }else {
+                month[thisDate.getDate()] = date;
+              }
+            }else {
+              year[thisDate.getMonth() + 1] = month;
+              month[thisDate.getDate()] = date;
+            }
+          }else {
+            result[thisDate.getFullYear()] = year;
+            year[thisDate.getMonth() + 1] = month;
+            month[thisDate.getDate()] = date;
+          }
+          
+          if(schedule.count == 1) schedule.sort = date.length;
+
+          while(date.length < schedule.sort) {
+            date.push({startDate: "dummy", sort: date.length});
+          }
+
+          if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
+            for(let i = date.length - 1; i >= schedule.sort; i--) {
+              date[i].sort++;
+              date[i + 1] = date[i];
+            }
+          }
+
+          date[schedule.sort] = schedule;
+          
+          thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
+        }
       }
 
       schedules = result;
+      scheduleLoaded = true;
 
       logined();
     }else {

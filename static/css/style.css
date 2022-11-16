@@ -116,14 +116,16 @@
 .calendar-date span{width: 100%; height: 100%;}
 .calendar-date .date{justify-content: flex-end; align-items: center;}
 .calendar-date .date p{display: inline-flex; height: 100%; align-items: center; justify-content: center; border-radius: 0 0 0 7px; user-select: none;}
-.today p{background: #B1D7B4; color: #fff;}
+.today .date p{background: #B1D7B4; color: #fff;}
 .page-loaded .calendar-date p{transition: .8s;}
 .prev-date, .prev-data-date, .next-date, .next-data-date{background: #f0f0f0;}
 .prev-date p, .prev-data-date p, .next-date p, .next-data-date p{color: #777;}
-.prev-date.today p, .prev-data-date.today p, .next-date.today p, .next-data-date.today p{background: #7FB77E; color: #fff;}
+.prev-date.today .date p, .prev-data-date.today .date p, .next-date.today .date p, .next-data-date.today .date p{background: #7FB77E; color: #fff;}
 
 .calendar-date .schedule{width: 100%; height: 100%;}
-.calendar-date .schedule>span{display: flex; justify-content: flex-start; align-items: center; padding: 0 4px; border-radius: 5px; border: 1px solid #bbb8;}
+.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
+.calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
+.calendar-date .schedule-end>span{width: 100%; border-right: 1px solid #bbb8; border-top-right-radius: 5px; border-bottom-right-radius: 5px;}
 
 #month-area{display: flex; padding: 0 24px; font-weight: bold; align-items: center;}
 #this-month{font-size: 44px; width: 160px; text-align: center;}

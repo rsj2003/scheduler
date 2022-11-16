@@ -25,6 +25,7 @@ let moveMonth = false;
 let dateScheduleList = [];
 let scheduleLoaded = false;
 let scheduleTrim = 0;
+let teamScheduleType = 1;
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
@@ -51,7 +52,7 @@ let schedules  = [{
   color: "#daedcd",
   notice: "this is text schedule3",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2022-11-14 12:00:00",
   endDate: "2022-11-29 18:00:00"
@@ -71,7 +72,7 @@ let schedules  = [{
   color: "#257854",
   notice: "this is text schedule5",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
@@ -81,7 +82,7 @@ let schedules  = [{
   color: "#257854",
   notice: "this is text schedule6",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
@@ -111,7 +112,7 @@ let schedules  = [{
   color: "#fa12cd",
   notice: "this is text schedule9",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2023-01-23 12:00:00",
   endDate: "2023-01-25 18:00:00"
@@ -131,7 +132,7 @@ let schedules  = [{
   color: "#853459",
   notice: "this is text schedule11",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2023-01-26 12:00:00",
   endDate: "2023-01-31 18:00:00"
@@ -141,7 +142,7 @@ let schedules  = [{
   color: "#92cd76",
   notice: "this is text schedule12",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2023-01-28 12:00:00",
   endDate: "2023-01-29 18:00:00"
@@ -151,7 +152,7 @@ let schedules  = [{
   color: "#e5f46d",
   notice: "this is text schedule13",
   createUser: -1,
-  type: -1,
+  type: 1,
   alert: 0,
   startDate: "2023-01-029 12:00:00",
   endDate: "2023-01-30 18:00:00"
@@ -229,6 +230,16 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
       
       for(let i = 0; i < schedule.length; i++) {
         const thisSchedule = schedule[i];
+
+        if(teamScheduleType == 0 && thisSchedule.type > -1) {
+          console.log(year, month, date, thisSchedule);
+          continue;
+        }
+        if(teamScheduleType == 2 && thisSchedule.type == -1) {
+          console.log(year, month, date, thisSchedule);
+          continue;
+        }
+
         insert++;
 
         if(rows - 1 == insert - scheduleTrim) {
@@ -459,6 +470,9 @@ const loadSchedules = e => {
         let schedule = request[i];
         let start = new Date(schedule.startDate);
         let end = new Date(schedule.endDate);
+        let prevSchedule = false;
+
+        if(i > 0) prevSchedule = request[i - 1];
 
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay(), hour: start.getHours(), minutes: start.getMinutes()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay(), hour: end.getHours(), minutes: end.getMinutes()};
@@ -497,7 +511,9 @@ const loadSchedules = e => {
           if(schedule.count == 1) schedule.sort = date.length;
 
           while(date.length < schedule.sort) {
-            date.push({startDate: "dummy", sort: date.length});
+            const dummy = {startDate: "dummy", sort: date.length};
+            if(prevSchedule) dummy.type = prevSchedule.type;
+            date.push(dummy);
           }
 
           if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {

@@ -197,7 +197,7 @@ router.post("/get-schedules", function(req, res, next) {
   const conn = getConn();
   conn.connect();
     
-  conn.query(`SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}'`, (err, result, fields) => {
+  conn.query(`SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`, (err, result, fields) => {
     if(err) throw err;
 
     res.send({state: "SUCCESS", result: result});

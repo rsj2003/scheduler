@@ -123,7 +123,7 @@
 .prev-date.today .date p, .prev-data-date.today .date p, .next-date.today .date p, .next-data-date.today .date p{background: #7FB77E; color: #fff;}
 
 .calendar-date .schedule{width: 100%; height: 100%;}
-.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
+.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8; cursor: pointer;}
 .calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
 .calendar-date .schedule-end>span{width: 100%; border-right: 1px solid #bbb8; border-top-right-radius: 5px; border-bottom-right-radius: 5px;}
 
@@ -133,11 +133,19 @@
 .page-loaded #prev-month, .page-loaded #next-month {transition: .5s;}
 #prev-month:hover, #next-month:hover {box-shadow: 0 0 5px #3338;}
 
-#toggle-area{width: 280px; height: 40px; background: #B1D7B4; color: #777; position: relative; border-radius: 40px; cursor: pointer;}
-#selected{position: absolute; background: #7FB77E; width: 50%; height: 100%; border-radius: 40px; left: 0; top: 0;}
-#toggle-text-area{position: absolute; z-index: 5; display: flex; width: 100%; height: 100%; align-items: center; justify-content: space-between;}
-#toggle-text-area>div{width: 50%; text-align: center; user-select: none;}
-#toggle-text-area .selected{color: #fff;}
+#toggle-area{width: 300px; height: 40px; background: #B1D7B4; color: #777; border-radius: 40px; cursor: pointer; user-select: none;}
+#toggle-text-area{position: relative; width: 100%; height: 100%;}
+.toggle-text-area{position: absolute; width: 300px; height: 100%; display: flex; justify-content: space-between; align-items: center; left: 0; top: 0;}
+#selected{background: #7FB77E; width: 100%; height: 100%; border-radius: 40px; overflow: hidden; position: absolute; top: 0; left: 0;}
+#toggle-text-area .solo-view, #toggle-text-area .team-view{width: 50%; text-align: center;}
+#toggle-text-area #selected>div{color: #fff;}
+.page-loaded #selected, .page-loaded #selected .toggle-text-area{transition: .5s;}
+
+.is-solo #selected{width: 50%;}
+.is-solo #selected .toggle-text-area{left: 0;}
+
+.is-team #selected{width: 50%; left: 50%;}
+.is-team #selected .toggle-text-area{left: -150px;}
 
 #calendar-side>div{background: #333b; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px;}
 #team-list{height: 100%;}

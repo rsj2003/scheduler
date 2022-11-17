@@ -15,6 +15,9 @@ const $userEmail = document.querySelector("#email span");
 const $thisMonth = document.querySelector("#this-month");
 const $prevMonth = document.querySelector("#prev-month");
 const $nextMonth = document.querySelector("#next-month");
+const $toggleArea = document.querySelector("#toggle-area");
+const $selected = document.querySelector("#selected");
+const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
 let calendarMonth = undefined;
@@ -26,6 +29,7 @@ let dateScheduleList = [];
 let scheduleLoaded = false;
 let scheduleTrim = 0;
 let teamScheduleType = 1;
+let isToggleTimeout = false;
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
@@ -166,6 +170,16 @@ let schedules  = [{
   alert: 0,
   startDate: "2023-01-29 12:00:00",
   endDate: "2023-02-07 18:00:00"
+},{
+  scheduleNo: 15,
+  name: "test15",
+  color: "#5e8cf4",
+  notice: "this is text schedule15",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-19 12:00:00",
+  endDate: "2022-11-19 18:00:00"
 }];
 
 const getTextColorByBackgroundColor = color => {
@@ -227,16 +241,15 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
       const schedule = schedules[year][month][date * 1];
       const day = new Date(year, month - 1, date).getDay();
       let insert = 0;
+      let todo = [];
       
       for(let i = 0; i < schedule.length; i++) {
         const thisSchedule = schedule[i];
 
         if(teamScheduleType == 0 && thisSchedule.type > -1) {
-          console.log(year, month, date, thisSchedule);
           continue;
         }
         if(teamScheduleType == 2 && thisSchedule.type == -1) {
-          console.log(year, month, date, thisSchedule);
           continue;
         }
 
@@ -287,6 +300,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
           if(thisSchedule.startDate !== "dummy") {
             let $prevSchedule = false;
+            todo.push(1);
 
             if($prevDate && rows - 2 == insert - scheduleTrim) {
               $prevSchedule = $prevDate.querySelector(".schedule-more");
@@ -297,6 +311,16 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
             $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
 
             if((thisSchedule.startDate.year == year && thisSchedule.startDate.month == month && thisSchedule.startDate.date == date) || day == 0 || $prevSchedule) {
+              console.log(date, insert, todo);
+              if(todo.length > 0 && todo.indexOf(1) == insert - 1) {
+                const $dummies = $calendarDate.querySelectorAll(".schedule");
+
+                for(let i = 0; i < $dummies.length; i++) {
+                  $dummies[i].remove();
+                }
+
+                scheduleTrim += todo.length - 1;
+              }
               $schedule.classList.add("schedule-start");
               $p.innerText = thisSchedule.name;
             }
@@ -307,6 +331,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
             if(day == 0) {
               scheduleTrim++;
               continue;
+            }else {
+              todo.push(0);
             }
           }
           
@@ -373,7 +399,7 @@ const setCalendar = (year, month) => {
         nowDates++;
       }
 
-      if(monthList[0].getDay() == 6) prevTop = 110;
+      if(monthList[0].getDay() == 6) prevTop = calendarHeight / 6;
       else prevTop = 0;
     }else {
       let otherDates = monthList[nowMonth].getDate() > nowDates + 7 ? nowDates + 7 : monthList[nowMonth].getDate();
@@ -463,6 +489,7 @@ const loadSchedules = e => {
     if(res.state == "SUCCESS") {
       let result = {};
       let request = res.result;
+      let dummyType = {};
 
       if(request == "test") request = schedules;
 
@@ -470,9 +497,6 @@ const loadSchedules = e => {
         let schedule = request[i];
         let start = new Date(schedule.startDate);
         let end = new Date(schedule.endDate);
-        let prevSchedule = false;
-
-        if(i > 0) prevSchedule = request[i - 1];
 
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay(), hour: start.getHours(), minutes: start.getMinutes()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay(), hour: end.getHours(), minutes: end.getMinutes()};
@@ -511,8 +535,7 @@ const loadSchedules = e => {
           if(schedule.count == 1) schedule.sort = date.length;
 
           while(date.length < schedule.sort) {
-            const dummy = {startDate: "dummy", sort: date.length};
-            if(prevSchedule) dummy.type = prevSchedule.type;
+            const dummy = {startDate: "dummy", sort: date.length, type: dummyType[date.length]};
             date.push(dummy);
           }
 
@@ -520,10 +543,13 @@ const loadSchedules = e => {
             for(let i = date.length - 1; i >= schedule.sort; i--) {
               date[i].sort++;
               date[i + 1] = date[i];
+
+              dummyType[date[i].sort] = date[i].type;
             }
           }
 
           date[schedule.sort] = schedule;
+          dummyType[schedule.sort] = schedule.type;
           
           thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
         }
@@ -651,6 +677,27 @@ $calendarDateRel.addEventListener("wheel", e => {
   }else {
     nextMonthAni();
   }
+})
+
+$toggleArea.addEventListener("click", e => {
+  const classList = $toggleArea.classList;
+
+  if(classList.contains("is-solo")) {
+    $toggleArea.classList.remove("is-solo");
+    $toggleArea.classList.add("is-team");
+    teamScheduleType = 2;
+  }else if(classList.contains("is-team")) {
+    $toggleArea.classList.remove("is-team");
+    teamScheduleType = 1;
+  }else {
+    $toggleArea.classList.add("is-solo");
+    teamScheduleType = 0;
+  }
+
+  clearTimeout(isToggleTimeout)
+  isToggleTimeout = setTimeout(e => {
+    setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+  }, 500);
 })
 
 const indexPageLoaded = e => {

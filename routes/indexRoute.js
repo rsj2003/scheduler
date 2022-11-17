@@ -67,6 +67,12 @@ router.post("/register-action", function(req, res, next) {
   }else if(param.email == "") {
     res.send({alert: "이메일를 입력해주세요."});
   }else {
+    if(param.id == "login-test") {
+      console.log("register-test");
+      console.log({id: param.id, email: param.email});
+      res.send({state: "SUCCESS", id: param.id});
+      return;
+    }
     if(param.id.match(/[^a-z|0-9]/g)) {
       res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
     }
@@ -118,6 +124,13 @@ router.post("/login-action", function(req, res, next) {
   }else if(param.password == "") {
     res.send({alert: "비밀번호를 입력해주세요."});
   }else {
+    if(param.id == "login-test") {
+      console.log("login-test");
+      req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0};
+      console.log(req.session.user);
+      res.send({state: "SUCCESS", user: req.session.user});
+      return;
+    }
     const conn = getConn();
     conn.connect();
     
@@ -125,9 +138,9 @@ router.post("/login-action", function(req, res, next) {
       if(err) throw err;
       
       if(result.length > 0) {
-        console.log("login");
-        console.log(result[0]);
         let account = result[0];
+        console.log("login");
+        console.log(account);
         req.session.user = account;
         res.send({state: "SUCCESS", user: req.session.user});
       }else {

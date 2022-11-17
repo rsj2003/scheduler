@@ -8,6 +8,7 @@ const $calendarDateRel = document.querySelector("#date-rel");
 const $calendarSide = document.querySelector("#calendar-side");
 const $calendarArea = document.querySelector("#calendar-area");
 const $date = document.querySelector("#date");
+const $dateSub = document.querySelector("#date-sub");
 const $todayMonth = document.querySelector("#today-month");
 const $todayDate = document.querySelector("#today-date");
 const $userId = document.querySelector("#id span");
@@ -29,6 +30,7 @@ let dateScheduleList = [];
 let scheduleLoaded = false;
 let scheduleTrim = 0;
 let teamScheduleType = 1;
+let teamSchedulePrevType = teamScheduleType;
 let isToggleTimeout = false;
 let schedules  = [{
   scheduleNo: 1,
@@ -311,7 +313,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
             $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
 
             if((thisSchedule.startDate.year == year && thisSchedule.startDate.month == month && thisSchedule.startDate.date == date) || day == 0 || $prevSchedule) {
-              console.log(date, insert, todo);
               if(todo.length > 0 && todo.indexOf(1) == insert - 1) {
                 const $dummies = $calendarDate.querySelectorAll(".schedule");
 
@@ -347,7 +348,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
   $line.append($calendarDate);
 }
 
-const setCalendar = (year, month) => {
+const setCalendar = (year, month, $calendar = $date) => {
   const thisMonth = new Date(year, month, 0);
   const prevMonth = new Date(year, month - 1, 0);
   const prevDataMonth = new Date(year, month - 2, 0);
@@ -378,7 +379,7 @@ const setCalendar = (year, month) => {
 
   $thisMonth.innerHTML = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
 
-  const $removeDates = $date.querySelectorAll(".calendar-line");
+  const $removeDates = $calendar.querySelectorAll(".calendar-line");
 
   for(let i = 0; i < $removeDates.length; i++) {
     $removeDates[i].remove();
@@ -446,14 +447,14 @@ const setCalendar = (year, month) => {
       }
     }
 
-
-    $date.append($calendarLine);
+    $calendar.append($calendarLine);
   }
 
-  $date.style.height = `${calendarHeight * 3}px`;
-  $date.style.top = `-${calendarHeight / 6 * thisMonthLine}px`;
-  $date.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
-  moveMonth = false;
+  $calendar.style.height = `${calendarHeight * 3}px`;
+  $calendar.style.top = `-${calendarHeight / 6 * thisMonthLine}px`;
+  $calendar.style.gridTemplateRows = `repeat(${6 * 3}, 1fr)`;
+
+  if($calendar == $date) moveMonth = false;
 }
 
 const logined = e => {
@@ -462,7 +463,6 @@ const logined = e => {
   if(!isLogined) {
     isLogined = true;
     let widthType = 0;
-
 
     if(page.w < 1920) widthType = 1;
     if(page.w < 1600) widthType = 2;
@@ -680,24 +680,49 @@ $calendarDateRel.addEventListener("wheel", e => {
 })
 
 $toggleArea.addEventListener("click", e => {
-  const classList = $toggleArea.classList;
+  if(!moveMonth || moveMonth == 2) {
+    const classList = $toggleArea.classList;
+    let scheduleType = 1
+    moveMonth = 2;
 
-  if(classList.contains("is-solo")) {
-    $toggleArea.classList.remove("is-solo");
-    $toggleArea.classList.add("is-team");
-    teamScheduleType = 2;
-  }else if(classList.contains("is-team")) {
-    $toggleArea.classList.remove("is-team");
-    teamScheduleType = 1;
-  }else {
-    $toggleArea.classList.add("is-solo");
-    teamScheduleType = 0;
+    if(classList.contains("is-solo")) {
+      $toggleArea.classList.remove("is-solo");
+      $toggleArea.classList.add("is-team");
+      scheduleType = 2;
+    }else if(classList.contains("is-team")) {
+      $toggleArea.classList.remove("is-team");
+      scheduleType = 1;
+    }else {
+      $toggleArea.classList.add("is-solo");
+      scheduleType = 0;
+    }
+
+    clearTimeout(isToggleTimeout)
+    if(teamSchedulePrevType !== scheduleType) {
+      isToggleTimeout = setTimeout(e => {
+        moveMonth = true;
+        teamScheduleType = scheduleType
+        teamSchedulePrevType = teamScheduleType;
+        $dateSub.style.opacity = 0;
+        $dateSub.style.display = "grid";
+        setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, $dateSub);
+        setTimeout(e => {
+          $dateSub.style.transition = ".3s";
+          setTimeout(e => {
+            $dateSub.style.opacity = 1;
+            moveMonth = 2;
+            setTimeout(e => {
+              $dateSub.style.display = "none";
+              $dateSub.style.transition = "";
+              setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+            }, 300);
+          }, 10);
+        }, 20);
+      }, 500);
+    }else {
+      moveMonth = false;
+    }
   }
-
-  clearTimeout(isToggleTimeout)
-  isToggleTimeout = setTimeout(e => {
-    setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
-  }, 500);
 })
 
 const indexPageLoaded = e => {

@@ -155,7 +155,7 @@
 #side-toggle{right: -18px;}
 #cal-side-toggle{left: -18px;}
 #side-toggle .bar{background: #7FB77E; right: calc(50% - 3px);}
-#cal-side-toggle .bar{background: #555; left: calc(50% - 3px);}
+#cal-side-toggle .bar{background: #D57979; left: calc(50% - 3px);}
 .page-loaded .toggle-bar{transition: .8s;}
 .page-loaded .toggle-bar .bar{transition: .3s;}
 

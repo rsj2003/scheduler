@@ -148,7 +148,7 @@
 .is-team #selected{width: 50%; left: 50%;}
 .is-team #selected .toggle-text-area{left: -150px;}
 
-#calendar-side>div{background: #eba2a2; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px;}
+#calendar-side>div{background: #f3abab; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px;}
 #calendar-side>#team-list{height: 100%; background: #fff0f0;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}

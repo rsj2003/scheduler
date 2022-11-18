@@ -730,3 +730,14 @@ const indexPageLoaded = e => {
     setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
   })
 }
+
+const $teamList = document.querySelector("#team-list");
+const $calSideToggle = document.querySelector("#cal-side-toggle");
+const $calendarSideDivs = document.querySelectorAll("#calendar-side>div");
+
+const testing = e => {
+  $calendarSide.style.background = "#ebbeb0";
+  $calendarSideDivs.forEach(el => el.style.background = "#e99175");
+  $teamList.style.background = "#fff6f0";
+  $calSideToggle.style.background = "#0000";
+}

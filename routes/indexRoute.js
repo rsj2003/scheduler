@@ -46,12 +46,10 @@ router.post("/userData-action", function(req, res, next) {
 
 router.post("/register-action", function(req, res, next) {
   let body = [];
-
   req.on("data", chunk => {body.push(chunk)});
   req.on("end", e => {
     body = Buffer.concat(body).toString();
     req.body = body !== "" ? JSON.parse(body) : undefined;
-
     next();
   })
 }, function(req, res) {
@@ -106,12 +104,10 @@ router.post("/register-action", function(req, res, next) {
 
 router.post("/login-action", function(req, res, next) {
   let body = [];
-
   req.on("data", chunk => {body.push(chunk)});
   req.on("end", e => {
     body = Buffer.concat(body).toString();
     req.body = body !== "" ? JSON.parse(body) : undefined;
-
     next();
   })
 }, function(req, res) {
@@ -153,12 +149,10 @@ router.post("/login-action", function(req, res, next) {
 })
 router.post("/test-login-action", function(req, res, next) {
   let body = [];
-
   req.on("data", chunk => {body.push(chunk)});
   req.on("end", e => {
     body = Buffer.concat(body).toString();
     req.body = body !== "" ? JSON.parse(body) : undefined;
-
     next();
   })
 }, function(req, res) {
@@ -168,12 +162,10 @@ router.post("/test-login-action", function(req, res, next) {
 
 router.post("/logout-action", function(req, res, next) {
   let body = [];
-
   req.on("data", chunk => {body.push(chunk)});
   req.on("end", e => {
     body = Buffer.concat(body).toString();
     req.body = body !== "" ? JSON.parse(body) : undefined;
-
     next();
   })
 }, function(req, res) {
@@ -182,16 +174,6 @@ router.post("/logout-action", function(req, res, next) {
 })
 
 router.post("/get-schedules", function(req, res, next) {
-  let body = [];
-
-  req.on("data", chunk => {body.push(chunk)});
-  req.on("end", e => {
-    body = Buffer.concat(body).toString();
-    req.body = body !== "" ? JSON.parse(body) : undefined;
-
-    next();
-  })
-}, function(req, res) {
   if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: "test"});
   
   const conn = getConn();

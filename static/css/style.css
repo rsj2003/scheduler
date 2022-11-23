@@ -94,7 +94,7 @@
 /* main contents */
 #main{position: absolute; width: calc(100% - 300px); height: 100%; right: 0; top: 0; display: grid; grid-template-columns: 1fr 300px;}
 #calendar-side-area{position: relative; width: 100%; height: 100%;}
-#calendar-side{position: absolute; left: 300px; top: 0; width: 300px; height: 100%; background: #fbd9d9; padding: 25px; display: flex; gap: 25px; flex-direction: column;}
+#calendar-side{position: absolute; left: 300px; top: 0; width: 300px; height: 100%; background: #e8d9d5; padding: 25px; display: flex; gap: 25px; flex-direction: column;}
 .page-loaded #calendar-side{transition: .8s;}
 
 #calendar-area{padding: 60px 80px; pointer-events: none; opacity: 0; transform: scale(.9); height: 100%; display: grid; grid-template-rows: 75px 1fr;}
@@ -117,7 +117,7 @@
 .calendar-date span{width: 100%; height: 100%;}
 .calendar-date .date{justify-content: flex-end; align-items: center;}
 .calendar-date .date p{display: inline-flex; height: 100%; align-items: center; justify-content: center; border-radius: 0 0 0 7px; user-select: none;}
-.today .date p{background: #B1D7B4; color: #fff;}
+.today .date p{background: #d7bdb0; color: #fff;}
 .page-loaded .calendar-date p{transition: .8s;}
 .prev-date, .prev-data-date, .next-date, .next-data-date{background: #f0f0f0;}
 .prev-date p, .prev-data-date p, .next-date p, .next-data-date p{color: #777;}
@@ -148,14 +148,14 @@
 .is-team #selected{width: 50%; left: 50%;}
 .is-team #selected .toggle-text-area{left: -150px;}
 
-#calendar-side>div{background: #f3abab; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px;}
-#calendar-side>#team-list{height: 100%; background: #fff0f0;}
+#calendar-side>div{background: #dec8bf; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332;}
+#calendar-side>#team-list{height: 100%; background: #fff9;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
 #cal-side-toggle{left: -18px;}
 #side-toggle .bar{background: #7FB77E; right: calc(50% - 3px);}
-#cal-side-toggle .bar{background: #D57979; left: calc(50% - 3px);}
+#cal-side-toggle .bar{background: #b88d7f; left: calc(50% - 3px);}
 .page-loaded .toggle-bar{transition: .8s;}
 .page-loaded .toggle-bar .bar{transition: .3s;}
 

@@ -82,8 +82,9 @@
         <div id="calendar-side-area">
           <div id="calendar-side">
             <div id="cal-side-toggle" class="toggle-bar"><span class="bar"></span></div>
-            <div id="creat-team">Create Team</div>
-            <div id="invite-team">Invite</div>
+            <div id="open-create-team">Create Team</div>
+            <div id="open-invite-team">Invite</div>
+            <div id="open-request-team">Request</div>
             <div id="team-list"></div>
           </div>
         </div>
@@ -150,7 +151,89 @@
       <div id="today-date"></div>
     </div>
   </div>
-  <iframe id="ac-if" name="action-if" class="ac-if"></iframe>
+  <div id="add-schedule" class="popup">
+    <div class="popup-header">
+      <p>Add Schedule</p>
+    </div>
+    <div class="popup-content">
+      <form id="add-schedule-form" class="popup-form">
+        <span class="input-group input-name-group">
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="off">
+          <input type="color" name="color">
+        </span>
+        <span class="input-group">
+          <span>Content</span>
+          <textarea name="content"></textarea>
+        </span>
+        <span class="input-group input-time-group">
+          <span>Time</span>
+          <input type="date" name="start">
+          <span class="between-time">~</span>
+          <input type="date" name="end">
+        </span>
+        <span class="input-group">
+          <span>Team</span>
+          <select name="group"></select>
+        </span>
+        <span class="input-buttons">
+          <button id="add-schedule-button" class="add-button">Add</button>
+          <button class="close-button">Cancle</button>
+        </span>
+      </form>
+    </div>
+  </div>
+  <div id="modify-schedule" class="popup">
+    <div class="popup-header">
+      <p>Modify Schedule</p>
+    </div>
+    <div class="popup-content">
+      <form id="modify-schedule-form" class="popup-form">
+        <span class="input-group input-name-group">
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="off">
+          <input type="color" name="color">
+        </span>
+        <span class="input-group">
+          <span>Content</span>
+          <textarea name="content"></textarea>
+        </span>
+        <span class="input-group input-time-group">
+          <span>Time</span>
+          <input type="date" name="start">
+          <span class="between-time">~</span>
+          <input type="date" name="end">
+        </span>
+        <span class="input-group">
+          <span>Team</span>
+          <select name="group"></select>
+        </span>
+        <span class="input-buttons">
+          <button id="modify-schedule-button" class="modify-button">Modify</button>
+          <button id="delete-schedule-button" class="delete-button">delete</button>
+          <button class="close-button">Cancle</button>
+        </span>
+      </form>
+    </div>
+  </div>
+  <div id="create-team" class="popup other-color">
+    <div class="popup-header">
+      <p>Create Team</p>
+    </div>
+    <div class="popup-content">
+      <form id="create-team-form" class="popup-form">
+        <span class="input-group input-name-group">
+          <span>Name</span>
+          <input type="text" name="name" autocomplete="off">
+          <input type="color" name="color">
+        </span>
+        <span class="input-buttons">
+          <button id="create-team-button" class="create-button">Create</button>
+          <button class="close-button">Cancle</button>
+        </span>
+      </form>
+    </div>
+  </div>
   <script src="/js/index.js"></script>
   <script src="/js/user.js"></script>
   <script src="/js/login.js"></script>

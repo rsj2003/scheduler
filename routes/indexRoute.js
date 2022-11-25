@@ -122,7 +122,7 @@ router.post("/login-action", function(req, res, next) {
   }else {
     if(param.id == "login-test") {
       console.log("login-test");
-      req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0};
+      req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0, team: []};
       console.log(req.session.user);
       res.send({state: "SUCCESS", user: req.session.user});
       return;
@@ -135,10 +135,21 @@ router.post("/login-action", function(req, res, next) {
       
       if(result.length > 0) {
         let account = result[0];
-        console.log("login");
-        console.log(account);
-        req.session.user = account;
-        res.send({state: "SUCCESS", user: req.session.user});
+
+        const conn = getConn();
+        conn.connect();
+
+        conn.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${account.no}`, (err, result, firelds) => {
+          if(err) throw err;
+          
+          account.team = result;
+
+          console.log("login");
+          console.log(account);
+          req.session.user = account;
+          res.send({state: "SUCCESS", user: req.session.user});
+        });
+
       }else {
         res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
       }
@@ -178,14 +189,57 @@ router.post("/get-schedules", function(req, res, next) {
   
   const conn = getConn();
   conn.connect();
+  let sql = `SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`;
+  const teamList = req.session.user.team;
+
+  for(let i = 0; i < teamList.length; i++) {
+    sql += ` OR type = ${teamList[i].no}`;
+  }
     
-  conn.query(`SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`, (err, result, fields) => {
+  conn.query(sql, (err, result, fields) => {
     if(err) throw err;
 
     res.send({state: "SUCCESS", result: result});
   })
 
   conn.end();
+})
+
+router.post("/add-schedule", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.name = param.name.trim().toLocaleLowerCase();
+  param.color = param.color.trim();
+  param.content = param.content.trim().toLocaleLowerCase();
+  param.start = param.start.trim();
+  param.end = param.end.trim();
+  param.group = param.group.trim();
+
+  if(param.name == "") {
+    res.send({alert: "스케줄 명을 입력해주세요."});
+  }else if(param.start == "") {
+    res.send({alert: "시작 날짜를 입력해주세요."});
+  }else if(param.end == "") {
+    res.send({alert: "끝 날짜를 입력해주세요."});
+  }else {
+    const conn = getConn();
+    conn.connect();
+
+    conn.query(`INSERT INTO user(name, color, noticle, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result, fields) => {
+      if(err) throw err;
+
+      res.send({state: "SUCCESS"});
+    })
+    
+    conn.end();
+  }
 })
 
 module.exports = router;

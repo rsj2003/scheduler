@@ -96,13 +96,14 @@ $forgetPassword.addEventListener("click", e => {
 
 $registerForm.addEventListener("submit", e => {
   e.preventDefault();
+  const form = e.target;
 
   fetch("/register-action", {
     method: "POST",
     body: JSON.stringify({
-      id: e.target.id.value,
-      password: e.target.password.value,
-      email: e.target.email.value
+      id: form.id.value,
+      password: form.password.value,
+      email: form.email.value
     })
   })
   .then(req => req.json())
@@ -124,12 +125,13 @@ $registerForm.addEventListener("submit", e => {
 
 $loginForm.addEventListener("submit", e => {
   e.preventDefault();
+  const form = e.target;
 
   fetch("/login-action", {
     method: "POST",
     body: JSON.stringify({
-      id: e.target.id.value,
-      password: e.target.password.value
+      id: form.id.value,
+      password: form.password.value
     })
   })
   .then(req => req.json())

@@ -18,6 +18,13 @@ const $prevMonth = document.querySelector("#prev-month");
 const $nextMonth = document.querySelector("#next-month");
 const $toggleArea = document.querySelector("#toggle-area");
 const $selected = document.querySelector("#selected");
+const $openCreateTeam = document.querySelector("open-create-team");
+const $createTeam = document.querySelector("#create-team");
+const $addSchedule = document.querySelector("#add-schedule");
+const $addScheduleForm = document.querySelector("#add-schedule-form");
+const $addScheduleButton = document.querySelector("#add-schedule-button");
+const $popup = document.querySelectorAll(".popup");
+const $closeButton = document.querySelectorAll(".close-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
@@ -32,6 +39,7 @@ let scheduleTrim = 0;
 let teamScheduleType = 1;
 let teamSchedulePrevType = teamScheduleType;
 let isToggleTimeout = false;
+let popupOpened = false;
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
@@ -214,6 +222,42 @@ const setAlert = alert => {
   }
 }
 
+const appendTeam = el => {
+  const teamList = user.team;
+
+  for(let i = -1; i < teamList.length; i++) {
+    const option = document.createElement("option");
+    
+    if(i == -1) {
+      option.value = -1;
+      option.innerText = "개인"
+    }else {
+      option.value = teamList[i].no;
+      option.innerText = teamList[i].name;
+    }
+
+    el.append(option);
+  }
+
+}
+
+const openAddSchedule = thisDate => {
+  if(!popupOpened) {
+    popupOpened = true;
+
+    $addSchedule.style.display = "block";
+  
+    appendTeam($addScheduleForm.group);
+  
+    $addScheduleForm.name.value = "";
+    $addScheduleForm.color.value = "#B1D7B4";
+    $addScheduleForm.content.value = "";
+    $addScheduleForm.start.value = `${thisDate.year}-${thisDate.month}-${thisDate.date}`;
+    $addScheduleForm.end.value = `${thisDate.year}-${thisDate.month}-${thisDate.date}`;
+    $addScheduleForm.group.value = -1;
+  }
+}
+
 const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
   const $calendarDate = document.createElement("div");
   const thisHeight = lineHeight / 6;
@@ -236,6 +280,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
   $calendarDate.innerHTML = `<span class="date flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
   $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
+  if(isLogined) $calendarDate.addEventListener("click", e => openAddSchedule({year, month, date}));
 
   if(scheduleLoaded) {
     if(schedules[year] && schedules[year][month] && schedules[year][month][date * 1]) {
@@ -458,8 +503,6 @@ const setCalendar = (year, month, $calendar = $date) => {
 }
 
 const logined = e => {
-  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
-
   if(!isLogined) {
     isLogined = true;
     let widthType = 0;
@@ -477,6 +520,8 @@ const logined = e => {
       }, 250);
     }, 1000);
   }
+
+  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
 }
 
 const loadSchedules = e => {
@@ -498,8 +543,8 @@ const loadSchedules = e => {
         let start = new Date(schedule.startDate);
         let end = new Date(schedule.endDate);
 
-        schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay(), hour: start.getHours(), minutes: start.getMinutes()};
-        schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay(), hour: end.getHours(), minutes: end.getMinutes()};
+        schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay()};
+        schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay()};
         schedule.count = 0;
         schedule.sort = -1;
 
@@ -725,19 +770,44 @@ $toggleArea.addEventListener("click", e => {
   }
 })
 
+$createTeam.addEventListener("click", e => {
+
+})
+
+$closeButton.forEach(el => el.addEventListener("click", e => {
+  e.preventDefault();
+  popupOpened = false;
+  $popup.forEach(elm => elm.style.display = "none");
+}))
+
+$addScheduleButton.addEventListener("click", e => {
+  e.preventDefault();
+  popupOpened = false;
+  const form = $addScheduleForm;
+
+  fetch("/add-schedule", {
+    method: "POST",
+    body: JSON.stringify({
+      name: form.name.value,
+      color: form.color.value,
+      content: form.content.value,
+      start: form.start.value,
+      end: form.end.value,
+      group: form.group.value
+    })
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      loadSchedules();
+    }else {
+      console.error(res.err);
+    }
+  })
+})
+
 const indexPageLoaded = e => {
   window.addEventListener("resize", e => {
     setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
   })
-}
-
-const $teamList = document.querySelector("#team-list");
-const $calSideToggle = document.querySelector("#cal-side-toggle");
-const $calendarSideDivs = document.querySelectorAll("#calendar-side>div");
-
-const testing = e => {
-  $calendarSide.style.background = "#ebbeb0";
-  $calendarSideDivs.forEach(el => el.style.background = "#e99175");
-  $teamList.style.background = "#fff6f0";
-  $calSideToggle.style.background = "#0000";
 }

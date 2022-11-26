@@ -269,9 +269,9 @@ router.post("/get-team", function(req, res, next) {
           res.send({state: "SUCCESS", result: teamList});
         }
       })
-    }
 
-    conn.end();
+      conn.end();
+    }
   })
 
   conn.end();

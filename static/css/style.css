@@ -148,8 +148,8 @@
 .is-team #selected{width: 50%; left: 50%;}
 .is-team #selected .toggle-text-area{left: -150px;}
 
-#calendar-side>div{background: #dec8bf; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332;}
-#calendar-side>#team-list{height: 100%; background: #fff9;}
+#calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer;}
+#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
@@ -159,7 +159,7 @@
 .page-loaded .toggle-bar{transition: .8s;}
 .page-loaded .toggle-bar .bar{transition: .3s;}
 
-.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none;}
+.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px;}
 .popup-header{width: 100%; height: 60px; background: #7FB77E; color: #fff; font-size: 30px; display: flex; justify-content: center; align-items: center; font-weight: bold;}
 .other-color .popup-header{background: #b88d7f;}
 .popup-content{padding: 20px 60px;}
@@ -174,7 +174,7 @@
 .popup-content button+button{margin-left: 30px;}
 .popup-content button:hover{color: #fff; background: #7FB77E}
 .other-color .popup-content button:hover{background: #b88d7f;}
-.popup-content textarea{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%; height: 100%;}
+.popup-content textarea{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%; height: 84px;}
 .other-color .popup-content textarea{border-color: #d7bdb0;}
 .popup-content select{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%;}
 .other-color .popup-content select{border-color: #d7bdb0;}

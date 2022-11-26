@@ -18,7 +18,7 @@
         <div id="side-toggle" class="toggle-bar"><span class="bar"></span></div>
         <div id="user-data">
           <div id="user">
-            <div id="id">id: <span><% if(user) { %><%= user.id %><% } %></span></div>
+            <div id="id"><% if(user.name) { %>name: <% }else { %>id: <% } %><span><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
             <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
           </div>
           <button id="logout">logout</button>

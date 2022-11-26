@@ -167,7 +167,7 @@ router.post("/test-login-action", function(req, res, next) {
     next();
   })
 }, function(req, res) {
-  req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0};
+  req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: null, cellNo: "000", alert: 0};
   res.send({state: "SUCCESS", user: req.session.user});
 })
 
@@ -240,6 +240,41 @@ router.post("/add-schedule", function(req, res, next) {
     
     conn.end();
   }
+})
+
+router.post("/get-team", function(req, res, next) {
+  if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: [{no: 1, name: "test team", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}]}]});
+  
+  const conn = getConn();
+  conn.connect();
+
+  conn.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${req.session.user.no}`, (err, result, fields) => {
+    if(err) throw err;
+    const teamList = result;
+    let loadTeamCount = 0;
+
+    for(let i = 0; i < teamList.length; i++) {
+      const team = teamList[i];
+      const conn = getConn();
+      conn.connect();
+  
+      conn.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${team.no}`, (err, result, fields) => {
+        if(err) throw err;
+  
+        loadTeamCount++;
+        team.member = result;
+  
+        if(loadTeamCount == teamList.length) {
+          req.session.user.team = teamList;
+          res.send({state: "SUCCESS", result: teamList});
+        }
+      })
+    }
+
+    conn.end();
+  })
+
+  conn.end();
 })
 
 router.post("/create-team", function(req, res, next) {

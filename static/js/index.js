@@ -31,6 +31,7 @@ const $addScheduleButton = document.querySelector("#add-schedule-button");
 const $popup = document.querySelectorAll(".popup");
 const $closeButton = document.querySelectorAll(".close-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
+const $teamList = document.querySelector("#team-list");
 const today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
 let calendarMonth = undefined;
@@ -619,6 +620,75 @@ const loadSchedules = e => {
   })
 }
 
+const loadTeam = e => {
+  fetch("/get-team", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      let request = res.result;
+      user.team = request;
+
+      const teamItems = $teamList.querySelectorAll(".team-item");
+      for(let i = 0; i < teamItems.length; i++) {
+        teamItems[i].remove();
+      }
+
+      for(let i = 0; i < request.length; i++) {
+        const data = request[i];
+        const $item = document.createElement("div");
+        const $header = document.createElement("div");
+        const $content = document.createElement("div");
+        const $teamName = document.createElement("p");
+
+        $item.classList.add("team-item");
+        $header.classList.add("team-header");
+        $content.classList.add("team-content");
+
+        $teamName.innerText = data.name;
+        $header.append($teamName);
+
+        for(let j = 0; j < data.member.length; j++) {
+          const member = data.member[j];
+          const $memberItem = document.createElement("div");
+          const $listUi = document.createElement("div");
+          const $memberName = document.createElement("p");
+
+          $memberItem.classList.add("member-item");
+          $listUi.classList.add("list-ui");
+          $memberName.classList.add("member-name");
+
+          if(member.name) $memberName.innerText = member.name;
+          else $memberName.innerText = member.id;
+          $memberItem.append($listUi);
+          $memberItem.append($memberName);
+
+          if(member.position == "leader") {
+            $memberItem.classList.add("leader");
+
+            $content.prepend($memberItem);
+          }else {
+            $content.append($memberItem);
+          }
+        }
+
+        $item.append($header);
+        $item.append($content);
+
+        $teamList.append($item);
+      }
+
+      loadSchedules();
+    }else {
+      if(res.alert) {
+        setAlert(res.alert);
+      }
+    }
+  })
+}
+
 const prevMonthAni = e => {
   if(!moveMonth) {
     moveMonth = true;
@@ -791,11 +861,18 @@ $openCreateTeam.addEventListener("click", e => {
   }
 })
 
-$closeButton.forEach(el => el.addEventListener("click", e => {
-  e.preventDefault();
-  popupOpened = false;
-  $popup.forEach(elm => elm.style.display = "none");
-}))
+for(let i = 0; i < $closeButton.length; i++) {
+  const el = $closeButton[i];
+  
+  el.addEventListener("click", e => {
+    e.preventDefault();
+    popupOpened = false;
+
+    for(let j = 0; j < $popup.length; j++) {
+      $popup[j].style.display = "none";
+    }
+  })
+}
 
 $addScheduleButton.addEventListener("click", e => {
   e.preventDefault();
@@ -840,7 +917,7 @@ $createTeamButton.addEventListener("click", e => {
     if(res.state == "SUCCESS") {
       popupOpened = false;
       $createTeam.style.display = "none";
-      loadSchedules();
+      loadTeam();
     }else {
       console.error(res.err);
     }

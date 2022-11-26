@@ -21,7 +21,7 @@ const app = e => {
   }, 1)
 
   if(user.id) {
-    loadSchedules();
+    loadTeam();
   }
 
   page.w = window.innerWidth;

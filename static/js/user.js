@@ -8,6 +8,6 @@ fetch("/userData-action", {
 .then(res => {
   if(res.user.id) {
     user = res.user;
-    loadSchedules();
+    loadTeam();
   }
 })

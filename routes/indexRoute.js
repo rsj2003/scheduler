@@ -189,7 +189,7 @@ router.post("/get-schedules", function(req, res, next) {
   
   const conn = getConn();
   conn.connect();
-  let sql = `SELECT schedule_no as no, name, color, noticle, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`;
+  let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`;
   const teamList = req.session.user.team;
 
   for(let i = 0; i < teamList.length; i++) {
@@ -215,9 +215,9 @@ router.post("/add-schedule", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  param.name = param.name.trim().toLocaleLowerCase();
+  param.name = param.name.trim();
   param.color = param.color.trim();
-  param.content = param.content.trim().toLocaleLowerCase();
+  param.content = param.content.trim();
   param.start = param.start.trim();
   param.end = param.end.trim();
   param.group = param.group.trim();
@@ -232,10 +232,69 @@ router.post("/add-schedule", function(req, res, next) {
     const conn = getConn();
     conn.connect();
 
-    conn.query(`INSERT INTO user(name, color, noticle, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result, fields) => {
+    conn.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result, fields) => {
       if(err) throw err;
 
       res.send({state: "SUCCESS"});
+    })
+    
+    conn.end();
+  }
+})
+
+router.post("/create-team", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.name = param.name.trim();
+  param.color = param.color.trim();
+
+  if(param.name == "") {
+    res.send({alert: "팀 명을 입력해주세요."});
+  }else {
+    const conn = getConn();
+    conn.connect();
+
+    const exCode = new Date().getTime().toString() + Math.floor(Math.random() * 10).toString();
+
+    conn.query(`INSERT INTO scheduler.group(name, color, create_date, update_date) VALUES('${exCode}', '${param.color}', now(), now())`, (err, result, fields) => {
+      if(err) throw err;
+
+      const conn = getConn();
+      conn.connect();
+
+      conn.query(`SELECT group_no as no FROM scheduler.group WHERE name = '${exCode}'`, (err, result, fields) => {
+        if(err) throw err;
+
+        const groupNo = result[0].no;
+        const conn = getConn();
+        conn.connect();
+
+        conn.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${groupNo}, ${req.session.user.no}, 'leader', FALSE, now(), now())`, (err, result, fields) => {
+          if(err) throw err;
+
+          const conn = getConn();
+          conn.connect();
+
+          conn.query(`UPDATE scheduler.group SET name = '${param.name}' WHERE group_no = ${groupNo}`, (err, result, fields) => {
+            if(err) throw err;
+
+            res.send({state: "SUCCESS"});
+          })
+
+          conn.end();
+        })
+
+        conn.end();
+      })
+
+      conn.end();
     })
     
     conn.end();

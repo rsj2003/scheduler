@@ -7,6 +7,7 @@ const $calendar = document.querySelector("#calendar");
 const $calendarDateRel = document.querySelector("#date-rel");
 const $calendarSide = document.querySelector("#calendar-side");
 const $calendarArea = document.querySelector("#calendar-area");
+const $calSideToggle = document.querySelector("#cal-side-toggle");
 const $date = document.querySelector("#date");
 const $dateSub = document.querySelector("#date-sub");
 const $todayMonth = document.querySelector("#today-month");
@@ -18,8 +19,12 @@ const $prevMonth = document.querySelector("#prev-month");
 const $nextMonth = document.querySelector("#next-month");
 const $toggleArea = document.querySelector("#toggle-area");
 const $selected = document.querySelector("#selected");
-const $openCreateTeam = document.querySelector("open-create-team");
+const $openCreateTeam = document.querySelector("#open-create-team");
+const $openInviteTeam = document.querySelector("#open-invite-team");
+const $openRequestTeam = document.querySelector("#open-request-team");
 const $createTeam = document.querySelector("#create-team");
+const $createTeamForm = document.querySelector("#create-team-form");
+const $createTeamButton = document.querySelector("#create-team-button");
 const $addSchedule = document.querySelector("#add-schedule");
 const $addScheduleForm = document.querySelector("#add-schedule-form");
 const $addScheduleButton = document.querySelector("#add-schedule-button");
@@ -40,11 +45,13 @@ let teamScheduleType = 1;
 let teamSchedulePrevType = teamScheduleType;
 let isToggleTimeout = false;
 let popupOpened = false;
+let rightSideOpen = false;
+let leftSideOpen = true;
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
   color: "#cdedda",
-  notice: "this is text schedule",
+  content: "this is text schedule",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -54,7 +61,7 @@ let schedules  = [{
   scheduleNo: 2,
   name: "test2",
   color: "#cddaed",
-  notice: "this is text schedule2",
+  content: "this is text schedule2",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -64,7 +71,7 @@ let schedules  = [{
   scheduleNo: 3,
   name: "test3",
   color: "#daedcd",
-  notice: "this is text schedule3",
+  content: "this is text schedule3",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -74,7 +81,7 @@ let schedules  = [{
   scheduleNo: 4,
   name: "test4",
   color: "#257854",
-  notice: "this is text schedule4",
+  content: "this is text schedule4",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -84,7 +91,7 @@ let schedules  = [{
   scheduleNo: 5,
   name: "test5",
   color: "#257854",
-  notice: "this is text schedule5",
+  content: "this is text schedule5",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -94,7 +101,7 @@ let schedules  = [{
   scheduleNo: 6,
   name: "test6",
   color: "#257854",
-  notice: "this is text schedule6",
+  content: "this is text schedule6",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -104,7 +111,7 @@ let schedules  = [{
   scheduleNo: 7,
   name: "test7",
   color: "#257854",
-  notice: "this is text schedule7",
+  content: "this is text schedule7",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -114,7 +121,7 @@ let schedules  = [{
   scheduleNo: 8,
   name: "test8",
   color: "#54dfa2",
-  notice: "this is text schedule8",
+  content: "this is text schedule8",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -124,7 +131,7 @@ let schedules  = [{
   scheduleNo: 9,
   name: "test9",
   color: "#fa12cd",
-  notice: "this is text schedule9",
+  content: "this is text schedule9",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -134,7 +141,7 @@ let schedules  = [{
   scheduleNo: 10,
   name: "test10",
   color: "#caa5fd",
-  notice: "this is text schedule10",
+  content: "this is text schedule10",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -144,7 +151,7 @@ let schedules  = [{
   scheduleNo: 11,
   name: "test11",
   color: "#853459",
-  notice: "this is text schedule11",
+  content: "this is text schedule11",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -154,7 +161,7 @@ let schedules  = [{
   scheduleNo: 12,
   name: "test12",
   color: "#92cd76",
-  notice: "this is text schedule12",
+  content: "this is text schedule12",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -164,7 +171,7 @@ let schedules  = [{
   scheduleNo: 13,
   name: "test13",
   color: "#e5f46d",
-  notice: "this is text schedule13",
+  content: "this is text schedule13",
   createUser: -1,
   type: 1,
   alert: 0,
@@ -174,7 +181,7 @@ let schedules  = [{
   scheduleNo: 14,
   name: "test14",
   color: "#5e8cf4",
-  notice: "this is text schedule14",
+  content: "this is text schedule14",
   createUser: -1,
   type: -1,
   alert: 0,
@@ -184,7 +191,7 @@ let schedules  = [{
   scheduleNo: 15,
   name: "test15",
   color: "#5e8cf4",
-  notice: "this is text schedule15",
+  content: "this is text schedule15",
   createUser: 1,
   type: -1,
   alert: 0,
@@ -770,8 +777,18 @@ $toggleArea.addEventListener("click", e => {
   }
 })
 
-$createTeam.addEventListener("click", e => {
+$calSideToggle.addEventListener("click", e => {
 
+})
+
+$openCreateTeam.addEventListener("click", e => {
+  e.preventDefault();
+  if(!popupOpened) {
+    popupOpened = true;
+    $createTeam.style.display = "block";
+    $createTeamForm.name.value = "";
+    $createTeamForm.color.value = `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`;
+  }
 })
 
 $closeButton.forEach(el => el.addEventListener("click", e => {
@@ -782,7 +799,6 @@ $closeButton.forEach(el => el.addEventListener("click", e => {
 
 $addScheduleButton.addEventListener("click", e => {
   e.preventDefault();
-  popupOpened = false;
   const form = $addScheduleForm;
 
   fetch("/add-schedule", {
@@ -799,6 +815,31 @@ $addScheduleButton.addEventListener("click", e => {
   .then(req => req.json())
   .then(res => {
     if(res.state == "SUCCESS") {
+      popupOpened = false;
+      $addSchedule.style.display = "none";
+      loadSchedules();
+    }else {
+      console.error(res.err);
+    }
+  })
+})
+
+$createTeamButton.addEventListener("click", e => {
+  e.preventDefault();
+  const form = $createTeamForm;
+
+  fetch("/create-team", {
+    method: "POST",
+    body: JSON.stringify({
+      name: form.name.value,
+      color: form.color.value
+    })
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      popupOpened = false;
+      $createTeam.style.display = "none";
       loadSchedules();
     }else {
       console.error(res.err);

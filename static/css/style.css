@@ -164,7 +164,7 @@
 .other-color .popup-header{background: #b88d7f;}
 .popup-content{padding: 20px 60px;}
 .popup-content form{display: flex; flex-direction: column; align-items: flex-start; gap: 10px;}
-.popup-content .input-group{display: grid; grid-template-columns: 63px 1fr; width: 100%;}
+.popup-content .input-group{display: grid; grid-template-columns: 63px 1fr; width: 100%; align-items: center;}
 .popup-content .input-name-group{grid-template-columns: 63px 1fr 35px;}
 .popup-content .input-time-group{grid-template-columns: 63px 1fr 20px 1fr;}
 .popup-content input{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px;}

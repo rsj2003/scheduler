@@ -600,11 +600,29 @@ const loadSchedules = e => {
           }
 
           if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
-            for(let i = date.length - 1; i >= schedule.sort; i--) {
-              date[i].sort++;
-              date[i + 1] = date[i];
+            for(let j = date.length - 1; j >= schedule.sort; j--) {
+              if(date[j].lastSort != i) {
+                date[j].sort++;
+                date[j].lastSort = i;
+              }
+              date[j + 1] = date[j];
 
-              dummyType[date[i].sort] = date[i].type;
+              if(thisDate == endDate) {
+                let end = date[j + 1].endDate;
+                let dummyThisDate = new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1);
+                let dummyEndDate = new Date(end.year, end.month - 1, end.date);
+  
+                while(dummyThisDate <= dummyEndDate) {
+                  let dummyDate = result[dummyThisDate.getFullYear()][dummyThisDate.getMonth() + 1][dummyThisDate.getDate()];
+
+                  for(let k = dummyDate.length - 1; k > schedule.sort; k--) {
+                    date[k + 1] = date[k];
+                    date[k] = {startDate: "dummy", sort: k, type: schedule.type};
+                  }
+                }
+              }
+
+              dummyType[date[j].sort] = date[j].type;
             }
           }
 

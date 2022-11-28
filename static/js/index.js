@@ -607,7 +607,7 @@ const loadSchedules = e => {
               }
               date[j + 1] = date[j];
 
-              if(thisDate == endDate) {
+              if(thisDate.getTime() == endDate.getTime()) {
                 let end = date[j + 1].endDate;
                 let dummyThisDate = new Date(end.getFullYear(), end.getMonth(), end.getDate() + 1);
                 let dummyEndDate = new Date(end.year, end.month - 1, end.date);

@@ -232,6 +232,11 @@ const setAlert = alert => {
 
 const appendTeam = el => {
   const teamList = user.team;
+  const $options = el.querySelectorAll("option");
+
+  for(let i = 0; i < $options.length; i++) {
+    $options[i].remove();
+  }
 
   for(let i = -1; i < teamList.length; i++) {
     const option = document.createElement("option");
@@ -256,6 +261,8 @@ const openAddSchedule = thisDate => {
     $addSchedule.style.display = "block";
   
     appendTeam($addScheduleForm.group);
+
+    if(thisDate.month.toString().length == 1) thisDate.month = `0${thisDate.month}`;
   
     $addScheduleForm.name.value = "";
     $addScheduleForm.color.value = "#B1D7B4";

@@ -647,8 +647,8 @@ const loadSchedules = e => {
 
                   for(let k = dummyDate.length - 1; k >= schedule.sort; k--) {
                     dummyDate[k + 1] = date[k];
-                    dummyDate[k] = {startDate: "dummy", sort: k, type: schedule.type};
                   }
+                  dummyDate[schedule.sort] = {startDate: "dummy", sort: schedule.sort, type: schedule.type};
 
                   dummyThisDate = new Date(dummyThisDate.getFullYear(), dummyThisDate.getMonth(), dummyThisDate.getDate() + 1);
                 }

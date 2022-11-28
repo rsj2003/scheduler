@@ -198,6 +198,36 @@ let schedules  = [{
   alert: 0,
   startDate: "2022-11-19 12:00:00",
   endDate: "2022-11-19 18:00:00"
+},{
+  scheduleNo: 16,
+  name: "test16",
+  color: "#5e8cf4",
+  content: "this is text schedule16",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-01 12:00:00",
+  endDate: "2022-11-13 18:00:00"
+},{
+  scheduleNo: 17,
+  name: "test17",
+  color: "#5e8cb4",
+  content: "this is text schedule17",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-11-07 12:00:00",
+  endDate: "2022-11-12 18:00:00"
+},{
+  scheduleNo: 18,
+  name: "test18",
+  color: "#5edcc4",
+  content: "this is text schedule18",
+  createUser: 1,
+  type: 1,
+  alert: 0,
+  startDate: "2022-11-06 12:00:00",
+  endDate: "2022-11-08 18:00:00"
 }];
 
 const getTextColorByBackgroundColor = color => {
@@ -615,10 +645,12 @@ const loadSchedules = e => {
                 while(dummyThisDate <= dummyEndDate) {
                   let dummyDate = result[dummyThisDate.getFullYear()][dummyThisDate.getMonth() + 1][dummyThisDate.getDate()];
 
-                  for(let k = dummyDate.length - 1; k > schedule.sort; k--) {
-                    date[k + 1] = date[k];
-                    date[k] = {startDate: "dummy", sort: k, type: schedule.type};
+                  for(let k = dummyDate.length - 1; k >= schedule.sort; k--) {
+                    dummyDate[k + 1] = date[k];
+                    dummyDate[k] = {startDate: "dummy", sort: k, type: schedule.type};
                   }
+
+                  dummyThisDate = new Date(dummyThisDate.getFullYear(), dummyThisDate.getMonth(), dummyThisDate.getDate() + 1);
                 }
               }
 

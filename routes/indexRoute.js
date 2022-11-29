@@ -6,7 +6,7 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const session = require("express-session");
 
-const getConn = e => mysql.createConnection({
+const getConn = e => mysql.createPool({
   host: '158.247.239.116',
   user: 'dongyang',
   password: 'slm*123',

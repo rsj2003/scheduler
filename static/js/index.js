@@ -42,6 +42,7 @@ let moveMonth = false;
 let dateScheduleList = [];
 let scheduleLoaded = false;
 let scheduleTrim = 0;
+let scheduleTrimList = [];
 let teamScheduleType = 1;
 let teamSchedulePrevType = teamScheduleType;
 let isToggleTimeout = false;
@@ -127,7 +128,7 @@ let schedules  = [{
   type: -1,
   alert: 0,
   startDate: "2022-11-16 12:00:00",
-  endDate: "2023-01-22 18:00:00"
+  endDate: "2022-12-01 18:00:00"
 },{
   scheduleNo: 9,
   name: "test9",
@@ -228,6 +229,56 @@ let schedules  = [{
   alert: 0,
   startDate: "2022-11-06 12:00:00",
   endDate: "2022-11-08 18:00:00"
+},{
+  scheduleNo: 19,
+  name: "test19",
+  color: "#9e8cd4",
+  content: "this is text schedule19",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-12-12 12:00:00",
+  endDate: "2022-12-27 18:00:00"
+},{
+  scheduleNo: 20,
+  name: "test20",
+  color: "#5e8cf4",
+  content: "this is text schedule20",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-12-21 12:00:00",
+  endDate: "2022-12-25 18:00:00"
+},{
+  scheduleNo: 21,
+  name: "test21",
+  color: "#5e8cb4",
+  content: "this is text schedule21",
+  createUser: 1,
+  type: -1,
+  alert: 0,
+  startDate: "2022-12-16 12:00:00",
+  endDate: "2022-12-23 18:00:00"
+},{
+  scheduleNo: 22,
+  name: "test22",
+  color: "#5edcc4",
+  content: "this is text schedule22",
+  createUser: 1,
+  type: 1,
+  alert: 0,
+  startDate: "2022-12-25 12:00:00",
+  endDate: "2022-12-27 18:00:00"
+},{
+  scheduleNo: 23,
+  name: "test23",
+  color: "#5fdcb4",
+  content: "this is text schedule23",
+  createUser: 1,
+  type: 1,
+  alert: 0,
+  startDate: "2022-12-13 12:00:00",
+  endDate: "2022-12-16 18:00:00"
 }];
 
 const getTextColorByBackgroundColor = color => {
@@ -381,7 +432,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
           break;
         }else {
           if(i + 1 <= scheduleTrim) {
-            if(thisSchedule.startDate === "dummy") continue;
+            if(thisSchedule.startDate == "dummy") continue;
             else scheduleTrim = 0;
           }
           const $schedule = document.createElement("span");
@@ -393,6 +444,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
           if(thisSchedule.startDate !== "dummy") {
             let $prevSchedule = false;
             todo.push(1);
+
+            if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) scheduleTrimList.splice(scheduleTrimList.indexOf(thisSchedule.idx), scheduleTrimList.length);
 
             if($prevDate && rows - 2 == insert - scheduleTrim) {
               $prevSchedule = $prevDate.querySelector(".schedule-more");
@@ -420,9 +473,14 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
             }
           }else {
             if(day == 0) {
+              scheduleTrimList.push(thisSchedule.idx);
               scheduleTrim++;
               continue;
             }else {
+              if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) {
+                scheduleTrim++;
+                continue;
+              }
               todo.push(0);
             }
           }
@@ -450,6 +508,7 @@ const setCalendar = (year, month, $calendar = $date) => {
   let nowDates = 0;
   let thisMonthLine = 0;
   scheduleTrim = 0;
+  scheduleTrimList = [];
 
   $calendarDateRel.clientHeight = $calendarDateRel.clientHeight - ($calendarDateRel.clientHeight % 6 + 1);
 
@@ -592,6 +651,7 @@ const loadSchedules = e => {
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay()};
         schedule.count = 0;
         schedule.sort = -1;
+        schedule.dummy = {startDate: "dummy", sort: schedule.sort, type: schedule.type, idx: i};
 
         let thisDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
         let endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
@@ -622,10 +682,10 @@ const loadSchedules = e => {
             month[thisDate.getDate()] = date;
           }
           
-          if(schedule.count == 1) schedule.sort = date.length;
+          if(schedule.count == 1) schedule.sort = schedule.dummy.sort = date.length;
 
           while(date.length < schedule.sort) {
-            const dummy = {startDate: "dummy", sort: date.length, type: dummyType[date.length]};
+            const dummy = dummyType[date.length];
             date.push(dummy);
           }
 
@@ -633,6 +693,7 @@ const loadSchedules = e => {
             for(let j = date.length - 1; j >= schedule.sort; j--) {
               if(date[j].lastSort != i) {
                 date[j].sort++;
+                date[j].dummy.sort = date[j].sort
                 date[j].lastSort = i;
               }
               date[j + 1] = date[j];
@@ -646,20 +707,21 @@ const loadSchedules = e => {
                   let dummyDate = result[dummyThisDate.getFullYear()][dummyThisDate.getMonth() + 1][dummyThisDate.getDate()];
 
                   for(let k = dummyDate.length - 1; k >= schedule.sort; k--) {
-                    dummyDate[k + 1] = date[k];
+                    dummyDate[k + 1] = dummyDate[k];
                   }
-                  dummyDate[schedule.sort] = {startDate: "dummy", sort: schedule.sort, type: schedule.type};
+                  dummyDate[schedule.sort] = schedule.dummy;
 
                   dummyThisDate = new Date(dummyThisDate.getFullYear(), dummyThisDate.getMonth(), dummyThisDate.getDate() + 1);
                 }
               }
 
-              dummyType[date[j].sort] = date[j].type;
+              dummyType[date[j].sort] = date[j].dummy;
             }
           }
 
+          schedule.idx = i;
           date[schedule.sort] = schedule;
-          dummyType[schedule.sort] = schedule.type;
+          dummyType[schedule.sort] = schedule.dummy;
           
           thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
         }

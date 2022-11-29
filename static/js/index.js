@@ -32,6 +32,7 @@ const $popup = document.querySelectorAll(".popup");
 const $closeButton = document.querySelectorAll(".close-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const $teamList = document.querySelector("#team-list");
+const $popupBackground = document.querySelector("#popup-background");
 const today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
 let calendarMonth = undefined;
@@ -340,6 +341,7 @@ const openAddSchedule = thisDate => {
     popupOpened = true;
 
     $addSchedule.style.display = "block";
+    $popupBackground.style.display = "block";
   
     appendTeam($addScheduleForm.group);
 
@@ -376,7 +378,11 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
   $calendarDate.innerHTML = `<span class="date flex"><p style="width: ${thisHeight / rows * 1.25}px">${date}</p></span>`;
   $calendarDate.style.gridTemplateRows = `repeat(${rows - 1}, 1fr)`;
-  if(isLogined) $calendarDate.addEventListener("click", e => openAddSchedule({year, month, date}));
+  if(isLogined) $calendarDate.addEventListener("click", e => {
+    if(e.target == $calendarDate) {
+      openAddSchedule({year, month, date})
+    }
+  });
 
   if(scheduleLoaded) {
     if(schedules[year] && schedules[year][month] && schedules[year][month][date * 1]) {
@@ -403,6 +409,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
           const $background = $schedule.querySelector("span");
           const $p = $schedule.querySelector("p");
   
+          $schedule.classList.remove("dummy");
           $schedule.classList.add("schedule-more");
           $schedule.classList.add("schedule-end");
           $background.style.background = "#bbb";
@@ -483,6 +490,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
               }
               todo.push(0);
             }
+
+            $schedule.classList.add("dummy");
           }
           
           $background.append($p);
@@ -768,6 +777,8 @@ const loadTeam = e => {
 
         $teamName.innerText = data.name;
         $header.append($teamName);
+        $header.style.background = data.color;
+        $header.style.color = getTextColorByBackgroundColor(data.color);
 
         for(let j = 0; j < data.member.length; j++) {
           const member = data.member[j];
@@ -975,6 +986,7 @@ $openCreateTeam.addEventListener("click", e => {
   if(!popupOpened) {
     popupOpened = true;
     $createTeam.style.display = "block";
+    $popupBackground.style.display = "block";
     $createTeamForm.name.value = "";
     $createTeamForm.color.value = `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`;
   }
@@ -986,6 +998,8 @@ for(let i = 0; i < $closeButton.length; i++) {
   el.addEventListener("click", e => {
     e.preventDefault();
     popupOpened = false;
+
+    $popupBackground.style.display = "none";
 
     for(let j = 0; j < $popup.length; j++) {
       $popup[j].style.display = "none";

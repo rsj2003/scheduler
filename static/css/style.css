@@ -113,18 +113,22 @@
 #day>.sun{background: #ffbaba;}
 #day>.wke{background: #acf;}
 
-.calendar-date{display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); background: #fff;}
+.calendar-date{display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(4, 1fr); background: #fff; cursor: pointer;}
+.calendar-date:hover{background: #f8f8f8;}
 .calendar-date span{width: 100%; height: 100%;}
-.calendar-date .date{justify-content: flex-end; align-items: center;}
+.calendar-date .date{justify-content: flex-end; align-items: center; pointer-events: none;}
+.calendar-date .dummy{pointer-events: none;}
 .calendar-date .date p{display: inline-flex; height: 100%; align-items: center; justify-content: center; border-radius: 0 0 0 7px; user-select: none;}
 .today .date p{background: #d7bdb0; color: #fff;}
 .page-loaded .calendar-date p{transition: .8s;}
 .prev-date, .prev-data-date, .next-date, .next-data-date{background: #f0f0f0;}
+.prev-date:hover, .prev-data-date:hover, .next-date:hover, .next-data-date:hover{background: #e9e9e9;}
 .prev-date p, .prev-data-date p, .next-date p, .next-data-date p{color: #777;}
 .prev-date.today .date p, .prev-data-date.today .date p, .next-date.today .date p, .next-data-date.today .date p{background: #7FB77E; color: #fff;}
 
-.calendar-date .schedule{width: 100%; height: 100%;}
-.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8; cursor: pointer;}
+.calendar-date .schedule{width: 100%; height: 100%; cursor: pointer;}
+.calendar-date .schedule>span{pointer-events: none;}
+.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
 .calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
 .calendar-date .schedule-end>span{width: 100%; border-right: 1px solid #bbb8; border-top-right-radius: 5px; border-bottom-right-radius: 5px;}
 
@@ -149,7 +153,7 @@
 .is-team #selected .toggle-text-area{left: -150px;}
 
 #calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer;}
-#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default;}
+#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; overflow: auto; padding: 10px; gap: 20px; overflow-y: overlay;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
@@ -159,7 +163,8 @@
 .page-loaded .toggle-bar{transition: .8s;}
 .page-loaded .toggle-bar .bar{transition: .3s;}
 
-.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px;}
+#popup-background{width: 100%; height: 100%; background: #0002; position: absolute; left: 0; top: 0; z-index: 500; display: none;}
+.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px; z-index: 510;}
 .popup-header{width: 100%; height: 60px; background: #7FB77E; color: #fff; font-size: 30px; display: flex; justify-content: center; align-items: center; font-weight: bold;}
 .other-color .popup-header{background: #b88d7f;}
 .popup-content{padding: 20px 60px;}
@@ -180,6 +185,18 @@
 .other-color .popup-content select{border-color: #d7bdb0;}
 .popup-content .between-time{display: inline-block; text-align: center;}
 .popup-content .input-buttons{display: flex; justify-content: center; align-items: center; width: 100%; padding-top: 20px;}
+
+#team-list::-webkit-scrollbar{width: 10px; background: #0000;}
+#team-list::-webkit-scrollbar-track{width: 10px; background: #0000;}
+#team-list::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
+/* #team-list::-webkit-scrollbar-track{display: none;} */
+#team-list .team-item{width: 100%; height: auto; color: #888; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
+#team-list .team-header{padding: 3px 5px; border: #bbb 1px solid; border-radius: 3px; width: 100%; margin-bottom: 5px;}
+#team-list .team-content{width: 100%; height: auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
+#team-list .member-item{display: grid; grid-template-columns: 30px 1fr; width: 100%;}
+#team-list .list-ui{width: 13px; height: calc(100% + 2px); border-left: 1px solid #888; border-bottom: 1px solid #888; transform: translate(10px, calc(-40% - 1px));}
+#team-list .leader .list-ui{height: 60%; transform: translate(10px, 0);}
+#team-list .member-item:last-of-type .list-ui{border-bottom-left-radius: 7px;}
 
 @media screen and (max-width: 1919px) { 
 	#main{grid-template-columns: 1fr 0px;}

@@ -6,7 +6,7 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const session = require("express-session");
 
-const getConn = e => mysql.createPool({
+let getConn = e => mysql.createConnection({
   host: '158.247.239.116',
   user: 'dongyang',
   password: 'slm*123',
@@ -243,7 +243,7 @@ router.post("/add-schedule", function(req, res, next) {
 })
 
 router.post("/get-team", function(req, res, next) {
-  if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: [{no: 1, name: "test team", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}]}]});
+  if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: [{no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#852", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}]});
   
   const conn = getConn();
   conn.connect();
@@ -335,5 +335,27 @@ router.post("/create-team", function(req, res, next) {
     conn.end();
   }
 })
+
+const DBfunction = e => {
+  const conn = getConn();
+  conn.connect();
+
+  try{
+    conn.query(`SELECT 1`, e => {})
+  }catch(err) {
+    getConn = e => mysql.createPool({
+      host: '158.247.239.116',
+      user: 'dongyang',
+      password: 'slm*123',
+      database: 'scheduler'
+    })
+  }
+
+  DBquery = setTimeout(e => {DBfunction()}, 1000);
+
+  conn.end();
+}
+
+let DBquery = setTimeout(e => {DBfunction()}, 1000);
 
 module.exports = router;

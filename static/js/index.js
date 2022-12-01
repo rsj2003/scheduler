@@ -50,6 +50,7 @@ let isToggleTimeout = false;
 let popupOpened = false;
 let rightSideOpen = false;
 let leftSideOpen = true;
+let disable = [];
 let schedules  = [{
   scheduleNo: 1,
   name: "test",
@@ -65,7 +66,7 @@ let schedules  = [{
   name: "test2",
   color: "#cddaed",
   content: "this is text schedule2",
-  createUser: -1,
+  createUser: 3,
   type: -1,
   alert: 0,
   startDate: "2022-11-18 12:00:00",
@@ -75,7 +76,7 @@ let schedules  = [{
   name: "test3",
   color: "#daedcd",
   content: "this is text schedule3",
-  createUser: -1,
+  createUser: 2,
   type: 1,
   alert: 0,
   startDate: "2022-11-14 12:00:00",
@@ -85,7 +86,7 @@ let schedules  = [{
   name: "test4",
   color: "#257854",
   content: "this is text schedule4",
-  createUser: -1,
+  createUser: 2,
   type: -1,
   alert: 0,
   startDate: "2022-11-21 12:00:00",
@@ -105,7 +106,7 @@ let schedules  = [{
   name: "test6",
   color: "#257854",
   content: "this is text schedule6",
-  createUser: -1,
+  createUser: 1,
   type: 1,
   alert: 0,
   startDate: "2022-11-21 12:00:00",
@@ -115,7 +116,7 @@ let schedules  = [{
   name: "test7",
   color: "#257854",
   content: "this is text schedule7",
-  createUser: -1,
+  createUser: 1,
   type: -1,
   alert: 0,
   startDate: "2022-11-21 12:00:00",
@@ -125,7 +126,7 @@ let schedules  = [{
   name: "test8",
   color: "#54dfa2",
   content: "this is text schedule8",
-  createUser: -1,
+  createUser: 2,
   type: -1,
   alert: 0,
   startDate: "2022-11-16 12:00:00",
@@ -145,7 +146,7 @@ let schedules  = [{
   name: "test10",
   color: "#caa5fd",
   content: "this is text schedule10",
-  createUser: -1,
+  createUser: 2,
   type: -1,
   alert: 0,
   startDate: "2023-01-25 12:00:00",
@@ -165,7 +166,7 @@ let schedules  = [{
   name: "test12",
   color: "#92cd76",
   content: "this is text schedule12",
-  createUser: -1,
+  createUser: 2,
   type: 1,
   alert: 0,
   startDate: "2023-01-28 12:00:00",
@@ -395,12 +396,9 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
       for(let i = 0; i < schedule.length; i++) {
         const thisSchedule = schedule[i];
 
-        if(teamScheduleType == 0 && thisSchedule.type > -1) {
-          continue;
-        }
-        if(teamScheduleType == 2 && thisSchedule.type == -1) {
-          continue;
-        }
+        if(teamScheduleType == 0 && thisSchedule.type > -1) continue;
+        if(teamScheduleType == 2 && thisSchedule.type == -1) continue;
+        if(disable.indexOf(thisSchedule.type) > -1) continue;
 
         insert++;
 

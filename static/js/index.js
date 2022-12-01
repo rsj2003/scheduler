@@ -656,13 +656,12 @@ const loadSchedules = e => {
         let end = new Date(schedule.endDate);
         let dummyType = {};
 
-        console.log(i);
-
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay()};
         schedule.count = 0;
         schedule.sort = -1;
         schedule.dummy = {startDate: "dummy", sort: schedule.sort, type: schedule.type, idx: i};
+        schedule.idx = i;
 
         let thisDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
         let endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
@@ -707,7 +706,7 @@ const loadSchedules = e => {
             date.push(dummy);
           }
 
-          if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
+          // if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
             for(let j = date.length - 1; j >= schedule.sort; j--) {
               if(date[j].lastSort != i) {
                 date[j].sort++;
@@ -733,13 +732,12 @@ const loadSchedules = e => {
                 }
               }
 
-              dummyType[date[j].sort] = date[j].dummy;
+              // dummyType[date[j].sort] = date[j].dummy;
             }
-          }
+          // }
 
-          schedule.idx = i;
           date[schedule.sort] = schedule;
-          dummyType[schedule.sort] = schedule.dummy;
+          // dummyType[schedule.sort] = schedule.dummy;
           
           thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
         }

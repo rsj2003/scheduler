@@ -693,7 +693,7 @@ const loadSchedules = e => {
           
           if(start.getFullYear() == thisDate.getFullYear() && start.getMonth() == thisDate.getMonth() && start.getDate() == thisDate.getDate()) {
             for(let j = 0; j < date.length; j++) {
-              dummyType[j] = date[j];
+              dummyType[j] = date[j].dummy;
             }
           }
           

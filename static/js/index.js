@@ -708,7 +708,7 @@ const loadSchedules = e => {
 
           // if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
             for(let j = date.length - 1; j >= schedule.sort; j--) {
-              if(date[j].lastSort != i) {
+              if(date[j].lastSort != i && date[j].startDate !== "dummy") {
                 date[j].sort++;
                 date[j].dummy.sort = date[j].sort
                 date[j].lastSort = i;

@@ -647,7 +647,6 @@ const loadSchedules = e => {
     if(res.state == "SUCCESS") {
       let result = {};
       let request = res.result;
-      let dummyType = {};
 
       if(request == "test") request = schedules;
 
@@ -655,6 +654,7 @@ const loadSchedules = e => {
         let schedule = request[i];
         let start = new Date(schedule.startDate);
         let end = new Date(schedule.endDate);
+        let dummyType = {};
 
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay()};
@@ -689,6 +689,12 @@ const loadSchedules = e => {
             result[thisDate.getFullYear()] = year;
             year[thisDate.getMonth() + 1] = month;
             month[thisDate.getDate()] = date;
+          }
+          
+          if(start.getFullYear() == thisDate.getFullYear() && start.getMonth() == thisDate.getMonth() && start.getDate() == thisDate.getDate()) {
+            for(let j = 0; j < date.length; j++) {
+              dummyType[j] = date[j];
+            }
           }
           
           if(schedule.count == 1) schedule.sort = schedule.dummy.sort = date.length;
@@ -1027,6 +1033,7 @@ $addScheduleButton.addEventListener("click", e => {
     if(res.state == "SUCCESS") {
       popupOpened = false;
       $addSchedule.style.display = "none";
+      $popupBackground.style.display = "none";
       loadSchedules();
     }else {
       console.error(res.err);
@@ -1050,6 +1057,7 @@ $createTeamButton.addEventListener("click", e => {
     if(res.state == "SUCCESS") {
       popupOpened = false;
       $createTeam.style.display = "none";
+      $popupBackground.style.display = "none";
       loadTeam();
     }else {
       console.error(res.err);

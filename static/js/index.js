@@ -656,6 +656,8 @@ const loadSchedules = e => {
         let end = new Date(schedule.endDate);
         let dummyType = {};
 
+        console.log(i);
+
         schedule.startDate = {year: start.getFullYear(), month: start.getMonth() + 1, date: start.getDate(), day: start.getDay()};
         schedule.endDate = {year: end.getFullYear(), month: end.getMonth() + 1, date: end.getDate(), day: end.getDay()};
         schedule.count = 0;
@@ -693,7 +695,8 @@ const loadSchedules = e => {
           
           if(start.getFullYear() == thisDate.getFullYear() && start.getMonth() == thisDate.getMonth() && start.getDate() == thisDate.getDate()) {
             for(let j = 0; j < date.length; j++) {
-              dummyType[j] = date[j].dummy;
+              if(date[j].startDate == "dummy") dummyType[j] = date[j];
+              else dummyType[j] = date[j].dummy;
             }
           }
           

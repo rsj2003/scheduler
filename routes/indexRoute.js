@@ -6,12 +6,12 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const session = require("express-session");
 
-let getConn = e => mysql.createConnection({
-  host: '158.247.239.116',
-  user: 'dongyang',
-  password: 'slm*123',
-  database: 'scheduler'
-})
+// let getConn = e => mysql.createConnection({
+//   host: '158.247.239.116',
+//   user: 'dongyang',
+//   password: 'slm*123',
+//   database: 'scheduler'
+// })
 
 let pool = mysql.createPool({
   host: '158.247.239.116',
@@ -196,23 +196,27 @@ router.post("/logout-action", function(req, res, next) {
 
 router.post("/get-schedules", function(req, res, next) {
   if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: "test"});
+
   
-  const conn = getConn();
-  conn.connect();
-  let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`;
-  const teamList = req.session.user.team;
-
-  for(let i = 0; i < teamList.length; i++) {
-    sql += ` OR type = ${teamList[i].no}`;
-  }
-    
-  conn.query(sql, (err, result, fields) => {
+  pool.getConnection((err, connection) => {
     if(err) throw err;
+    else {
+      let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${req.session.user.no}`;
+      const teamList = req.session.user.team;
+    
+      for(let i = 0; i < teamList.length; i++) {
+        sql += ` OR type = ${teamList[i].no}`;
+      }
 
-    res.send({state: "SUCCESS", result: result});
+      connection.query(sql, (err, result) => {
+        if(err) throw err;
+
+        res.send({state: "SUCCESS", result: result});
+      })
+
+      connection.release();
+    }
   })
-
-  conn.end();
 })
 
 router.post("/add-schedule", function(req, res, next) {
@@ -254,37 +258,36 @@ router.post("/add-schedule", function(req, res, next) {
 
 router.post("/get-team", function(req, res, next) {
   if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: [{no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#852", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}, {no: 1, name: "test team", color: "#abc", member: [{no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -1, id: "login-test", name: null, position: "leader"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}, {no: -2, id: "login-test2", name: "teseter", position: "member"}]}]});
-  
-  const conn = getConn();
-  conn.connect();
 
-  conn.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${req.session.user.no}`, (err, result, fields) => {
+  pool.getConnection((err, connection) => {
     if(err) throw err;
-    const teamList = result;
-    let loadTeamCount = 0;
-
-    for(let i = 0; i < teamList.length; i++) {
-      const team = teamList[i];
-      const conn = getConn();
-      conn.connect();
-  
-      conn.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${team.no}`, (err, result, fields) => {
+    else {
+      connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${req.session.user.no}`, (err, result) => {
         if(err) throw err;
-  
-        loadTeamCount++;
-        team.member = result;
-  
-        if(loadTeamCount == teamList.length) {
-          req.session.user.team = teamList;
-          res.send({state: "SUCCESS", result: teamList});
+
+        const teamList = result;
+        let loadTeamCount = 0;
+
+        for(let i = 0; i < teamList.length; i++) {
+          const team = teamList[i];
+
+          connection.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${team.no}`, (err, result) => {
+            if(err) throw err;
+
+            loadTeamCount++;
+            team.member = result;
+      
+            if(loadTeamCount == teamList.length) {
+              req.session.user.team = teamList;
+              res.send({state: "SUCCESS", result: teamList});
+            }
+          })
         }
       })
-
-      conn.end();
+      
+      connection.release();
     }
   })
-
-  conn.end();
 })
 
 router.post("/create-team", function(req, res, next) {
@@ -303,63 +306,48 @@ router.post("/create-team", function(req, res, next) {
   if(param.name == "") {
     res.send({alert: "팀 명을 입력해주세요."});
   }else {
-    const conn = getConn();
-    conn.connect();
-
     const exCode = new Date().getTime().toString() + Math.floor(Math.random() * 10).toString();
 
-    conn.query(`INSERT INTO scheduler.group(name, color, create_date, update_date) VALUES('${exCode}', '${param.color}', now(), now())`, (err, result, fields) => {
+    pool.getConnection((err, connection) => {
       if(err) throw err;
-
-      const conn = getConn();
-      conn.connect();
-
-      conn.query(`SELECT group_no as no FROM scheduler.group WHERE name = '${exCode}'`, (err, result, fields) => {
-        if(err) throw err;
-
-        const groupNo = result[0].no;
-        const conn = getConn();
-        conn.connect();
-
-        conn.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${groupNo}, ${req.session.user.no}, 'leader', FALSE, now(), now())`, (err, result, fields) => {
+      else {
+        connection.query(`INSERT INTO scheduler.group(name, color, create_date, update_date) VALUES('${exCode}', '${param.color}', now(), now())`, (err, result) => {
           if(err) throw err;
 
-          const conn = getConn();
-          conn.connect();
-
-          conn.query(`UPDATE scheduler.group SET name = '${param.name}' WHERE group_no = ${groupNo}`, (err, result, fields) => {
+          connection.query(`SELECT group_no as no FROM scheduler.group WHERE name = '${exCode}'`, (err, result) => {
             if(err) throw err;
 
-            res.send({state: "SUCCESS"});
-          })
+            const groupNo = result[0].no;
 
-          conn.end();
-        })
-
-        conn.end();
-      })
-
-      conn.end();
-    })
+            connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${groupNo}, ${req.session.user.no}, 'leader', FALSE, now(), now())`, (err, result) => {
+              if(err) throw err;
+  
+              connection.query(`UPDATE scheduler.group SET name = '${param.name}' WHERE group_no = ${groupNo}`, (err, result) => {
+                if(err) throw err;
     
-    conn.end();
+                res.send({state: "SUCCESS"});
+              })
+            })
+          })
+        })
+        
+        connection.release();
+      }
+    })
   }
 })
 
 const DBfunction = e => {
-  const conn = getConn();
-  conn.connect();
-
-  try{
-    conn.query(`SELECT 1`, e => {})
-  }catch(err) {
-    getConn = e => mysql.createPool({
-      host: '158.247.239.116',
-      user: 'dongyang',
-      password: 'slm*123',
-      database: 'scheduler'
-    })
-  }
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`SELECT 1`, (err, result) => {
+        if(err) throw err;
+      })
+       
+      connection.release();
+    }
+  })
 
   DBquery = setTimeout(e => {DBfunction()}, 1000);
 

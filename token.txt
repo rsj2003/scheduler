@@ -43,3 +43,15 @@ Emitted 'error' event on Connection instance at:
 }
 
 Node.js v18.7.0
+
+
+pool.getConnection((err, connection) => {
+  if(err) throw err;
+  else {
+    connection.query(``, (err, result) => {
+      if(err) throw err;
+    })
+    
+    connection.release();
+  }
+})

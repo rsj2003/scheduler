@@ -6,13 +6,6 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const session = require("express-session");
 
-// let getConn = e => mysql.createConnection({
-//   host: '158.247.239.116',
-//   user: 'dongyang',
-//   password: 'slm*123',
-//   database: 'scheduler'
-// })
-
 let pool = mysql.createPool({
   host: '158.247.239.116',
   user: 'dongyang',
@@ -98,8 +91,6 @@ router.post("/register-action", function(req, res, next) {
               console.log({id: param.id, email: param.email});
               res.send({state: "SUCCESS", id: param.id});
             })
-            
-            conn.end();
           }
         })
 
@@ -245,8 +236,6 @@ router.post("/add-schedule", function(req, res, next) {
 
       res.send({state: "SUCCESS"});
     })
-    
-    conn.end();
   }
 })
 

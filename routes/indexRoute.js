@@ -350,8 +350,6 @@ const DBfunction = e => {
   })
 
   DBquery = setTimeout(e => {DBfunction()}, 1000);
-
-  conn.end();
 }
 
 let DBquery = setTimeout(e => {DBfunction()}, 1000);

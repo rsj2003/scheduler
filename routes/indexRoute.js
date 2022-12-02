@@ -251,21 +251,29 @@ router.post("/get-team", function(req, res, next) {
         const teamList = result;
         let loadTeamCount = 0;
 
-        for(let i = 0; i < teamList.length; i++) {
-          const team = teamList[i];
+        if(teamList.length > 0) {
+          for(let i = 0; i < teamList.length; i++) {
+            const team = teamList[i];
+  
+            connection.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${team.no}`, (err, result) => {
+              if(err) throw err;
+  
+              loadTeamCount++;
+              team.member = result;
+        
+              if(loadTeamCount == teamList.length) {
+                req.session.user.team = teamList;
+  
+                res.send({state: "SUCCESS", result: teamList});
+              }
+            })
+          }
+        }else {
+          req.session.user.team = [];
 
-          connection.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${team.no}`, (err, result) => {
-            if(err) throw err;
-
-            loadTeamCount++;
-            team.member = result;
-      
-            if(loadTeamCount == teamList.length) {
-              req.session.user.team = teamList;
-              res.send({state: "SUCCESS", result: teamList});
-            }
-          })
+          res.send({state: "SUCCESS", result: []});
         }
+
       })
       
       connection.release();

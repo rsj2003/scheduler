@@ -11,3 +11,35 @@ github_pat_11AJ4BL5A0YqMmGOILiBXh_er0tu5wpFy4GVkJkhz36WbYnCbr9rJ02dYgU4rbmYdMT2F
 
 
 INSERT INTO schedule(name, color, noticle, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES("test", "#cdedda", "this is test schedule", 2, -1, FALSE, "2022-11-14 12:00:00", "2022-11-18 18:00:00", now(), now());
+
+
+
+
+node:events:491
+      throw er: // Unhandled 'error' events
+
+Error: Packets out of order. Got: 0 Expected: 12
+    at Parser._tryReadPacketHeader (/root/scheduling/node_modules/mysql/lib/protocol/Parser.js:470:15)
+    at Parser.write (/root/scheduling/node_modules/mysql/lib/protocol/Parser.js:33:29)
+    at Protocol.write (/root/scheduling/node_modules/mysql/lib/protocol/Protocol.js:38:16)
+    at Socket.<anonymous> (/root/scheduling/node_modules/mysql/lib/Connection.js:88:28)
+    at Socket.<anonymous> (/root/scheduling/node_modules/mysql/lib/Connection.js:526:10)
+    at Socket.emit (node:events:516:28)
+    at addChunk (node:internal/streams/readable:324:12)
+    at readableAddChunk (node:internal/streams/readable:297:9)
+    at Readable.push (node:internal/streams/readable:297:9)
+    atTCP.onStreamRead (node:internal/stream_base_commons:190:23)
+Emitted 'error' event on Connection instance at:
+    at Connection._handleProtocolError (/root/scheduling/node_modules/mysql/lib/Connection.js:423:8)
+    at Protocol.emit (node:events:513:28)
+    at Protocol._delegateError (/root/scheduling/node_modules/mysql/lib/protocol/Protocol.js:398:10)
+    at Protocol.handleParserError (/root/scheduling/node_modules/mysql/lib/protocol/Protocol.js:380:10)
+    at Parser._tryReadPacketHeader (/root/scheduling/node_modules/mysql/lib/protocol/Parser.js:478:10)
+    at Parser.write (/root/scheduling/node_modules/mysql/lib/protocol/Parser.js:33:29)
+    [... lines matching original stack trace ...]
+    at Socket.emit (node:events:513:28) {
+  code: 'PROTOCOL_PACKETS_OUT_OF_ORDER',
+  fatal: true
+}
+
+Node.js v18.7.0

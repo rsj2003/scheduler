@@ -13,6 +13,13 @@ let getConn = e => mysql.createConnection({
   database: 'scheduler'
 })
 
+let pool = mysql.createPool({
+  host: '158.247.239.116',
+  user: 'dongyang',
+  password: 'slm*123',
+  database: 'scheduler'
+})
+
 const cipher = password => {
   return crypto.createHash("sha512").update(password).digest("base64");
 }
@@ -74,31 +81,34 @@ router.post("/register-action", function(req, res, next) {
     if(param.id.match(/[^a-z|0-9]/g)) {
       res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
     }
-    const conn = getConn();
-    conn.connect();
-    
-    conn.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result, fields) => {
+
+    pool.getConnection((err, connection) => {
       if(err) throw err;
-
-      if(result.length > 0) {
-        res.send({alert: "이미 사용중인 id입니다."});
-      }else {
-        const conn = getConn();
-        conn.connect();
-
-        conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result, fields) => {
+      else {
+        connection.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result) => {
           if(err) throw err;
 
-          console.log("register");
-          console.log({id: param.id, email: param.email});
-          res.send({state: "SUCCESS", id: param.id});
+          if(result.length > 0) {
+            res.send({alert: "이미 사용중인 id입니다."});
+          }else {
+            const conn = getConn();
+            conn.connect();
+    
+            conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result, fields) => {
+              if(err) throw err;
+    
+              console.log("register");
+              console.log({id: param.id, email: param.email});
+              res.send({state: "SUCCESS", id: param.id});
+            })
+            
+            conn.end();
+          }
         })
-        
-        conn.end();
+
+        connection.release();
       }
     })
-
-    conn.end();
   }
 })
 
@@ -127,37 +137,37 @@ router.post("/login-action", function(req, res, next) {
       res.send({state: "SUCCESS", user: req.session.user});
       return;
     }
-    const conn = getConn();
-    conn.connect();
-    
-    conn.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result, fields) => {
+
+    pool.getConnection((err, connection) => {
       if(err) throw err;
-      
-      if(result.length > 0) {
-        let account = result[0];
-
-        const conn = getConn();
-        conn.connect();
-
-        conn.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${account.no}`, (err, result, firelds) => {
+      else {
+        connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result) => {
           if(err) throw err;
+
+          if(result.length > 0) {
+            let account = result[0];
+
+            connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${account.no}`, (err, result) => {
+              if(err) throw err;
           
-          account.team = result;
+              account.team = result;
 
-          console.log("login");
-          console.log(account);
-          req.session.user = account;
-          res.send({state: "SUCCESS", user: req.session.user});
-        });
+              console.log("login");
+              console.log(account);
+              req.session.user = account;
+              res.send({state: "SUCCESS", user: req.session.user});
+            })
+          }else {
+            res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
+          }
+        })
 
-      }else {
-        res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
+        connection.release();
       }
     })
-
-    conn.end();
   }
 })
+
 router.post("/test-login-action", function(req, res, next) {
   let body = [];
   req.on("data", chunk => {body.push(chunk)});

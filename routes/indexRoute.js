@@ -91,10 +91,7 @@ router.post("/register-action", function(req, res, next) {
           if(result.length > 0) {
             res.send({alert: "이미 사용중인 id입니다."});
           }else {
-            const conn = getConn();
-            conn.connect();
-    
-            conn.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result, fields) => {
+            connection.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result) => {
               if(err) throw err;
     
               console.log("register");
@@ -243,10 +240,7 @@ router.post("/add-schedule", function(req, res, next) {
   }else if(param.end == "") {
     res.send({alert: "끝 날짜를 입력해주세요."});
   }else {
-    const conn = getConn();
-    conn.connect();
-
-    conn.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result, fields) => {
+    connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result) => {
       if(err) throw err;
 
       res.send({state: "SUCCESS"});

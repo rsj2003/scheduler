@@ -703,8 +703,6 @@ const loadSchedules = e => {
             const dummy = dummyType[date.length];
             date.push(dummy);
           }
-
-          // if(date[schedule.sort] !== undefined && date[schedule.sort].startDate !== "dummy") {
             for(let j = date.length - 1; j >= schedule.sort; j--) {
               if(date[j].lastSort != i && date[j].startDate !== "dummy") {
                 date[j].sort++;
@@ -729,13 +727,9 @@ const loadSchedules = e => {
                   dummyThisDate = new Date(dummyThisDate.getFullYear(), dummyThisDate.getMonth(), dummyThisDate.getDate() + 1);
                 }
               }
-
-              // dummyType[date[j].sort] = date[j].dummy;
             }
-          // }
 
           date[schedule.sort] = schedule;
-          // dummyType[schedule.sort] = schedule.dummy;
           
           thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
         }
@@ -774,16 +768,57 @@ const loadTeam = e => {
         const $item = document.createElement("div");
         const $header = document.createElement("div");
         const $content = document.createElement("div");
+        const $headerIcon = document.createElement("span");
         const $teamName = document.createElement("p");
+        const $teamShow = document.createElement("input");
+        const $teamShowLabel = document.createElement("label");
 
         $item.classList.add("team-item");
         $header.classList.add("team-header");
         $content.classList.add("team-content");
+        $headerIcon.classList.add("team-icon");
+        $headerIcon.classList.add("active");
+        $teamShow.classList.add("team-show");
+        $teamShowLabel.classList.add("team-show-label");
+
+        $header.append($teamShow);
+        $header.append($headerIcon);
+        $headerIcon.style.background = getTextColorByBackgroundColor(data.color);
+
+        $headerIcon.addEventListener("click", e => {
+          if($headerIcon.classList.contains("active")) {
+            $headerIcon.classList.remove("active");
+            $content.style.display = "none";
+          }else {
+            $headerIcon.classList.add("active");
+            $content.style.display = "block";
+          }
+        })
 
         $teamName.innerText = data.name;
         $header.append($teamName);
         $header.style.background = data.color;
         $header.style.color = getTextColorByBackgroundColor(data.color);
+
+        $teamShow.id = `team-show-${i}`;
+        $teamShow.type = "checkbox";
+        $teamShow.checked = true;
+
+        $teamShow.addEventListener("change", e => {
+          let idx = disable.indexOf(data.no);
+          if($teamShow.checked) {
+            if(idx > -1) disable.splice(idx, 1);
+          }else {
+            if(idx == -1) disable.push(idx);
+          }
+
+          loadSchedules();
+        })
+
+        $teamShowLabel.setAttribute("for", `team-show-${i}`);
+        $teamShowLabel.style.color = getTextColorByBackgroundColor(data.color);
+        $teamShowLabel.style.background = getTextColorByBackgroundColor(data.color);
+        $header.append($teamShowLabel);
 
         for(let j = 0; j < data.member.length; j++) {
           const member = data.member[j];
@@ -1011,6 +1046,17 @@ for(let i = 0; i < $closeButton.length; i++) {
     }
   })
 }
+
+$popupBackground.addEventListener("click", e => {
+  e.preventDefault();
+  popupOpened = false;
+
+  $popupBackground.style.display = "none";
+
+  for(let j = 0; j < $popup.length; j++) {
+    $popup[j].style.display = "none";
+  }
+})
 
 $addScheduleButton.addEventListener("click", e => {
   e.preventDefault();

@@ -343,6 +343,6 @@ const DBfunction = e => {
   DBquery = setTimeout(e => {DBfunction()}, 1000);
 }
 
-let DBquery = setTimeout(e => {DBfunction()}, 1000);
+// let DBquery = setTimeout(e => {DBfunction()}, 1000);
 
 module.exports = router;

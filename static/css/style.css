@@ -126,7 +126,7 @@
 .prev-date p, .prev-data-date p, .next-date p, .next-data-date p{color: #777;}
 .prev-date.today .date p, .prev-data-date.today .date p, .next-date.today .date p, .next-data-date.today .date p{background: #7FB77E; color: #fff;}
 
-.calendar-date .schedule{width: 100%; height: 100%; cursor: pointer;}
+.calendar-date .schedule{width: 100%; height: 100%; cursor: pointer; user-select: none;}
 .calendar-date .schedule>span{pointer-events: none;}
 .calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
 .calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
@@ -152,8 +152,8 @@
 .is-team #selected{width: 50%; left: 50%;}
 .is-team #selected .toggle-text-area{left: -150px;}
 
-#calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer;}
-#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; overflow: auto; padding: 10px; gap: 20px; overflow-y: overlay;}
+#calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer; user-select: none;}
+#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; overflow: auto; padding: 10px; gap: 10px; overflow-y: overlay;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
@@ -189,14 +189,18 @@
 #team-list::-webkit-scrollbar{width: 10px; background: #0000;}
 #team-list::-webkit-scrollbar-track{width: 10px; background: #0000;}
 #team-list::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
-/* #team-list::-webkit-scrollbar-track{display: none;} */
 #team-list .team-item{width: 100%; height: auto; color: #888; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
-#team-list .team-header{padding: 3px 5px; border: #bbb 1px solid; border-radius: 3px; width: 100%; margin-bottom: 5px;}
-#team-list .team-content{width: 100%; height: auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
+#team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 0 26px 1fr 26px;}
+#team-list .team-icon{width: 100%; height: 100%; display: block; clip-path: polygon(37.73% 28.76%, 74.52% 50%, 37.73% 71.24%, 37.73% 28.76%); transition: .2s; transform: translateX(-10%); cursor: pointer;}
+#team-list .team-icon.active{transform: translateX(-10%) rotate(90deg);}
+#team-list .team-content{width: 100%; height: auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-bottom: 10px;}
 #team-list .member-item{display: grid; grid-template-columns: 30px 1fr; width: 100%;}
-#team-list .list-ui{width: 13px; height: calc(100% + 2px); border-left: 1px solid #888; border-bottom: 1px solid #888; transform: translate(10px, calc(-40% - 1px));}
-#team-list .leader .list-ui{height: 60%; transform: translate(10px, 0);}
+#team-list .list-ui{width: 13px; height: calc(100% + 2px); border-left: 1px solid #888; border-bottom: 1px solid #888; transform: translate(10px, calc(-30% - 1px));}
+#team-list .leader .list-ui{height: 60%; transform: translate(10px, calc(100% / 6));}
 #team-list .member-item:last-of-type .list-ui{border-bottom-left-radius: 7px;}
+#team-list .team-show{display: none;}
+#team-list .team-show-label{margin: 3px; border: 2px solid; padding: 2px; display: block; width: 100%; height: 100%;}
+#team-list .team-show-label:checked::before{content: ""; background: inherit; display: block; width: 100%; height: 100%;}
 
 @media screen and (max-width: 1919px) { 
 	#main{grid-template-columns: 1fr 0px;}

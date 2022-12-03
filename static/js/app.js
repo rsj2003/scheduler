@@ -24,6 +24,10 @@ const app = e => {
     loadTeam();
   }
 
+  for(let i = 0; i < $alert.length; i++) {
+    $alert[i].innerHTML = " ";
+  }
+
   page.w = window.innerWidth;
   page.h = window.innerHeight;
   page.x = page.w / 2;

@@ -24,3 +24,5 @@ img{width: 100%; height: 100%;}
 input{outline: none;}
 button, input[type="button"], input[type="submit"]{cursor: pointer;}
 textarea{resize: none; outline: none;}
+
+h1, h2, h3, h4, h5, h6, p, a{user-select: none;}

@@ -298,7 +298,7 @@ const getTextColorByBackgroundColor = color => {
 
 const resetAlert = e => {
   for(let i = 0; i < $alert.length; i++) {
-    $alert[i].innerHTML = "";
+    $alert[i].innerHTML = " ";
   }
   for(let i = 0; i < $alertPop.length; i++) {
     $alertPop[i].style.display = "none";
@@ -808,19 +808,40 @@ const loadTeam = e => {
         $teamShow.checked = true;
 
         $teamShow.addEventListener("change", e => {
-          let idx = disable.indexOf(data.no);
-          if($teamShow.checked) {
-            if(idx > -1) disable.splice(idx, 1);
-          }else {
-            if(idx == -1) disable.push(data.no);
+          if(!moveMonth) {
+            let idx = disable.indexOf(data.no);
+            if($teamShow.checked) {
+              if(idx > -1) disable.splice(idx, 1);
+            }else {
+              if(idx == -1) disable.push(data.no);
+            }
+  
+  
+            moveMonth = true;
+            $dateSub.style.opacity = 0;
+            $dateSub.style.display = "grid";
+            setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, $dateSub);
+            setTimeout(e => {
+              $dateSub.style.transition = ".3s";
+              setTimeout(e => {
+                $dateSub.style.opacity = 1;
+                moveMonth = 2;
+                setTimeout(e => {
+                  $dateSub.style.display = "none";
+                  $dateSub.style.transition = "";
+                  setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+                }, 300);
+              }, 10);
+            }, 20);
           }
-
-          loadSchedules();
         })
 
         $teamShowLabel.setAttribute("for", `team-show-${i}`);
         $teamShowLabel.style.color = getTextColorByBackgroundColor(data.color);
         $teamShowLabelCheck.style.background = getTextColorByBackgroundColor(data.color);
+        $teamShowLabel.addEventListener("click", e => {
+          if(moveMonth) e.preventDefault();
+        })
         $teamShowLabel.append($teamShowLabelCheck);
         $header.append($teamShowLabel);
 
@@ -1043,6 +1064,7 @@ for(let i = 0; i < $closeButton.length; i++) {
     e.preventDefault();
     popupOpened = false;
 
+    resetAlert();
     $popupBackground.style.display = "none";
 
     for(let j = 0; j < $popup.length; j++) {
@@ -1055,6 +1077,7 @@ $popupBackground.addEventListener("click", e => {
   e.preventDefault();
   popupOpened = false;
 
+  resetAlert();
   $popupBackground.style.display = "none";
 
   for(let j = 0; j < $popup.length; j++) {
@@ -1083,9 +1106,12 @@ $addScheduleButton.addEventListener("click", e => {
       popupOpened = false;
       $addSchedule.style.display = "none";
       $popupBackground.style.display = "none";
+      resetAlert();
       loadSchedules();
     }else {
-      console.error(res.err);
+      if(res.alert) {
+        setAlert(res.alert);
+      }
     }
   })
 })
@@ -1107,9 +1133,12 @@ $createTeamButton.addEventListener("click", e => {
       popupOpened = false;
       $createTeam.style.display = "none";
       $popupBackground.style.display = "none";
+      resetAlert();
       loadTeam();
     }else {
-      console.error(res.err);
+      if(res.alert) {
+        setAlert(res.alert);
+      }
     }
   })
 })

@@ -399,7 +399,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
         if(teamScheduleType == 0 && thisSchedule.type > -1) continue;
         if(teamScheduleType == 2 && thisSchedule.type == -1) continue;
-        // if(disable.indexOf(thisSchedule.type) > -1) continue;
+        if(disable.indexOf(thisSchedule.type) > -1) continue;
 
         insert++;
 

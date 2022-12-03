@@ -231,10 +231,15 @@ router.post("/add-schedule", function(req, res, next) {
   }else if(param.end == "") {
     res.send({alert: "끝 날짜를 입력해주세요."});
   }else {
-    connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result) => {
+    pool.getConnection((err, connection) => {
       if(err) throw err;
+      else {
+        connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result) => {
+          if(err) throw err;
 
-      res.send({state: "SUCCESS"});
+          res.send({state: "SUCCESS"});
+        })
+      }
     })
   }
 })

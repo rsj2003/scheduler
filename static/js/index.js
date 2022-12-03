@@ -51,7 +51,8 @@ let popupOpened = false;
 let rightSideOpen = false;
 let leftSideOpen = true;
 let disable = [];
-let schedules  = [{
+let schedules = [];
+let schedulesData = [{
   scheduleNo: 1,
   name: "test",
   color: "#cdedda",
@@ -398,7 +399,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
         if(teamScheduleType == 0 && thisSchedule.type > -1) continue;
         if(teamScheduleType == 2 && thisSchedule.type == -1) continue;
-        if(disable.indexOf(thisSchedule.type) > -1) continue;
+        // if(disable.indexOf(thisSchedule.type) > -1) continue;
 
         insert++;
 
@@ -646,7 +647,7 @@ const loadSchedules = e => {
       let result = {};
       let request = res.result;
 
-      if(request == "test") request = schedules;
+      if(request == "test") request = JSON.parse(JSON.stringify(schedulesData));
 
       for(let i = 0; i < request.length; i++) {
         let schedule = request[i];
@@ -772,6 +773,7 @@ const loadTeam = e => {
         const $teamName = document.createElement("p");
         const $teamShow = document.createElement("input");
         const $teamShowLabel = document.createElement("label");
+        const $teamShowLabelCheck = document.createElement("span");
 
         $item.classList.add("team-item");
         $header.classList.add("team-header");
@@ -780,6 +782,7 @@ const loadTeam = e => {
         $headerIcon.classList.add("active");
         $teamShow.classList.add("team-show");
         $teamShowLabel.classList.add("team-show-label");
+        $teamShowLabelCheck.classList.add("team-show-label-check");
 
         $header.append($teamShow);
         $header.append($headerIcon);
@@ -809,7 +812,7 @@ const loadTeam = e => {
           if($teamShow.checked) {
             if(idx > -1) disable.splice(idx, 1);
           }else {
-            if(idx == -1) disable.push(idx);
+            if(idx == -1) disable.push(data.no);
           }
 
           loadSchedules();
@@ -817,7 +820,8 @@ const loadTeam = e => {
 
         $teamShowLabel.setAttribute("for", `team-show-${i}`);
         $teamShowLabel.style.color = getTextColorByBackgroundColor(data.color);
-        $teamShowLabel.style.background = getTextColorByBackgroundColor(data.color);
+        $teamShowLabelCheck.style.background = getTextColorByBackgroundColor(data.color);
+        $teamShowLabel.append($teamShowLabelCheck);
         $header.append($teamShowLabel);
 
         for(let j = 0; j < data.member.length; j++) {

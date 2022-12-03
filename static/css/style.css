@@ -190,8 +190,8 @@
 #team-list::-webkit-scrollbar-track{width: 10px; background: #0000;}
 #team-list::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
 #team-list .team-item{width: 100%; height: auto; color: #888; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
-#team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 0 26px 1fr 26px;}
-#team-list .team-icon{width: 100%; height: 100%; display: block; clip-path: polygon(37.73% 28.76%, 74.52% 50%, 37.73% 71.24%, 37.73% 28.76%); transition: .2s; transform: translateX(-10%); cursor: pointer;}
+#team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 26px 1fr 26px; align-items: center;}
+#team-list .team-icon{width: 26px; height: 26px; display: block; clip-path: polygon(37.73% 28.76%, 74.52% 50%, 37.73% 71.24%, 37.73% 28.76%); transition: .2s; transform: translateX(-10%); cursor: pointer;}
 #team-list .team-icon.active{transform: translateX(-10%) rotate(90deg);}
 #team-list .team-content{width: 100%; height: auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-bottom: 10px;}
 #team-list .member-item{display: grid; grid-template-columns: 30px 1fr; width: 100%;}
@@ -199,8 +199,9 @@
 #team-list .leader .list-ui{height: 60%; transform: translate(10px, calc(100% / 6));}
 #team-list .member-item:last-of-type .list-ui{border-bottom-left-radius: 7px;}
 #team-list .team-show{display: none;}
-#team-list .team-show-label{margin: 3px; border: 2px solid; padding: 2px; display: block; width: 100%; height: 100%;}
-#team-list .team-show-label:checked::before{content: ""; background: inherit; display: block; width: 100%; height: 100%;}
+#team-list .team-show-label{margin: 3px; border: 2px solid; padding: 2px; display: block; width: 20px; height: 20px; margin: 3px; }
+#team-list .team-show-label span{display: none; width: 100%; height: 100%;}
+#team-list .team-show:checked ~ .team-show-label span{display: block;}
 
 @media screen and (max-width: 1919px) { 
 	#main{grid-template-columns: 1fr 0px;}

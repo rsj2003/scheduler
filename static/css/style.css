@@ -194,7 +194,8 @@
 .invite-item ~ .invite-item{border-top: 1px solid #fff;}
 .invite-color-box{display: block; width: 25px; height: 25px; padding: 2px; border-radius: 5px; margin-right: 8px;}
 .invite-label{display: block; width: 100%; height: 100%; border: 2px solid; padding: 2px; border-radius: 4px; cursor: pointer;}
-.invite-color{display: block; width: 100%; height: 100%; border-radius: 2px;}
+.invite-color{display: none; width: 100%; height: 100%; border-radius: 2px;}
+.invite-checkbox:checked ~ .invite-color-box .invite-color{display: block;}
 .invite-name{font-size: 18px;}
 
 .scroll-bar{overflow-y: overlay;}

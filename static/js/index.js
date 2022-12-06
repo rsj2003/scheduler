@@ -802,6 +802,9 @@ const loadTeam = (invite = false) => {
               $checkbox.classList.add("none");
               $checkbox.type = "checkbox";
               $checkbox.name = "checkedTeam";
+              $checkbox.id = `invite-checkbox-${data.no}`;
+
+              $label.setAttribute("for", `invite-checkbox-${data.no}`);
 
               $colorBox.append($label);
               $label.append($color);

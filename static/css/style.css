@@ -155,7 +155,7 @@
 .is-team #selected .toggle-text-area{left: -150px;}
 
 #calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer; user-select: none;}
-#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; overflow: auto; padding: 10px; gap: 10px; overflow-y: overlay;}
+#calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; padding: 10px; gap: 10px;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
@@ -189,9 +189,19 @@
 .popup-content .alert{width: 100%; text-align: center; padding-top: 14px; height: 30px;}
 .popup-content .input-buttons{display: flex; justify-content: center; align-items: center; width: 100%;}
 
-#team-list::-webkit-scrollbar{width: 10px; background: #0000;}
-#team-list::-webkit-scrollbar-track{width: 10px; background: #0000;}
-#team-list::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
+#invite-team-list{width: 100%; min-height: 50px; max-height: 350px; background: #d7bdb055; padding: 10px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 5px; border-radius: 5px;}
+.invite-item{display: flex; width: 100%; align-items: center; padding: 7px 5px 2px;}
+.invite-item ~ .invite-item{border-top: 1px solid #fff;}
+.invite-color-box{display: block; width: 25px; height: 25px; padding: 2px; border-radius: 5px; margin-right: 8px;}
+.invite-label{display: block; width: 100%; height: 100%; border: 2px solid; padding: 2px; border-radius: 4px; cursor: pointer;}
+.invite-color{display: block; width: 100%; height: 100%; border-radius: 2px;}
+.invite-name{font-size: 18px;}
+
+.scroll-bar{overflow-y: overlay;}
+.scroll-bar::-webkit-scrollbar{width: 10px; background: #0000;}
+.scroll-bar::-webkit-scrollbar-track{width: 10px; background: #0000;}
+.scroll-bar::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
+
 #team-list .team-item{width: 100%; height: auto; color: #888; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
 #team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 26px 1fr 26px; align-items: center;}
 #team-list .team-icon{width: 26px; height: 26px; display: block; clip-path: polygon(37.73% 28.76%, 74.52% 50%, 37.73% 71.24%, 37.73% 28.76%); transition: .2s; transform: translateX(-10%); cursor: pointer;}

@@ -23,8 +23,14 @@ const $openCreateTeam = document.querySelector("#open-create-team");
 const $openInviteTeam = document.querySelector("#open-invite-team");
 const $openRequestTeam = document.querySelector("#open-request-team");
 const $createTeam = document.querySelector("#create-team");
+const $inviteTeam = document.querySelector("#invite-team");
+const $requestTeam = document.querySelector("#request-team");
+const $inviteTeamList = document.querySelector("#invite-team-list");
 const $createTeamForm = document.querySelector("#create-team-form");
+const $inviteTeamForm = document.querySelector("#invite-team-form");
+const $requestTeamForm = document.querySelector("#request-team-form");
 const $createTeamButton = document.querySelector("#create-team-button");
+const $inviteTeamButton = document.querySelector("#create-team-button");
 const $addSchedule = document.querySelector("#add-schedule");
 const $addScheduleForm = document.querySelector("#add-schedule-form");
 const $addScheduleButton = document.querySelector("#add-schedule-button");
@@ -748,7 +754,7 @@ const loadSchedules = e => {
   })
 }
 
-const loadTeam = e => {
+const loadTeam = (invite = false) => {
   fetch("/get-team", {
     method: "POST",
     body: JSON.stringify({})
@@ -758,6 +764,63 @@ const loadTeam = e => {
     if(res.state == "SUCCESS") {
       let request = res.result;
       user.team = request;
+
+      if(invite && !popupOpened) {
+        popupOpened = true;
+
+        $inviteTeam.style.display = "block";
+        $popupBackground.style.display = "block";
+        $inviteTeamForm.user.value = "";
+
+        const inviteTeamList = $inviteTeamList.querySelectorAll(".invite-item");
+        for(let i = 0; i < inviteTeamList.length; i++) {
+          inviteTeamList[i].remove();
+        }
+
+        for(let i = 0; i < request.length; i++) {
+          const data = request[i];
+          const members = data.member;
+
+          for(let j = 0; j < members.length; j++) {
+            const member = members[j];
+
+            if(member.position == "leader" && member.no == user.no) {
+              const $item = document.createElement("div");
+              const $checkbox = document.createElement("input");
+              const $colorBox = document.createElement("div");
+              const $label = document.createElement("label");
+              const $color = document.createElement("span");
+              const $name = document.createElement("p");
+
+              $item.classList.add("invite-item");
+              $checkbox.classList.add("invite-checkbox");
+              $colorBox.classList.add("invite-color-box");
+              $label.classList.add("invite-label");
+              $color.classList.add("invite-color");
+              $name.classList.add("invite-name");
+
+              $checkbox.classList.add("none");
+              $checkbox.type = "checkbox";
+              $checkbox.name = "checkedTeam";
+
+              $colorBox.append($label);
+              $label.append($color);
+
+              $colorBox.style.backgroundColor = getTextColorByBackgroundColor(data.color);
+              $label.style.borderColor = data.color;
+              $color.style.backgroundColor = data.color;
+
+              $name.innerText = data.name;
+
+              $item.append($checkbox);
+              $item.append($colorBox);
+              $item.append($name);
+
+              $inviteTeamList.append($item);
+            }
+          }
+        }
+      }
 
       const teamItems = $teamList.querySelectorAll(".team-item");
       for(let i = 0; i < teamItems.length; i++) {
@@ -1055,6 +1118,11 @@ $openCreateTeam.addEventListener("click", e => {
     $createTeamForm.name.value = "";
     $createTeamForm.color.value = `#${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}${Math.floor(Math.random() * 256).toString(16)}`;
   }
+})
+
+$openInviteTeam.addEventListener("click", e => {
+  e.preventDefault();
+  if(!popupOpened) loadTeam(true);
 })
 
 for(let i = 0; i < $closeButton.length; i++) {

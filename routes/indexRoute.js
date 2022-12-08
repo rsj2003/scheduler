@@ -334,7 +334,7 @@ router.post("/create-team", function(req, res, next) {
   }
 })
 
-router.post("/create-team", function(req, res, next) {
+router.post("/invite-team", function(req, res, next) {
   let body = [];
   req.on("data", chunk => {body.push(chunk)});
   req.on("end", e => {

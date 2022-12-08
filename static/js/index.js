@@ -1231,7 +1231,23 @@ $inviteTeamButton.addEventListener("click", e => {
     }
   }
 
-  console.log(param);
+  fetch("/invite-team", {
+    method: "POST",
+    body: JSON.stringify(param)
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      popupOpened = false;
+      $inviteTeam.style.display = "none";
+      $popupBackground.style.display = "none";
+      resetAlert();
+    }else {
+      if(res.alert) {
+        setAlert(res.alert);
+      }
+    }
+  })
 })
 
 const indexPageLoaded = e => {

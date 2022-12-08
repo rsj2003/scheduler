@@ -344,19 +344,19 @@ router.post("/invite-team", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  param.user = param.user.trim().toLocaleLowerCase();
+  param.uid = param.uid.trim().toLocaleLowerCase();
 
-  if(param.user == "") {
+  if(param.uid == "") {
     res.send({alert: "초대할 유저의 id를 입력해주세요."});
   }else if(param.no.length == 0) {
     res.send({alert: "초대할 팀을 선택해주세요."});
-  }else if(param.user.match(/[^a-z|0-9]/g)) {
+  }else if(param.uid.match(/[^a-z|0-9]/g)) {
     res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
   }else {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`SELECT user_no as no FROM user WHERE id = '${param.user}'`, (err, result) => {
+        connection.query(`SELECT user_no as no FROM user WHERE id = '${param.uid}'`, (err, result) => {
           if(err) throw err;
           
           if(result.length > 0) {

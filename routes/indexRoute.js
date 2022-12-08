@@ -366,7 +366,7 @@ router.post("/invite-team", function(req, res, next) {
             
             for(let i = 0; i < param.no.length; i++) {
               const groupNo = param.no[i];
-              connection.query(`SELECT invite FROM user WHERE user_no = '${userNo}' AND group_no = '${groupNo}'`, (err, result) => {
+              connection.query(`SELECT invite_no FROM invite WHERE user_no = '${userNo}' AND group_no = '${groupNo}'`, (err, result) => {
                 if(err) throw err;
                 
                 if(result.length == 0) {

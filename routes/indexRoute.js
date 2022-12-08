@@ -142,7 +142,7 @@ router.post("/login-action", function(req, res, next) {
               account.team = result;
 
               console.log("login");
-              console.log(account);
+              console.log({no: account.no, id: account.id, email: account.email, name: account.name, cellNo: account.cellNo});
               req.session.user = account;
               res.send({state: "SUCCESS", user: req.session.user});
             })
@@ -344,7 +344,7 @@ router.post("/invite-team", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  param.name = param.name.trim().toLocaleLowerCase();
+  param.user = param.user.trim().toLocaleLowerCase();
 
   if(param.user == "") {
     res.send({alert: "초대할 유저의 id를 입력해주세요."});

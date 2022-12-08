@@ -792,14 +792,14 @@ const loadTeam = (invite = false) => {
               const $color = document.createElement("span");
               const $name = document.createElement("p");
 
-              $item.dataset.no = data.no;
               $item.classList.add("invite-item");
               $checkbox.classList.add("invite-checkbox");
               $colorBox.classList.add("invite-color-box");
               $label.classList.add("invite-label");
               $color.classList.add("invite-color");
               $name.classList.add("invite-name");
-
+              
+              $checkbox.dataset.no = data.no;
               $checkbox.classList.add("none");
               $checkbox.type = "checkbox";
               $checkbox.name = "checkedTeam";

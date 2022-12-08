@@ -30,7 +30,7 @@ const $createTeamForm = document.querySelector("#create-team-form");
 const $inviteTeamForm = document.querySelector("#invite-team-form");
 const $requestTeamForm = document.querySelector("#request-team-form");
 const $createTeamButton = document.querySelector("#create-team-button");
-const $inviteTeamButton = document.querySelector("#create-team-button");
+const $inviteTeamButton = document.querySelector("#invite-team-button");
 const $addSchedule = document.querySelector("#add-schedule");
 const $addScheduleForm = document.querySelector("#add-schedule-form");
 const $addScheduleButton = document.querySelector("#add-schedule-button");
@@ -792,6 +792,7 @@ const loadTeam = (invite = false) => {
               const $color = document.createElement("span");
               const $name = document.createElement("p");
 
+              $item.dataset.no = data.no;
               $item.classList.add("invite-item");
               $checkbox.classList.add("invite-checkbox");
               $colorBox.classList.add("invite-color-box");
@@ -809,9 +810,10 @@ const loadTeam = (invite = false) => {
               $colorBox.append($label);
               $label.append($color);
 
-              $colorBox.style.backgroundColor = getTextColorByBackgroundColor(data.color);
-              $label.style.borderColor = data.color;
-              $color.style.backgroundColor = data.color;
+              $item.style.backgroundColor = data.color;
+              $item.style.color = getTextColorByBackgroundColor(data.color);
+              $label.style.borderColor = getTextColorByBackgroundColor(data.color);
+              $color.style.backgroundColor = getTextColorByBackgroundColor(data.color);
 
               $name.innerText = data.name;
 
@@ -1212,6 +1214,24 @@ $createTeamButton.addEventListener("click", e => {
       }
     }
   })
+})
+
+$inviteTeamButton.addEventListener("click", e => {
+  e.preventDefault();
+  const form = $inviteTeamForm;
+  const param = {};
+  param.uid = form.user.value;
+  param.no = [];
+
+  for(let i = 0; i < form.checkedTeam.length; i++) {
+    const thisCheckbox = form.checkedTeam[i];
+
+    if(thisCheckbox.checked) {
+      param.no.push(thisCheckbox.dataset.no);
+    }
+  }
+
+  console.log(param);
 })
 
 const indexPageLoaded = e => {

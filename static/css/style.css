@@ -166,7 +166,7 @@
 .page-loaded .toggle-bar .bar{transition: .3s;}
 
 #popup-background{width: 100%; height: 100%; background: #0002; position: absolute; left: 0; top: 0; z-index: 500; display: none;}
-.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px; z-index: 510;}
+.popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px; z-index: 510; max-height: 95%;}
 .popup-header{width: 100%; height: 60px; background: #7FB77E; color: #fff; font-size: 30px; display: flex; justify-content: center; align-items: center; font-weight: bold;}
 .other-color .popup-header{background: #b88d7f;}
 .popup-content{padding: 20px 60px;}
@@ -189,9 +189,8 @@
 .popup-content .alert{width: 100%; text-align: center; padding-top: 14px; height: 30px;}
 .popup-content .input-buttons{display: flex; justify-content: center; align-items: center; width: 100%;}
 
-#invite-team-list{width: 100%; min-height: 50px; max-height: 350px; background: #d7bdb055; padding: 10px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 5px; border-radius: 5px;}
-.invite-item{display: flex; width: 100%; align-items: center; padding: 7px 5px 2px;}
-.invite-item ~ .invite-item{border-top: 1px solid #fff;}
+#invite-team-list{width: 100%; min-height: 50px; max-height: 255px; background: #d7bdb055; padding: 10px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 5px; border-radius: 5px;}
+.invite-item{display: flex; width: 100%; align-items: center; padding: 5px 7px; border-radius: 5px;}
 .invite-color-box{display: block; width: 25px; height: 25px; padding: 2px; border-radius: 5px; margin-right: 8px;}
 .invite-label{display: block; width: 100%; height: 100%; border: 2px solid; padding: 2px; border-radius: 4px; cursor: pointer;}
 .invite-color{display: none; width: 100%; height: 100%; border-radius: 2px;}

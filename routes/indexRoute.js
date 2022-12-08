@@ -73,6 +73,7 @@ router.post("/register-action", function(req, res, next) {
     }
     if(param.id.match(/[^a-z|0-9]/g)) {
       res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
+      return;
     }
 
     pool.getConnection((err, connection) => {
@@ -327,6 +328,83 @@ router.post("/create-team", function(req, res, next) {
           })
         })
         
+        connection.release();
+      }
+    })
+  }
+})
+
+router.post("/create-team", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.name = param.name.trim().toLocaleLowerCase();
+
+  if(param.user == "") {
+    res.send({alert: "초대할 유저의 id를 입력해주세요."});
+  }else if(param.no.length == 0) {
+    res.send({alert: "초대할 팀을 선택해주세요."});
+  }else if(param.user.match(/[^a-z|0-9]/g)) {
+    res.send({alert: "id에는 영어와 숫자만 사용해주세요."});
+  }else {
+    pool.getConnection((err, connection) => {
+      if(err) throw err;
+      else {
+        connection.query(`SELECT user_no as no FROM user WHERE id = '${param.user}'`, (err, result) => {
+          if(err) throw err;
+          
+          if(result.length > 0) {
+            let insertInviteCount = 0;
+
+            const userNo = result[0].no;
+            
+            for(let i = 0; i < param.no.length; i++) {
+              const groupNo = param.no[i];
+              connection.query(`SELECT invite FROM user WHERE user_no = '${userNo}' AND group_no = '${groupNo}'`, (err, result) => {
+                if(err) throw err;
+                
+                if(result.length == 0) {
+                  connection.query(`SELECT member_no FROM member WHERE user_no = '${userNo}' AND group_no = '${groupNo}'`, (err, result) => {
+                    if(err) throw err;
+                    
+                    if(result.length == 0) {
+                      connection.query(`INSERT INTO invite(group_no, user_no, create_date, update_date) VALUES('${groupNo}', '${userNo}', now(), now())`, (err, result) => {
+                        if(err) throw err;
+                        
+                        insertInviteCount++;
+
+                        if(insertInviteCount == param.no.length) {
+                          res.send({state: "SUCCESS"});
+                        }
+                      })
+                    }else {
+                      insertInviteCount++;
+
+                      if(insertInviteCount == param.no.length) {
+                        res.send({state: "SUCCESS"});
+                      }
+                    }
+                  })
+                }else {
+                  insertInviteCount++;
+
+                  if(insertInviteCount == param.no.length) {
+                    res.send({state: "SUCCESS"});
+                  }
+                }
+              })
+            }
+          }else {
+            res.send({alert: "존재하지 않는 id입니다."});
+          }
+        })
+          
         connection.release();
       }
     })

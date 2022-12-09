@@ -644,6 +644,19 @@ const logined = e => {
   setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
 }
 
+const loadRequestCount = () => {
+  fetch("/get-request", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      $requestCount.innerHTML = res.count;
+    }
+  })
+}
+
 const loadSchedules = e => {
   fetch("/get-schedules", {
     method: "POST",
@@ -1050,19 +1063,6 @@ const nextMonthAni = e => {
       }, 800);
     }, 1);
   }
-}
-
-const loadRequestCount = () => {
-  fetch("/get-request", {
-    method: "POST",
-    body: JSON.stringify({})
-  })
-  .then(req => req.json())
-  .then(res => {
-    if(res.state == "SUCCESS") {
-      $requestCount.innerHTML = result.count;
-    }
-  })
 }
 
 const loadRequest = (open = false) => {

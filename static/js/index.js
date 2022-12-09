@@ -26,6 +26,7 @@ const $createTeam = document.querySelector("#create-team");
 const $inviteTeam = document.querySelector("#invite-team");
 const $requestTeam = document.querySelector("#request-team");
 const $inviteTeamList = document.querySelector("#invite-team-list");
+const $requestTeamList = document.querySelector("#request-team-list");
 const $createTeamForm = document.querySelector("#create-team-form");
 const $inviteTeamForm = document.querySelector("#invite-team-form");
 const $requestTeamForm = document.querySelector("#request-team-form");
@@ -39,6 +40,7 @@ const $closeButton = document.querySelectorAll(".close-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const $teamList = document.querySelector("#team-list");
 const $popupBackground = document.querySelector("#popup-background");
+const $requestCount = document.querySelector("#request-count");
 const today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
 let calendarMonth = undefined;
@@ -1048,6 +1050,112 @@ const nextMonthAni = e => {
   }
 }
 
+const loadRequestCount = (open = false) => {
+  fetch("/get-request", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      $requestCount.innerHTML = result.count;
+    }
+  })
+}
+
+const loadRequest = (open = false) => {
+  fetch("/get-request", {
+    method: "POST",
+    body: JSON.stringify({})
+  })
+  .then(req => req.json())
+  .then(res => {
+    if(res.state == "SUCCESS") {
+      if(!popupOpened || open) {
+        popupOpened = true;
+
+        const result = res.result;
+
+        $requestCount.innerHTML = result.length;
+
+        for(let i = 0; i < result.length; i++) {
+          const data = result[i];
+          const $item = document.createElement("div");
+          const $name = document.createElement("p");
+          const $accept = document.createElement("div");
+          const $refuse = document.createElement("div");
+
+          $item.classList.add("request-item");
+          $name.classList.add("request-name");
+          $accept.classList.add("request-button");
+          $refuse.classList.add("request-button");
+          
+          $item.style.backgroundColor = data.color;
+          $accept.style.borderColor =
+          $refuse.style.borderColor =
+          $item.style.color = getTextColorByBackgroundColor(data.color);
+
+          $name.innerText = data.name;
+          $accept.innerText = "Accept";
+          $refuse.innerText = "Refuse";
+
+          $accept.addEventListener("click", e => {
+            fetch("/accept-request", {
+              method: "POST",
+              body: JSON.stringify({
+                groupNo: data.no
+              })
+            })
+            .then(req => req.json())
+            .then(res => {
+              if(res.state == "SUCCESS") {
+                loadRequest(true);
+                loadTeam();
+              }else {
+                if(res.alert) {
+                  setAlert(res.alert);
+                }
+              }
+            })
+          })
+
+          $refuse.addEventListener("click", e => {
+            fetch("/refuse-request", {
+              method: "POST",
+              body: JSON.stringify({
+                groupNo: data.no
+              })
+            })
+            .then(req => req.json())
+            .then(res => {
+              if(res.state == "SUCCESS") {
+                loadRequest(true);
+              }else {
+                if(res.alert) {
+                  setAlert(res.alert);
+                }
+              }
+            })
+          })
+
+          $item.append($name);
+          $item.append($accept);
+          $item.append($refuse);
+
+          $requestTeamList.append($item);
+        }
+
+        $requestTeam.style.display = "block";
+        $popupBackground.style.display = "block";
+      }
+    }else {
+      if(res.alert) {
+        setAlert(res.alert);
+      }
+    }
+  })
+}
+
 $prevMonth.addEventListener("click", e => {
   prevMonthAni();
 })
@@ -1128,6 +1236,13 @@ $openCreateTeam.addEventListener("click", e => {
 $openInviteTeam.addEventListener("click", e => {
   e.preventDefault();
   if(!popupOpened) loadTeam(true);
+})
+
+$openRequestTeam.addEventListener("click", e => {
+  e.preventDefault();
+  if(!popupOpened) {
+    loadRequest();
+  }
 })
 
 for(let i = 0; i < $closeButton.length; i++) {

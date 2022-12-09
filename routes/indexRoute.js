@@ -411,6 +411,36 @@ router.post("/invite-team", function(req, res, next) {
   }
 })
 
+router.post("/get-request", function(req, res, next) {
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`SELECT group_no as no FROM invite where user_no = ${req.session.user.no}`, (err, result) => {
+        if(err) throw err;
+
+        res.send({state: "SUCCESS", result: result});
+      })
+      
+      connection.release();
+    }
+  })
+})
+
+router.post("/get-request-count", function(req, res, next) {
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`SELECT count(*) as count FROM invite where user_no = ${req.session.user.no}`, (err, result) => {
+        if(err) throw err;
+
+        res.send({state: "SUCCESS", count: result[0].count});
+      })
+      
+      connection.release();
+    }
+  })
+})
+
 const DBfunction = e => {
   pool.getConnection((err, connection) => {
     if(err) throw err;

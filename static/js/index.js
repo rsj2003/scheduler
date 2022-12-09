@@ -655,6 +655,8 @@ const loadSchedules = e => {
       let result = {};
       let request = res.result;
 
+      loadRequestCount();
+
       if(request == "test") request = JSON.parse(JSON.stringify(schedulesData));
 
       for(let i = 0; i < request.length; i++) {
@@ -1050,7 +1052,7 @@ const nextMonthAni = e => {
   }
 }
 
-const loadRequestCount = (open = false) => {
+const loadRequestCount = () => {
   fetch("/get-request", {
     method: "POST",
     body: JSON.stringify({})

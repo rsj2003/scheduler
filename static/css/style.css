@@ -156,6 +156,8 @@
 
 #calendar-side>div{background: #dbc2b8; color: #fff; width: 100%; display: flex; justify-content: center; align-items: center; padding: 8px 0; font-size: 18px; border-radius: 8px; box-shadow: 0 0 5px #3332; cursor: pointer; user-select: none;}
 #calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; padding: 10px; gap: 10px;}
+#calendar-side #open-request-team{position: relative;}
+#calendar-side #request-count{position: absolute; background: #7FB77E; color: #fff; padding: 3px 5px; right: 4px; top: 50%; transform: translateY(-50%); border-radius: 3px;}
 #wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}

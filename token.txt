@@ -6,8 +6,7 @@ sudo /usr/bin/mysql -u root -p
 
 git pull origin main
 
-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
-
+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
 
 
 INSERT INTO schedule(name, color, noticle, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES("test", "#cdedda", "this is test schedule", 2, -1, FALSE, "2022-11-14 12:00:00", "2022-11-18 18:00:00", now(), now());

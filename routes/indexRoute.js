@@ -415,7 +415,7 @@ router.post("/get-request", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT group_no as no FROM invite where user_no = ${req.session.user.no}`, (err, result) => {
+      connection.query(`SELECT gr.group_no as no, gr.color as color FROM invite in, scheduler.group gr where gr.group_no = in.group_no AND user_no = ${req.session.user.no}`, (err, result) => {
         if(err) throw err;
 
         res.send({state: "SUCCESS", result: result});

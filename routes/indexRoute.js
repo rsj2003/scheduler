@@ -433,7 +433,7 @@ router.post("/get-request-count", function(req, res, next) {
       connection.query(`SELECT count(*) as count FROM invite where user_no = ${req.session.user.no}`, (err, result) => {
         if(err) throw err;
 
-        res.send({state: "SUCCESS", count: result[0].count});
+        res.send({state: "SUCCESS", result: result[0]});
       })
       
       connection.release();

@@ -652,7 +652,7 @@ const loadRequestCount = () => {
   .then(req => req.json())
   .then(res => {
     if(res.state == "SUCCESS") {
-      $requestCount.innerHTML = res.count;
+      $requestCount.innerHTML = res.result.count;
     }
   })
 }
@@ -1079,6 +1079,11 @@ const loadRequest = (open = false) => {
         const result = res.result;
 
         $requestCount.innerHTML = result.length;
+
+        const requestTeamList = $requestTeamList.querySelectorAll(".request-item");
+        for(let i = 0; i < requestTeamList.length; i++) {
+          requestTeamList[i].remove();
+        }
 
         for(let i = 0; i < result.length; i++) {
           const data = result[i];

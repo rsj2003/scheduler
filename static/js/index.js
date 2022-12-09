@@ -645,7 +645,7 @@ const logined = e => {
 }
 
 const loadRequestCount = () => {
-  fetch("/get-request", {
+  fetch("/get-request-count", {
     method: "POST",
     body: JSON.stringify({})
   })

@@ -197,9 +197,9 @@
 .invite-checkbox:checked ~ .invite-color-box .invite-color{display: block;}
 .invite-name{font-size: 18px;}
 
-#requset-team-list{width: 100%; min-height: 50px; max-height: 255px; background: #d7bdb055; padding: 10px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 5px; border-radius: 5px;}
-.requset-item{display: flex; width: 100%; align-items: center; padding: 5px 7px; border-radius: 5px;}
-.requset-name{font-size: 18px;}
+#request-team-list{width: 100%; min-height: 50px; max-height: 255px; background: #d7bdb055; padding: 10px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 5px; border-radius: 5px;}
+.request-item{display: flex; width: 100%; align-items: center; padding: 5px 7px; border-radius: 5px;}
+.request-name{font-size: 18px;}
 
 .scroll-bar{overflow-y: overlay;}
 .scroll-bar::-webkit-scrollbar{width: 10px; background: #0000;}

@@ -1,5 +1,3 @@
-let user = {};
-
 fetch("/userData-action", {
   method: "POST",
   body: JSON.stringify({})

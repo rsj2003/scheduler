@@ -1,15 +1,3 @@
-const $login = document.querySelector("#login");
-const $register = document.querySelector("#register");
-const $forgetPassword = document.querySelector(".forgot-password");
-const $loginForm = document.querySelector("#login-form");
-const $registerForm = document.querySelector("#register-form");
-const $formBackgroundGrid = document.querySelector("#form-background .grid");
-const $registerGroup = document.querySelector("#register-group");
-const $loginGroup = document.querySelector("#login-group");
-const $formGroup = document.querySelector("#form-group");
-const $inputWrap = document.querySelector("#input-wrap");
-const $logout = document.querySelector("#logout");
-
 const loginToMain = e => {
   resetAlert();
   

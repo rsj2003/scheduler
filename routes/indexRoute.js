@@ -450,7 +450,7 @@ router.post("/accept-request", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  const groupNo = param.no;
+  const groupNo = param.groupNo;
 
   pool.getConnection((err, connection) => {
     if(err) throw err;
@@ -498,7 +498,7 @@ router.post("/refuse-request", function(req, res, next) {
   })
 }, function(req, res) {
   const param = req.body;
-  const groupNo = param.no;
+  const groupNo = param.groupNo;
 
   pool.getConnection((err, connection) => {
     if(err) throw err;

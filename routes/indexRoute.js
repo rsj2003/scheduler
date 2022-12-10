@@ -186,7 +186,6 @@ router.post("/logout-action", function(req, res, next) {
 router.post("/get-schedules", function(req, res, next) {
   if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: "test"});
 
-  
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
@@ -434,6 +433,80 @@ router.post("/get-request-count", function(req, res, next) {
         if(err) throw err;
 
         res.send({state: "SUCCESS", result: result[0]});
+      })
+      
+      connection.release();
+    }
+  })
+})
+
+router.post("/accept-request", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  const groupNo = param.no;
+
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`SELECT invite_no FROM invite WHERE user_no = '${req.session.user.no}' AND group_no = '${groupNo}'`, (err, result) => {
+        if(err) throw err;
+        
+        if(result.length > 0) {
+          connection.query(`SELECT member_no FROM member WHERE user_no = '${req.session.user.no}' AND group_no = '${groupNo}'`, (err, result) => {
+            if(err) throw err;
+    
+            let memberLenth = result.length;
+
+            connection.query(`DELETE FROM invite WHERE user_no = '${req.session.user.no}' AND group_no = '${groupNo}'`, (err, result) => {
+              if(err) throw err;
+      
+              if(memberLenth == 0) {
+                connection.query(`INSERT INTO invite(group_no, user_no, create_date, update_date) VALUES('${groupNo}', '${eq.session.user.no}', now(), now())`, (err, result) => {
+                  if(err) throw err;
+          
+                  res.send({state: "SUCCESS"});
+                })
+              }else {
+                res.send({alert: "이미 가입된 팀입니다."});
+              }
+            })
+          })
+        }else {
+          res.send({alert: "존재하지 않는 초대 입니다."});
+        }
+      })
+      
+      connection.release();
+    }
+  })
+})
+
+router.post("/refuse-request", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  const groupNo = param.no;
+
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`DELETE FROM invite WHERE user_no = '${req.session.user.no}' AND group_no = '${groupNo}'`, (err, result) => {
+        if(err) throw err;
+        
+        res.send({state: "SUCCESS"});
       })
       
       connection.release();

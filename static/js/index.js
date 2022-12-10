@@ -652,7 +652,12 @@ const loadRequestCount = () => {
   .then(req => req.json())
   .then(res => {
     if(res.state == "SUCCESS") {
-      $requestCount.innerHTML = res.result.count;
+      if(res.result.count == 0) {
+        $requestCount.style.display = "none";
+      }else {
+        $requestCount.style.display = "";
+        $requestCount.innerHTML = res.result.count;
+      }
     }
   })
 }
@@ -1078,7 +1083,12 @@ const loadRequest = (open = false) => {
 
         const result = res.result;
 
-        $requestCount.innerHTML = result.length;
+        if(result.length == 0) {
+          $requestCount.style.display = "none";
+        }else {
+          $requestCount.style.display = "";
+          $requestCount.innerHTML = result.length;
+        }
 
         const requestTeamList = $requestTeamList.querySelectorAll(".request-item");
         for(let i = 0; i < requestTeamList.length; i++) {
@@ -1120,6 +1130,8 @@ const loadRequest = (open = false) => {
                 loadTeam();
               }else {
                 if(res.alert) {
+                  loadRequest(true);
+                  loadTeam();
                   setAlert(res.alert);
                 }
               }

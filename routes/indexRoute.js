@@ -468,7 +468,7 @@ router.post("/accept-request", function(req, res, next) {
               if(err) throw err;
       
               if(memberLenth == 0) {
-                connection.query(`INSERT INTO invite(group_no, user_no, create_date, update_date) VALUES('${groupNo}', '${req.session.user.no}', now(), now())`, (err, result) => {
+                connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${groupNo}, ${req.session.user.no}, 'member', FALSE, now(), now())`, (err, result) => {
                   if(err) throw err;
           
                   res.send({state: "SUCCESS"});

@@ -426,6 +426,8 @@ router.post("/get-request", function(req, res, next) {
 })
 
 router.post("/get-request-count", function(req, res, next) {
+  if(req.session.user.id == "login-test") return res.send({state: "SUCCESS", result: {count: 0}});
+
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {

@@ -60,8 +60,9 @@ let rightSideOpen = false;
 let leftSideOpen = true;
 let disable = [];
 let schedules = [];
+let moreHoverIdx = 0;
 let schedulesData = [{
-  scheduleNo: 1,
+  no: 1,
   name: "test",
   color: "#cdedda",
   content: "this is text schedule",
@@ -71,7 +72,7 @@ let schedulesData = [{
   startDate: "2022-11-14 12:00:00",
   endDate: "2022-11-18 18:00:00"
 },{
-  scheduleNo: 2,
+  no: 2,
   name: "test2",
   color: "#cddaed",
   content: "this is text schedule2",
@@ -81,7 +82,7 @@ let schedulesData = [{
   startDate: "2022-11-18 12:00:00",
   endDate: "2022-11-18 18:00:00"
 },{
-  scheduleNo: 3,
+  no: 3,
   name: "test3",
   color: "#daedcd",
   content: "this is text schedule3",
@@ -91,7 +92,7 @@ let schedulesData = [{
   startDate: "2022-11-14 12:00:00",
   endDate: "2022-11-29 18:00:00"
 },{
-  scheduleNo: 4,
+  no: 4,
   name: "test4",
   color: "#257854",
   content: "this is text schedule4",
@@ -101,7 +102,7 @@ let schedulesData = [{
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
 },{
-  scheduleNo: 5,
+  no: 5,
   name: "test5",
   color: "#257854",
   content: "this is text schedule5",
@@ -111,7 +112,7 @@ let schedulesData = [{
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
 },{
-  scheduleNo: 6,
+  no: 6,
   name: "test6",
   color: "#257854",
   content: "this is text schedule6",
@@ -121,7 +122,7 @@ let schedulesData = [{
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
 },{
-  scheduleNo: 7,
+  no: 7,
   name: "test7",
   color: "#257854",
   content: "this is text schedule7",
@@ -131,7 +132,7 @@ let schedulesData = [{
   startDate: "2022-11-21 12:00:00",
   endDate: "2022-11-21 18:00:00"
 },{
-  scheduleNo: 8,
+  no: 8,
   name: "test8",
   color: "#54dfa2",
   content: "this is text schedule8",
@@ -141,7 +142,7 @@ let schedulesData = [{
   startDate: "2022-11-16 12:00:00",
   endDate: "2022-12-01 18:00:00"
 },{
-  scheduleNo: 9,
+  no: 9,
   name: "test9",
   color: "#fa12cd",
   content: "this is text schedule9",
@@ -151,7 +152,7 @@ let schedulesData = [{
   startDate: "2023-01-23 12:00:00",
   endDate: "2023-01-25 18:00:00"
 },{
-  scheduleNo: 10,
+  no: 10,
   name: "test10",
   color: "#caa5fd",
   content: "this is text schedule10",
@@ -161,7 +162,7 @@ let schedulesData = [{
   startDate: "2023-01-25 12:00:00",
   endDate: "2023-01-27 18:00:00"
 },{
-  scheduleNo: 11,
+  no: 11,
   name: "test11",
   color: "#853459",
   content: "this is text schedule11",
@@ -171,7 +172,7 @@ let schedulesData = [{
   startDate: "2023-01-26 12:00:00",
   endDate: "2023-01-31 18:00:00"
 },{
-  scheduleNo: 12,
+  no: 12,
   name: "test12",
   color: "#92cd76",
   content: "this is text schedule12",
@@ -181,7 +182,7 @@ let schedulesData = [{
   startDate: "2023-01-28 12:00:00",
   endDate: "2023-01-29 18:00:00"
 },{
-  scheduleNo: 13,
+  no: 13,
   name: "test13",
   color: "#e5f46d",
   content: "this is text schedule13",
@@ -191,7 +192,7 @@ let schedulesData = [{
   startDate: "2023-01-029 12:00:00",
   endDate: "2023-01-30 18:00:00"
 },{
-  scheduleNo: 14,
+  no: 14,
   name: "test14",
   color: "#5e8cf4",
   content: "this is text schedule14",
@@ -201,7 +202,7 @@ let schedulesData = [{
   startDate: "2023-01-29 12:00:00",
   endDate: "2023-02-07 18:00:00"
 },{
-  scheduleNo: 15,
+  no: 15,
   name: "test15",
   color: "#5e8cf4",
   content: "this is text schedule15",
@@ -211,7 +212,7 @@ let schedulesData = [{
   startDate: "2022-11-19 12:00:00",
   endDate: "2022-11-19 18:00:00"
 },{
-  scheduleNo: 16,
+  no: 16,
   name: "test16",
   color: "#5e8cf4",
   content: "this is text schedule16",
@@ -221,7 +222,7 @@ let schedulesData = [{
   startDate: "2022-11-01 12:00:00",
   endDate: "2022-11-13 18:00:00"
 },{
-  scheduleNo: 17,
+  no: 17,
   name: "test17",
   color: "#5e8cb4",
   content: "this is text schedule17",
@@ -231,7 +232,7 @@ let schedulesData = [{
   startDate: "2022-11-07 12:00:00",
   endDate: "2022-11-12 18:00:00"
 },{
-  scheduleNo: 18,
+  no: 18,
   name: "test18",
   color: "#5edcc4",
   content: "this is text schedule18",
@@ -241,7 +242,7 @@ let schedulesData = [{
   startDate: "2022-11-06 12:00:00",
   endDate: "2022-11-08 18:00:00"
 },{
-  scheduleNo: 19,
+  no: 19,
   name: "test19",
   color: "#9e8cd4",
   content: "this is text schedule19",
@@ -251,7 +252,7 @@ let schedulesData = [{
   startDate: "2022-12-12 12:00:00",
   endDate: "2022-12-27 18:00:00"
 },{
-  scheduleNo: 20,
+  no: 20,
   name: "test20",
   color: "#5e8cf4",
   content: "this is text schedule20",
@@ -261,7 +262,7 @@ let schedulesData = [{
   startDate: "2022-12-21 12:00:00",
   endDate: "2022-12-25 18:00:00"
 },{
-  scheduleNo: 21,
+  no: 21,
   name: "test21",
   color: "#5e8cb4",
   content: "this is text schedule21",
@@ -271,7 +272,7 @@ let schedulesData = [{
   startDate: "2022-12-16 12:00:00",
   endDate: "2022-12-23 18:00:00"
 },{
-  scheduleNo: 22,
+  no: 22,
   name: "test22",
   color: "#5edcc4",
   content: "this is text schedule22",
@@ -281,7 +282,7 @@ let schedulesData = [{
   startDate: "2022-12-25 12:00:00",
   endDate: "2022-12-27 18:00:00"
 },{
-  scheduleNo: 23,
+  no: 23,
   name: "test23",
   color: "#5fdcb4",
   content: "this is text schedule23",
@@ -302,6 +303,30 @@ const getTextColorByBackgroundColor = color => {
   const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
   return luma < 190 ? "#fff" : "#333";
+}
+
+const getHoverColorByBackgroundColor = color => {
+  const c = color.substring(1);
+  const rgb = parseInt(c, 16);
+  const r = (rgb >> 16) & 0xff;
+  const g = (rgb >>  8) & 0xff;
+  const b = (rgb >>  0) & 0xff;
+
+  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  let result = "#";
+
+  if(luma < 210) {
+    result += (r + 17 >= 255 ? 255 : r + 17).toString(16);
+    result += (g + 17 >= 255 ? 255 : g + 17).toString(16);
+    result += (b + 17 >= 255 ? 255 : b + 17).toString(16);
+  }else {
+    result += (r - 17 <= 0 ? 0 : r - 17).toString(16);
+    result += (g - 17 <= 0 ? 0 : g - 17).toString(16);
+    result += (b - 17 <= 0 ? 0 : b - 17).toString(16);
+  }
+
+  return result;
 }
 
 const resetAlert = e => {
@@ -415,11 +440,15 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
           const $background = $schedule.querySelector("span");
           const $p = $schedule.querySelector("p");
+          const no = $schedule.dataset.no;
   
+          $schedule.classList.remove(`schedule-no-${no}`);
           $schedule.classList.remove("dummy");
           $schedule.classList.add("schedule-more");
           $schedule.classList.add("schedule-end");
           $background.style.background = "#bbb";
+          $schedule.dataset.color = "#bbbbbb";
+          $schedule.dataset.hoverColor = "#cccccc";
           $p.style.color = "#fff";
           
           if($prevDate) {
@@ -428,6 +457,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
             if($prevSchedule && $prevSchedule.classList.contains("schedule-more")){
               $schedule.classList.remove("schedule-start");
               $prevSchedule.classList.remove("schedule-end");
+              $schedule.classList.add(`schedule-no-more-${moreHoverIdx}`);
+              $schedule.dataset.no = `more-${moreHoverIdx}`;  
               $p.innerText = "";
             }else {
               const $prevSchedules = $prevDate.querySelectorAll(".schedule");
@@ -435,11 +466,17 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
                 $prevSchedule.classList.add("schedule-end");
               }
 
+              moreHoverIdx++;
               $schedule.classList.add("schedule-start");
+              $schedule.classList.add(`schedule-no-more-${moreHoverIdx}`);
+              $schedule.dataset.no = `more-${moreHoverIdx}`;  
               $p.innerText = "More...";
             }
           }else {
+            moreHoverIdx++;
             $schedule.classList.add("schedule-start");
+            $schedule.classList.add(`schedule-no-more-${moreHoverIdx}`);
+            $schedule.dataset.no = `more-${moreHoverIdx}`;  
             $p.innerText = "More...";
           }
   
@@ -465,7 +502,11 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
               $prevSchedule = $prevDate.querySelector(".schedule-more");
             }
 
+            $schedule.dataset.color = thisSchedule.color;
+            $schedule.dataset.hoverColor = getHoverColorByBackgroundColor(thisSchedule.color);
+            $schedule.dataset.no = thisSchedule.no;
             $schedule.classList.add("schedule-date");
+            $schedule.classList.add(`schedule-no-${thisSchedule.no}`);
             $background.style.background = thisSchedule.color;
             $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
 
@@ -524,6 +565,7 @@ const setCalendar = (year, month, $calendar = $date) => {
   let nowDates = 0;
   let thisMonthLine = 0;
   scheduleTrim = 0;
+  moreHoverIdx = 0;
   scheduleTrimList = [];
 
   $calendarDateRel.clientHeight = $calendarDateRel.clientHeight - ($calendarDateRel.clientHeight % 6 + 1);
@@ -1382,6 +1424,24 @@ $inviteTeamButton.addEventListener("click", e => {
       }
     }
   })
+})
+
+document.addEventListener("mousemove", e => {
+  const target = e.target;
+  const no = target.dataset.no;
+  const hoverColor = target.dataset.hoverColor;
+  const $hovered = document.querySelectorAll(".schedule-hover");
+  const $targets = document.querySelectorAll(`.schedule-no-${no}`);
+
+  for(let i = 0; i < $hovered.length; i++) {
+    $hovered[i].classList.remove("schedule-hover");
+    $hovered[i].querySelector("span").style.background = $hovered[i].dataset.color;
+  }
+
+  for(let i = 0; i < $targets.length; i++) {
+    $targets[i].classList.add("schedule-hover");
+    $targets[i].querySelector("span").style.background = hoverColor;
+  }
 })
 
 const indexPageLoaded = e => {

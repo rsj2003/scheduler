@@ -11,6 +11,8 @@ const $inputWrap = document.querySelector("#input-wrap");
 const $logout = document.querySelector("#logout");
 
 const loginToMain = e => {
+  resetAlert();
+  
   $todayMonth.style.display = "block";
   $todayMonth.style.fontSize = "125px";
   $todayMonth.style.left = "130%";
@@ -111,6 +113,7 @@ $registerForm.addEventListener("submit", e => {
     if(res.state == "SUCCESS") {
       removeRegisterClass();
       $loginForm.id.value = res.id;
+      $loginForm.password.value = "";
       $loginForm.password.focus();
       setTimeout(e => {
         $registerForm.reset();

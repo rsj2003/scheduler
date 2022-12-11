@@ -28,6 +28,8 @@ const $addSchedule = document.querySelector("#add-schedule");
 const $addScheduleForm = document.querySelector("#add-schedule-form");
 const $addScheduleButton = document.querySelector("#add-schedule-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
+const $morePop = document.querySelector("#more-pop");
+const $moreCalendar = document.querySelector("#more-calendar");
 
 
 // team.js

@@ -16,6 +16,7 @@ let leftSideOpen = true;
 let disable = [];
 let schedules = [];
 let moreHoverIdx = 0;
+let moreHeight = 0;
 
 const getTextColorByBackgroundColor = color => {
   const c = color.substring(1);
@@ -73,10 +74,11 @@ const openAddSchedule = thisDate => {
   }
 }
 
-const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
+const colIntoLine = ($line, year, month, date, classList, lineHeight, more = false) => {
   const $calendarDate = document.createElement("div");
   const thisHeight = lineHeight / 6;
   let rows = 1;
+  let moreCount = 0;
 
   if(today.getFullYear() == year && today.getMonth() + 1 == month && today.getDate() == date) {
     classList = JSON.parse(JSON.stringify(classList));
@@ -118,8 +120,15 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
 
         insert++;
 
-        if(rows - 1 == insert - scheduleTrim) {
+        if(rows - 1 == insert - scheduleTrim && more !== false) {
+          moreCount++;
+          if(moreCount + (rows - 1) > moreHeight) moreHeight = moreCount + (rows - 1);
+          $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - (rows - 1)))}px`;
+        }
+
+        if(rows - 1 == insert - scheduleTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
+          if(!$schedule) break;
           const $background = $schedule.querySelector("span");
           const $p = $schedule.querySelector("p");
           const no = $schedule.dataset.no;
@@ -132,6 +141,42 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight) => {
           $schedule.dataset.color = "#bbbbbb";
           $schedule.dataset.hoverColor = "#cccccc";
           $p.style.color = "#fff";
+
+          $schedule.addEventListener("click", e => {
+            if(!popupOpened) {
+              popupOpened = true;
+              $morePop.style.display = "block";
+              $popupBackground.style.display = "block";
+              scheduleTrim = 0;
+              moreHeight = 1;
+
+              const moreStartDate = new Date(year, month - 1, date - day);
+              const $calendarLine = document.createElement("div");
+              const $prevCalendarList = $moreCalendar.querySelector(".calendar-line");
+              let thisDate = moreStartDate;
+
+              if($prevCalendarList) $prevCalendarList.remove();
+
+              $calendarLine.classList.add("calendar-line");
+              $calendarLine.style.width = `${$calendarDateRel.clientWidth}px`;
+
+              for(let j = 0; j < 7; j++) {
+                colIntoLine($calendarLine, thisDate.getFullYear(), thisDate.getMonth() + 1, thisDate.getDate(), ["calendar-date"], $calendarDateRel.clientHeight + 1, moreHeight);
+                thisDate = new Date(thisDate.getFullYear(), thisDate.getMonth(), thisDate.getDate() + 1);
+              }
+
+              const $moreDates = $calendarLine.querySelectorAll(".calendar-date");
+
+              for(let j = 0; j < $moreDates.length; j++) {
+                $moreDates[j].style.gridTemplateRows = `repeat(${moreHeight}, 1fr)`;
+              }
+
+              console.log($schedule.clientHeight);
+              console.log(moreStartDate);
+
+              $moreCalendar.append($calendarLine);
+            }
+          })
           
           if($prevDate) {
             const $prevSchedule = $prevDate.querySelector(".schedule:last-of-type");
@@ -249,8 +294,6 @@ const setCalendar = (year, month, $calendar = $date) => {
   scheduleTrim = 0;
   moreHoverIdx = 0;
   scheduleTrimList = [];
-
-  $calendarDateRel.clientHeight = $calendarDateRel.clientHeight - ($calendarDateRel.clientHeight % 6 + 1);
 
   calendarMonth = new Date(year, month, 0);
 

@@ -120,10 +120,11 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
 
         insert++;
 
-        if(rows - 1 == insert - scheduleTrim && more !== false) {
+        if(rows - 1 <= insert - scheduleTrim && more !== false) {
           moreCount++;
-          if(moreCount + (rows - 1) > moreHeight) moreHeight = moreCount + (rows - 1);
-          $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - (rows - 1)))}px`;
+          if(moreCount + (rows) > moreHeight) moreHeight = moreCount + (rows);
+          $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
+          console.log(moreCount, moreHeight);
         }
 
         if(rows - 1 == insert - scheduleTrim && more == false) {
@@ -168,7 +169,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               const $moreDates = $calendarLine.querySelectorAll(".calendar-date");
 
               for(let j = 0; j < $moreDates.length; j++) {
-                $moreDates[j].style.gridTemplateRows = `repeat(${moreHeight}, 1fr)`;
+                $moreDates[j].style.gridTemplateRows = `repeat(${moreHeight - 1}, 1fr)`;
               }
 
               console.log($schedule.clientHeight);

@@ -35,6 +35,8 @@ const app = e => {
 
   indexPageLoaded();
 
+  getUser();
+
   setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
 }
 

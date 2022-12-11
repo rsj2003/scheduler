@@ -1,23 +1,3 @@
-let calendarMonth = undefined;
-let isLogined = false;
-let prevTop = 0;
-let nextTop = 0;
-let moveMonth = false;
-let dateScheduleList = [];
-let scheduleLoaded = false;
-let scheduleTrim = 0;
-let scheduleTrimList = [];
-let teamScheduleType = 1;
-let teamSchedulePrevType = teamScheduleType;
-let isToggleTimeout = false;
-let popupOpened = false;
-let rightSideOpen = false;
-let leftSideOpen = true;
-let disable = [];
-let schedules = [];
-let moreHoverIdx = 0;
-let moreHeight = 0;
-
 const getTextColorByBackgroundColor = color => {
   const c = color.substring(1);
   const rgb = parseInt(c, 16);
@@ -405,6 +385,15 @@ const logined = e => {
 
       setTimeout(e => {
         $calendarSide.style.left = "0";
+
+        if(page.w < 1600) {
+          $backgroundGroup.style.transition = ".8s";
+          $inputWrap.style.transition = ".8s";
+          setTimeout(e => {
+            $backgroundGroup.style.left = "-300px";
+            $inputWrap.style.left = "-150px";
+          }, 250);
+        }
       }, 250);
     }, 1000);
   }
@@ -732,9 +721,3 @@ document.addEventListener("mousemove", e => {
     $targets[i].querySelector("span").style.background = hoverColor;
   }
 })
-
-const indexPageLoaded = e => {
-  window.addEventListener("resize", e => {
-    setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
-  })
-}

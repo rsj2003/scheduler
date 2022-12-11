@@ -16,8 +16,36 @@ const setAlert = alert => {
   }
 }
 
-$calSideToggle.addEventListener("click", e => {
+$sideToggle.addEventListener("click", e => {
+  if(page.w < 1600) {
+    $backgroundGroup.style.transition = ".8s";
+    $inputWrap.style.transition = ".8s";
+    setTimeout(e => {
+      if(leftSideOpen) {
+        leftSideOpen = false;
+        $backgroundGroup.style.left = "-300px";
+        $inputWrap.style.left = "-150px";
+      }else {
+        leftSideOpen = true;
+        $backgroundGroup.style.left = "0";
+        $inputWrap.style.left = "150px";
+      }
+    }, 1)
+  }
+})
 
+$calSideToggle.addEventListener("click", e => {
+  if(page.w < 1920) {
+    if(rightSideOpen) {
+      rightSideOpen = false;
+      $calendarSide.style.left = "0";
+      $calSideToggle.style.left = "";
+    }else {
+      rightSideOpen = true;
+      $calendarSide.style.left = "-300px";
+      $calSideToggle.style.left = "-18px";
+    }
+  }
 })
 
 for(let i = 0; i < $closeButton.length; i++) {
@@ -47,3 +75,44 @@ $popupBackground.addEventListener("click", e => {
     $popup[j].style.display = "none";
   }
 })
+
+const resizeLeftSide = e => {
+  $backgroundGroup.style.transition = "0s";
+  $inputWrap.style.transition = "0s";
+  setTimeout(e => {
+    if(page.w < 1600) {
+      $backgroundGroup.style.left = "-300px";
+      $inputWrap.style.left = "-150px";
+    }
+  }, 1)
+}
+
+const indexPageLoaded = e => {
+  window.addEventListener("resize", e => {
+    page.w = window.innerWidth;
+    page.h = window.innerHeight;
+    page.x = page.w / 2;
+    page.y = page.h / 2;
+
+    if(page.w >= 1920) {
+      rightSideOpen = false;
+      $calendarSide.style.left = "0";
+      $calSideToggle.style.left = "";
+    }
+
+    $backgroundGroup.style.transition = "0s";
+    $inputWrap.style.transition = "0s";
+    setTimeout(e => {
+      if(page.w >= 1600) {
+        leftSideOpen = false;
+        $backgroundGroup.style.left = "0";
+        $inputWrap.style.left = "150px";
+      }else if(!leftSideOpen) {
+        $backgroundGroup.style.left = "-300px";
+        $inputWrap.style.left = "-150px";
+      }
+    }, 1)
+
+    setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
+  })
+}

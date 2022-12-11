@@ -1,5 +1,6 @@
 // index.js
 const $wrap = document.querySelector("#wrap");
+const $backgroundGroup = document.querySelector("#background-group");
 const $alert = document.querySelectorAll(".alert");
 const $alertPop = document.querySelectorAll(".alert-pop");
 const $closeButton = document.querySelectorAll(".close-button");
@@ -7,14 +8,15 @@ const $userId = document.querySelector("#id span");
 const $userEmail = document.querySelector("#email span");
 const $popup = document.querySelectorAll(".popup");
 const $popupBackground = document.querySelector("#popup-background");
+const $calendarSide = document.querySelector("#calendar-side");
+const $calSideToggle = document.querySelector("#cal-side-toggle");
+const $sideToggle = document.querySelector("#side-toggle");
 
 
 // calendar.js
 const $calendar = document.querySelector("#calendar");
 const $calendarDateRel = document.querySelector("#date-rel");
-const $calendarSide = document.querySelector("#calendar-side");
 const $calendarArea = document.querySelector("#calendar-area");
-const $calSideToggle = document.querySelector("#cal-side-toggle");
 const $date = document.querySelector("#date");
 const $dateSub = document.querySelector("#date-sub");
 const $todayMonth = document.querySelector("#today-month");

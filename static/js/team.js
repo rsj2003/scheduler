@@ -170,7 +170,6 @@ const loadTeam = (invite = false) => {
               if(idx == -1) disable.push(data.no);
             }
   
-  
             moveMonth = true;
             $dateSub.style.opacity = 0;
             $dateSub.style.display = "grid";

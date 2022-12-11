@@ -231,4 +231,33 @@ const schedulesData = [{
   startDate: "2022-12-13 12:00:00",
   endDate: "2022-12-16 18:00:00"
 }];
+
+
+// index.js
+let popupOpened = false;
+let rightSideOpen = false;
+let leftSideOpen = false;
+let leftSideOpened = true;
+
+
+// calendar.js
+let calendarMonth = undefined;
+let prevTop = 0;
+let nextTop = 0;
+let moveMonth = false;
+let dateScheduleList = [];
+let scheduleLoaded = false;
+let scheduleTrim = 0;
+let scheduleTrimList = [];
+let teamScheduleType = 1;
+let teamSchedulePrevType = teamScheduleType;
+let isToggleTimeout = false;
+let disable = [];
+let schedules = [];
+let moreHoverIdx = 0;
+let moreHeight = 0;
+
+
+// login.js
+let isLogined = false;
 let user = {};

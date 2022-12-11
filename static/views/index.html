@@ -12,81 +12,83 @@
 <body>
   <div id="wrap" class="<% if(user) { %>main<% } %>">
     <div id="background">
-      <div class="grid">
-      </div>
-      <div id="side">
-        <div id="side-toggle" class="toggle-bar"><span class="bar"></span></div>
-        <div id="user-data">
-          <div id="user">
-            <div id="id"><% if(user.name) { %>name: <% }else { %>id: <% } %><span><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
-            <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
-          </div>
-          <button id="logout">logout</button>
+      <div id="background-group">
+        <div class="grid">
         </div>
-        <div id="today-todo">
-          <div id="todo-header">
-            Today's Schedule
+        <div id="side">
+          <div id="side-toggle" class="toggle-bar"><span class="bar"></span></div>
+          <div id="user-data">
+            <div id="user">
+              <div id="id"><% if(user.name) { %>name: <% }else { %>id: <% } %><span><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
+              <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
+            </div>
+            <button id="logout">logout</button>
           </div>
-          <div id="todo-content"></div>
+          <div id="today-todo">
+            <div id="todo-header">
+              Today's Schedule
+            </div>
+            <div id="todo-content"></div>
+          </div>
+        </div>
+        <div class="grid-background">
+          <canvas id="background-canvas"></canvas>
         </div>
       </div>
-      <div class="grid-background">
-        <canvas id="background-canvas"></canvas>
-      </div>
-      <div id="main">
-        <div id="body">
-          <!-- <div id="header">
-            
-          </div> -->
-          <div id="calendar-area">
-            <div id="calendar-header">
-              <div id="month-area">
-                <div id="prev-month">&lang;</div>
-                <div id="this-month"></div>
-                <div id="next-month">&rang;</div>
-              </div>
-              <div id="this-schedule">
-                <div id="toggle-area">
-                  <div id="toggle-text-area">
+    </div>
+    <div id="main">
+      <div id="body">
+        <!-- <div id="header">
+          
+        </div> -->
+        <div id="calendar-area">
+          <div id="calendar-header">
+            <div id="month-area">
+              <div id="prev-month">&lang;</div>
+              <div id="this-month"></div>
+              <div id="next-month">&rang;</div>
+            </div>
+            <div id="this-schedule">
+              <div id="toggle-area">
+                <div id="toggle-text-area">
+                  <div class="toggle-text-area">
+                    <div class="solo-view">My Schedule</div>
+                    <div class="team-view">Team Schedule</div>
+                  </div>
+                  <div id="selected">
                     <div class="toggle-text-area">
                       <div class="solo-view">My Schedule</div>
                       <div class="team-view">Team Schedule</div>
-                    </div>
-                    <div id="selected">
-                      <div class="toggle-text-area">
-                        <div class="solo-view">My Schedule</div>
-                        <div class="team-view">Team Schedule</div>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div id="calendar">
-              <div id="day">
-                <div class="sun">SUN</div>
-                <div class="wkd">MON</div>
-                <div class="wkd">TUE</div>
-                <div class="wkd">WED</div>
-                <div class="wkd">THU</div>
-                <div class="wkd">FRI</div>
-                <div class="wke">SAT</div>
-              </div>
-              <div id="date-rel">
-                <div id="date" class="calendar-dates"></div>
-                <div id="date-sub" class="calendar-dates"></div>
-              </div>
+          </div>
+          <div id="calendar">
+            <div id="day">
+              <div class="sun">SUN</div>
+              <div class="wkd">MON</div>
+              <div class="wkd">TUE</div>
+              <div class="wkd">WED</div>
+              <div class="wkd">THU</div>
+              <div class="wkd">FRI</div>
+              <div class="wke">SAT</div>
+            </div>
+            <div id="date-rel">
+              <div id="date" class="calendar-dates"></div>
+              <div id="date-sub" class="calendar-dates"></div>
             </div>
           </div>
         </div>
-        <div id="calendar-side-area">
-          <div id="calendar-side">
-            <div id="cal-side-toggle" class="toggle-bar"><span class="bar"></span></div>
-            <div id="open-create-team">Create Team</div>
-            <div id="open-invite-team">Invite</div>
-            <div id="open-request-team">Request<span id="request-count">0</span></div>
-            <div id="team-list" class="scroll-bar"></div>
-          </div>
+      </div>
+      <div id="calendar-side-area">
+        <div id="calendar-side">
+          <div id="cal-side-toggle" class="toggle-bar"><span class="bar"></span></div>
+          <div id="open-create-team">Create Team</div>
+          <div id="open-invite-team">Invite</div>
+          <div id="open-request-team">Request<span id="request-count">0</span></div>
+          <div id="team-list" class="scroll-bar"></div>
         </div>
       </div>
     </div>

@@ -67,7 +67,7 @@
 #form-group .to-back{border-radius: 0 0 150px 0; box-shadow: 1px 1px 15px #3333; overflow: hidden;}
 #form-group .to-back::after{width: 150px; height: 150px; box-shadow: -1px -1px 15px #3333;}
 
-#side{position: absolute; left: 0; top: 0; width: 300px; height: 100%; z-index: 20; padding: 330px 25px 0;}
+#side{position: absolute; left: 0; top: 0; width: 300px; height: 100%; z-index: 20; padding: 330px 25px 0; pointer-events: none;}
 
 /* main */
 #wrap.main #background .grid{width: 300px; box-shadow: 0 0 20px #0000;}
@@ -241,6 +241,5 @@
 @media screen and (max-width: 1599px) {
   #main{width: 100%;}
 
-  #side-toggle{right: -36px;}
   #side-toggle:hover .bar{right: 0px;}
 }

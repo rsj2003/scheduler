@@ -11,6 +11,7 @@ const $popupBackground = document.querySelector("#popup-background");
 const $calendarSide = document.querySelector("#calendar-side");
 const $calSideToggle = document.querySelector("#cal-side-toggle");
 const $sideToggle = document.querySelector("#side-toggle");
+const $side = document.querySelector("#side");
 
 
 // calendar.js

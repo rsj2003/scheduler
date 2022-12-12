@@ -379,23 +379,29 @@ const logined = e => {
     if(page.w < 1600) widthType = 2;
 
     setTimeout(e => {
-      $calendarArea.style.opacity = "1";
-      $calendarArea.style.transform = "scale(1)";
-      $calendarArea.style.pointerEvents = "unset";
+      $sideToggle.style.top = "";
 
       setTimeout(e => {
-        $calendarSide.style.left = "0";
-
-        if(page.w < 1600) {
-          $backgroundGroup.style.transition = ".8s";
-          $inputWrap.style.transition = ".8s";
-          setTimeout(e => {
-            $backgroundGroup.style.left = "-300px";
-            $inputWrap.style.left = "-150px";
-          }, 250);
-        }
-      }, 250);
-    }, 1000);
+        $calendarArea.style.opacity = "1";
+        $calendarArea.style.transform = "scale(1)";
+        $calendarArea.style.pointerEvents = "unset";
+  
+        setTimeout(e => {
+          $calendarSide.style.left = "0";
+          $side.style.pointerEvents = "unset";
+  
+          if(page.w < 1600) {
+            $backgroundGroup.style.transition = ".8s";
+            $inputWrap.style.transition = ".8s";
+            setTimeout(e => {
+              $backgroundGroup.style.left = "-300px";
+              $inputWrap.style.left = "-150px";
+              $sideToggle.style.right = "-36px";
+            }, 250);
+          }
+        }, 250);
+      }, 200);
+    }, 800)
   }
 
   setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);

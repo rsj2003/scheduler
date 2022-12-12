@@ -25,10 +25,12 @@ $sideToggle.addEventListener("click", e => {
         leftSideOpen = false;
         $backgroundGroup.style.left = "-300px";
         $inputWrap.style.left = "-150px";
+        $sideToggle.style.right = "-36px";
       }else {
         leftSideOpen = true;
         $backgroundGroup.style.left = "0";
         $inputWrap.style.left = "150px";
+        $sideToggle.style.right = "-18px";
       }
     }, 1)
   }
@@ -93,25 +95,29 @@ const indexPageLoaded = e => {
     page.h = window.innerHeight;
     page.x = page.w / 2;
     page.y = page.h / 2;
-
-    if(page.w >= 1920) {
-      rightSideOpen = false;
-      $calendarSide.style.left = "0";
-      $calSideToggle.style.left = "";
-    }
-
-    $backgroundGroup.style.transition = "0s";
-    $inputWrap.style.transition = "0s";
-    setTimeout(e => {
-      if(page.w >= 1600) {
-        leftSideOpen = false;
-        $backgroundGroup.style.left = "0";
-        $inputWrap.style.left = "150px";
-      }else if(!leftSideOpen) {
-        $backgroundGroup.style.left = "-300px";
-        $inputWrap.style.left = "-150px";
+    
+    if(isLogined) {
+      if(page.w >= 1920) {
+        rightSideOpen = false;
+        $calendarSide.style.left = "0";
+        $calSideToggle.style.left = "";
       }
-    }, 1)
+  
+      $backgroundGroup.style.transition = "0s";
+      $inputWrap.style.transition = "0s";
+      setTimeout(e => {
+        if(page.w >= 1600) {
+          leftSideOpen = false;
+          $backgroundGroup.style.left = "0";
+          $inputWrap.style.left = "150px";
+          $sideToggle.style.right = "-18px";
+        }else if(!leftSideOpen) {
+          $backgroundGroup.style.left = "-300px";
+          $inputWrap.style.left = "-150px";
+          $sideToggle.style.right = "-36px";
+        }
+      }, 1)
+    }
 
     setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
   })

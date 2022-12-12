@@ -7,6 +7,7 @@ const loginToMain = e => {
   $todayDate.style.display = "block";
   $todayDate.style.fontSize = "175px";
   $todayDate.style.right = "80%";
+  $sideToggle.style.transition = "0s";
 
   $userId.innerHTML = user.id;
   $userEmail.innerHTML = user.email;
@@ -14,56 +15,59 @@ const loginToMain = e => {
   setTimeout(e => {
     $todayMonth.style.transition = ".8s";
     $todayDate.style.transition = ".8s";
-  }, 5);
+    $sideToggle.style.top = "-55px";
 
-  setTimeout(e => {
-    $backgroundGrid.style.width = "300px";
-    $backgroundGrid.style.boxShadow = "0 0 20px #0000";
-    $backgroundGridBackground.style.width = "calc(100% - 300px)";
-    $backgroundGridBackground.style.left = "300px";
-    $registerForm.style.display = "none";
-    $loginGroup.style.display = "none";
-    $registerGroup.style.left = "-75px";
-    $registerGroup.style.transition = ".8s";
-    $formGroup.style.left = "760px";
-    $formGroup.style.transition = ".8s";
-    $inputWrap.style.transition = ".8s";
-    $todayDate.style.right = "11%";
-    $todayMonth.style.left = "50%";
-    $formBackgroundGrid.style.width = `${$formBackgroundGrid.clientWidth}px`;
-    
     setTimeout(e => {
-      $formBackgroundGrid.style.transition = ".8s";
-    }, 5);
-  
-    setTimeout(e => {
-      $backgroundGridBackground.style.zIndex = "2";
-      // $backgroundGridBackground.style.width = "100%";
-      $registerGroup.style.display = "none";
-      $formGroup.style.display = "none";
-      $inputWrap.style.transform = "translate(-50%, -50%) rotate(90deg)";
-      // $inputWrap.style.width = "580px";
-      // $formBackgroundGrid.style.width = "210px";
-      $inputWrap.style.width = "220px";
-      $inputWrap.style.height = "180px";
-      $inputWrap.style.left = "150px";
-      $inputWrap.style.top = "160px";
-      $inputWrap.style.boxShadow = "0 0 20px #3338";
-      $formBackgroundGrid.style.width = "90px";
-      $todayMonth.style.fontSize = "50px";
-      $todayDate.style.fontSize = "70px";
-      $todayDate.style.right = "0";
+      $backgroundGrid.style.width = "300px";
+      $backgroundGrid.style.boxShadow = "0 0 20px #0000";
+      $backgroundGridBackground.style.width = "calc(100% - 300px)";
+      $backgroundGridBackground.style.left = "300px";
+      $registerForm.style.display = "none";
+      $loginGroup.style.display = "none";
+      $registerGroup.style.left = "-75px";
+      $registerGroup.style.transition = ".8s";
+      $formGroup.style.left = "760px";
+      $formGroup.style.transition = ".8s";
+      $inputWrap.style.transition = ".8s";
+      $todayDate.style.right = "11%";
+      $todayMonth.style.left = "50%";
+      $formBackgroundGrid.style.width = `${$formBackgroundGrid.clientWidth}px`;
+      $sideToggle.style.transition = ".8s";
       
       setTimeout(e => {
-        $backgroundGridBackground.style.left = "0";
-        $backgroundGridBackground.style.width = "300px";
-        $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
-        $wrap.classList.add("main");
-
-        loadTeam();
+        $formBackgroundGrid.style.transition = ".8s";
+      }, 5);
+    
+      setTimeout(e => {
+        $backgroundGridBackground.style.zIndex = "2";
+        // $backgroundGridBackground.style.width = "100%";
+        $registerGroup.style.display = "none";
+        $formGroup.style.display = "none";
+        $inputWrap.style.transform = "translate(-50%, -50%) rotate(90deg)";
+        // $inputWrap.style.width = "580px";
+        // $formBackgroundGrid.style.width = "210px";
+        $inputWrap.style.width = "220px";
+        $inputWrap.style.height = "180px";
+        $inputWrap.style.left = "150px";
+        $inputWrap.style.top = "160px";
+        $inputWrap.style.boxShadow = "0 0 20px #3338";
+        $formBackgroundGrid.style.width = "90px";
+        $todayMonth.style.fontSize = "50px";
+        $todayDate.style.fontSize = "70px";
+        $todayDate.style.right = "0";
+        
+        setTimeout(e => {
+          $backgroundGridBackground.style.left = "0";
+          $backgroundGridBackground.style.width = "300px";
+          $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
+          $wrap.classList.add("main");
+  
+          loadTeam();
+        }, 800)
       }, 800)
-    }, 800)
-  }, 10)
+    }, 5)
+  }, 5);
+
 
 }
 

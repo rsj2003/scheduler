@@ -33,6 +33,7 @@ const $addScheduleButton = document.querySelector("#add-schedule-button");
 const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const $morePop = document.querySelector("#more-pop");
 const $moreCalendar = document.querySelector("#more-calendar");
+const $todoContent = document.querySelector("#todo-content");
 
 
 // team.js

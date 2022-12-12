@@ -394,13 +394,17 @@ $createTeamButton.addEventListener("click", e => {
 
 $inviteTeamButton.addEventListener("click", e => {
   e.preventDefault();
+
   const form = $inviteTeamForm;
   const param = {};
+  let checkedTeam = form.checkedTeam;
   param.uid = form.user.value;
   param.no = [];
 
-  for(let i = 0; i < form.checkedTeam.length; i++) {
-    const thisCheckbox = form.checkedTeam[i];
+  if(checkedTeam.length == undefined) checkedTeam = [checkedTeam];
+
+  for(let i = 0; i < checkedTeam.length; i++) {
+    const thisCheckbox = checkedTeam[i];
 
     if(thisCheckbox.checked) {
       param.no.push(thisCheckbox.dataset.no);

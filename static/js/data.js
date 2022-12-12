@@ -256,6 +256,7 @@ let disable = [];
 let schedules = [];
 let moreHoverIdx = 0;
 let moreHeight = 0;
+let todayDoList = [];
 
 
 // login.js

@@ -292,6 +292,31 @@ const setCalendar = (year, month, $calendar = $date) => {
 
   $thisMonth.innerHTML = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
 
+  const $removeTodo = $todoContent.querySelectorAll(".todo-item");
+
+  for(let i = 0; i < $removeTodo.length; i++) {
+    $removeTodo[i].remove();
+  }
+
+  for(let i = 0; i < todayDoList.length; i++) {
+    const todoItem = todayDoList[i];
+    const $item = document.createElement("div");
+    const $color = document.createElement("div");
+    const $p = document.createElement("p");
+
+    $item.classList.add("todo-item");
+    $color.classList.add("todo-color");
+    $p.classList.add("todo-name");
+
+    $color.style.background = todoItem.color;
+    $p.innerText = todoItem.name;
+
+    $item.append($color);
+    $item.append($p);
+
+    $todoContent.append($item);
+  }
+
   const $removeDates = $calendar.querySelectorAll(".calendar-line");
 
   for(let i = 0; i < $removeDates.length; i++) {
@@ -418,6 +443,8 @@ const loadSchedules = e => {
       let result = {};
       let request = res.result;
 
+      todayDoList = [];
+
       loadRequestCount();
 
       if(request == "test") request = JSON.parse(JSON.stringify(schedulesData));
@@ -469,6 +496,10 @@ const loadSchedules = e => {
               if(date[j].startDate == "dummy") dummyType[j] = date[j];
               else dummyType[j] = date[j].dummy;
             }
+          }
+
+          if(today.getFullYear() == thisDate.getFullYear() && today.getMonth() == thisDate.getMonth() && today.getDate() == thisDate.getDate()) {
+            todayDoList.push(schedule);
           }
           
           if(schedule.count == 1) schedule.sort = schedule.dummy.sort = date.length;

@@ -91,7 +91,9 @@
 #today-todo{display: grid; width: 100%; height: calc(100% - 150px); grid-template-columns: 1fr; grid-template-rows: 60px 1fr; margin-top: 25px; border-radius: 20px; overflow: hidden; transform: scale(.9); pointer-events: none; opacity: 0; box-shadow: 0 0 10px #3336; user-select: none;}
 #wrap.main.page-loaded #today-todo{transition: .8s .75s; opacity: 1; pointer-events: unset; transform: scale(1);}
 #todo-header{background: #B1D7B499; display: flex; font-size: 24px; color: #fff; justify-content: center; align-items: center;}
-#todo-content{background: #fff9;}
+#todo-content{background: #fff9; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 10px; padding: 15px;}
+.todo-item{width: 100%; display: grid; grid-template-columns: 30px 1fr; align-items: center; cursor: pointer;}
+.todo-color{width: 20px; height: 20px; border: 1px solid #aaa; border-radius: 30px;}
 
 /* main contents */
 #main{position: absolute; width: calc(100% - 300px); height: 100%; right: 0; top: 0; display: grid; grid-template-columns: 1fr 300px;}

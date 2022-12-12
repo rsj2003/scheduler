@@ -230,6 +230,8 @@ router.post("/add-schedule", function(req, res, next) {
     res.send({alert: "시작 날짜를 입력해주세요."});
   }else if(param.end == "") {
     res.send({alert: "끝 날짜를 입력해주세요."});
+  }else if(param.start < param.end) {
+    res.send({alert: "스케줄 기간이 잘못되었습니다."});
   }else {
     pool.getConnection((err, connection) => {
       if(err) throw err;

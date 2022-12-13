@@ -473,7 +473,7 @@ router.post("/accept-request", function(req, res, next) {
     
             let memberLenth = result.length;
 
-            connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = '${connection.escape(groupNo)}`, (err, result) => {
+            connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
               if(err) throw err;
       
               if(memberLenth == 0) {

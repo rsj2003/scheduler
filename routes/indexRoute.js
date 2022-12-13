@@ -461,44 +461,40 @@ router.post("/accept-request", function(req, res, next) {
   const param = req.body;
   const groupNo = param.groupNo;
 
-  if(param.no.length > 10 || param.no.length == 0) {
-    res.send({alert: "팀 정보가 잘못되었습니다."});
-  }else {
-    pool.getConnection((err, connection) => {
-      if(err) throw err;
-      else {
-        connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-          if(err) throw err;
-          
-          if(result.length > 0) {
-            connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+        if(err) throw err;
+        
+        if(result.length > 0) {
+          connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+            if(err) throw err;
+    
+            let memberLenth = result.length;
+
+            connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = '${connection.escape(groupNo)}`, (err, result) => {
               if(err) throw err;
       
-              let memberLenth = result.length;
-  
-              connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = '${connection.escape(groupNo)}`, (err, result) => {
-                if(err) throw err;
-        
-                if(memberLenth == 0) {
-                  connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'member', FALSE, now(), now())`, (err, result) => {
-                    if(err) throw err;
-            
-                    res.send({state: "SUCCESS"});
-                  })
-                }else {
-                  res.send({alert: "이미 가입된 팀입니다."});
-                }
-              })
+              if(memberLenth == 0) {
+                connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'member', FALSE, now(), now())`, (err, result) => {
+                  if(err) throw err;
+          
+                  res.send({state: "SUCCESS"});
+                })
+              }else {
+                res.send({alert: "이미 가입된 팀입니다."});
+              }
             })
-          }else {
-            res.send({alert: "존재하지 않는 초대 입니다."});
-          }
-        })
-        
-        connection.release();
-      }
-    })
-  }
+          })
+        }else {
+          res.send({alert: "존재하지 않는 초대 입니다."});
+        }
+      })
+      
+      connection.release();
+    }
+  })
 })
 
 router.post("/refuse-request", function(req, res, next) {
@@ -513,22 +509,18 @@ router.post("/refuse-request", function(req, res, next) {
   const param = req.body;
   const groupNo = param.groupNo;
 
-  if(param.no.length > 10 || param.no.length == 0) {
-    res.send({alert: "팀 정보가 잘못되었습니다."});
-  }else {
-    pool.getConnection((err, connection) => {
-      if(err) throw err;
-      else {
-        connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-          if(err) throw err;
-          
-          res.send({state: "SUCCESS"});
-        })
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+        if(err) throw err;
         
-        connection.release();
-      }
-    })
-  }
+        res.send({state: "SUCCESS"});
+      })
+      
+      connection.release();
+    }
+  })
 })
 
 const DBfunction = e => {

@@ -104,7 +104,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           moreCount++;
           if(moreCount + (rows) > moreHeight) moreHeight = moreCount + (rows);
           $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
-          console.log(moreCount, moreHeight);
         }
 
         if(rows - 1 == insert - scheduleTrim && more == false) {
@@ -242,6 +241,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
             }else {
               if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) {
                 scheduleTrim++;
+
+                console.log(month, date, scheduleTrim, scheduleTrimList);
                 continue;
               }
               todo.push(0);
@@ -290,7 +291,7 @@ const setCalendar = (year, month, $calendar = $date) => {
     thisCalendarYear++;
   }
 
-  $thisMonth.innerHTML = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
+  $thisMonth.innerText = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
 
   const $removeTodo = $todoContent.querySelectorAll(".todo-item");
 
@@ -449,6 +450,21 @@ const loadSchedules = e => {
 
       if(request == "test") request = JSON.parse(JSON.stringify(schedulesData));
 
+      request = request.sort((a, b) => {
+        let x = a.startDate;
+        let y = b.startDate;
+
+        if(x < y) {
+          return -1;
+        }else if(x > y) {
+          return 1;
+        }else {
+          return 0;
+        }
+      })
+
+      console.log(request);
+
       for(let i = 0; i < request.length; i++) {
         let schedule = request[i];
         let start = new Date(schedule.startDate);
@@ -568,7 +584,7 @@ const prevMonthAni = e => {
       thisCalendarYear++;
     }
   
-    $thisMonth.innerHTML = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
+    $thisMonth.innerText = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
   
     const $thisDates = $date.querySelectorAll(".this-date");
     const $prevDates = $date.querySelectorAll(".prev-date");
@@ -616,7 +632,7 @@ const nextMonthAni = e => {
       thisCalendarYear++;
     }
   
-    $thisMonth.innerHTML = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
+    $thisMonth.innerText = `${thisCalendarYear}.${thisCalendarMonth.toString().length > 1 ? thisCalendarMonth : "0" + thisCalendarMonth}`;
   
     const $thisDates = $date.querySelectorAll(".this-date");
     const $nextDates = $date.querySelectorAll(".next-date");

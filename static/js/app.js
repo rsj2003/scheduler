@@ -13,8 +13,8 @@ const app = e => {
 
   calendarMonth = new Date(todayYear, todayMonth, 0);
   
-  $todayMonth.innerHTML = todayMonth;
-  $todayDate.innerHTML = today.getDate().toString().length > 1 ? today.getDate() : "0" + today.getDate();
+  $todayMonth.innerText = todayMonth;
+  $todayDate.innerText = today.getDate().toString().length > 1 ? today.getDate() : "0" + today.getDate();
 
   setTimeout(e => {
     $wrap.classList.add("page-loaded");
@@ -25,7 +25,7 @@ const app = e => {
   }
 
   for(let i = 0; i < $alert.length; i++) {
-    $alert[i].innerHTML = " ";
+    $alert[i].innerText = " ";
   }
 
   page.w = window.innerWidth;

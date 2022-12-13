@@ -1,6 +1,6 @@
 const resetAlert = e => {
   for(let i = 0; i < $alert.length; i++) {
-    $alert[i].innerHTML = " ";
+    $alert[i].innerText = " ";
   }
   for(let i = 0; i < $alertPop.length; i++) {
     $alertPop[i].style.display = "none";
@@ -9,7 +9,7 @@ const resetAlert = e => {
 
 const setAlert = alert => {
   for(let i = 0; i < $alert.length; i++) {
-    $alert[i].innerHTML = alert;
+    $alert[i].innerText = alert;
   }
   for(let i = 0; i < $alertPop.length; i++) {
     $alertPop[i].style.display = "block";

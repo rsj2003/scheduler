@@ -34,7 +34,7 @@ const loadRequestCount = () => {
         $requestCount.style.display = "none";
       }else {
         $requestCount.style.display = "";
-        $requestCount.innerHTML = res.result.count;
+        $requestCount.innerText = res.result.count;
       }
     }
   })
@@ -254,7 +254,7 @@ const loadRequest = (open = false) => {
           $requestCount.style.display = "none";
         }else {
           $requestCount.style.display = "";
-          $requestCount.innerHTML = result.length;
+          $requestCount.innerText = result.length;
         }
 
         const requestTeamList = $requestTeamList.querySelectorAll(".request-item");

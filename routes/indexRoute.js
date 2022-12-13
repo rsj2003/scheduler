@@ -79,6 +79,7 @@ router.post("/register-action", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
+        console.log(connection.escape(password));
         connection.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result) => {
           if(err) throw err;
 

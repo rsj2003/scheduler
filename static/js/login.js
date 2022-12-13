@@ -9,8 +9,8 @@ const loginToMain = e => {
   $todayDate.style.right = "80%";
   $sideToggle.style.transition = "0s";
 
-  $userId.innerHTML = user.id;
-  $userEmail.innerHTML = user.email;
+  $userId.innerText = user.id;
+  $userEmail.innerText = user.email;
 
   setTimeout(e => {
     $todayMonth.style.transition = ".8s";

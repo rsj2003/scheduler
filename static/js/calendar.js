@@ -163,6 +163,10 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
             const $prevSchedule = $prevDate.querySelector(".schedule:last-of-type");
 
             if($prevSchedule && $prevSchedule.classList.contains("schedule-more")){
+              if($prevDate.classList.contains("schdule-start")) {
+                $schedule.classList.add("schedule-next");
+              }
+
               $schedule.classList.remove("schedule-start");
               $prevSchedule.classList.remove("schedule-end");
               $schedule.classList.add(`schedule-no-more-${moreHoverIdx}`);
@@ -230,6 +234,9 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               }
               $schedule.classList.add("schedule-start");
               $p.innerText = thisSchedule.name;
+            }
+            if($prevDate.classList.contains("schdule-start")) {
+              $schedule.classList.add("schedule-next");
             }
             if((thisSchedule.endDate.year == year && thisSchedule.endDate.month == month && thisSchedule.endDate.date == date) || day == 6){
               $schedule.classList.add("schedule-end");

@@ -235,7 +235,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               $schedule.classList.add("schedule-start");
               $p.innerText = thisSchedule.name;
             }
-            if($prevDate.classList.contains("schdule-start")) {
+            if($prevDate && $prevDate.classList.contains("schdule-start")) {
               $schedule.classList.add("schedule-next");
             }
             if((thisSchedule.endDate.year == year && thisSchedule.endDate.month == month && thisSchedule.endDate.date == date) || day == 6){

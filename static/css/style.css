@@ -134,6 +134,7 @@
 .calendar-date .schedule{width: 100%; height: 100%; cursor: pointer; user-select: none;}
 .calendar-date .schedule>span{pointer-events: none;}
 .calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
+.calendar-date .schedule-start{overflow: hidden;}
 .calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
 .calendar-date .schedule-end>span{width: 100%; border-right: 1px solid #bbb8; border-top-right-radius: 5px; border-bottom-right-radius: 5px;}
 

@@ -156,17 +156,3 @@ $logout.addEventListener("click", e => {
     }
   })
 })
-
-const testLogin = e => {
-  fetch("/test-login-action", {
-    method: "POST"
-  })
-  .then(req => req.json())
-  .then(res => {
-    if(res.state == "SUCCESS") {
-      user = res.user;
-      
-      loginToMain();
-    }
-  })
-}

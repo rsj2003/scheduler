@@ -219,15 +219,15 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
             $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
 
             if((thisSchedule.startDate.year == year && thisSchedule.startDate.month == month && thisSchedule.startDate.date == date) || day == 0 || $prevSchedule) {
-              if(todo.length > 0 && todo.indexOf(1) == insert - 1) {
-                const $dummies = $calendarDate.querySelectorAll(".schedule");
+              // if(todo.length > 0 && todo.indexOf(1) == insert - 1) {
+              //   const $dummies = $calendarDate.querySelectorAll(".schedule");
 
-                for(let i = 0; i < $dummies.length; i++) {
-                  $dummies[i].remove();
-                }
+              //   for(let i = 0; i < $dummies.length; i++) {
+              //     $dummies[i].remove();
+              //   }
 
-                scheduleTrim += todo.length - 1;
-              }
+              //   scheduleTrim += todo.length - 1;
+              // }
               $schedule.classList.add("schedule-start");
               $p.innerText = thisSchedule.name;
             }

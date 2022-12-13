@@ -230,6 +230,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               }
               $schedule.classList.add("schedule-start");
 
+              $p.style.width = `100%`;
               setTimeout(e => {
                 $p.style.width = `${$p.clientWidth}px`;
                 $p.innerText = thisSchedule.name;

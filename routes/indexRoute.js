@@ -60,10 +60,16 @@ router.post("/register-action", function(req, res, next) {
 
   if(param.id == "") {
     res.send({alert: "id를 입력해주세요."});
+  }else if(param.id.length > 25) {
+    res.send({alert: "id 길이가 너무 깁니다."});
   }else if(param.password == "") {
-    res.send({alert: "비밀번호를를 입력해주세요."});
+    res.send({alert: "비밀번호를 입력해주세요."});
+  }else if(param.password.length > 50) {
+    res.send({alert: "비밀번호 길이가 너무 깁니다."});
   }else if(param.email == "") {
     res.send({alert: "이메일를 입력해주세요."});
+  }else if(param.email.length > 50) {
+    res.send({alert: "이메일 길이가 너무 깁니다."});
   }else {
     if(param.id == "login-test") {
       console.log("register-test");
@@ -85,7 +91,7 @@ router.post("/register-action", function(req, res, next) {
           if(result.length > 0) {
             res.send({alert: "이미 사용중인 id입니다."});
           }else {
-            connection.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES('${param.id}', '${param.email}', '${cipher(param.password)}', FALSE, now(), now());`, (err, result) => {
+            connection.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES(${connection.escape(param.id)}, ${connection.escape(param.email)}, ${connection.escape(cipher(param.password))}, FALSE, now(), now());`, (err, result) => {
               if(err) throw err;
     
               console.log("register");
@@ -116,8 +122,12 @@ router.post("/login-action", function(req, res, next) {
   
   if(param.id == "") {
     res.send({alert: "id를 입력해주세요."});
+  }else if(param.id.length > 25) {
+    res.send({alert: "id가 잘못되었습니다."});
   }else if(param.password == "") {
     res.send({alert: "비밀번호를 입력해주세요."});
+  }else if(param.password.length > 50) {
+    res.send({alert: "비밀번호가 잘못되었습니다."});
   }else {
     if(param.id == "login-test") {
       console.log("login-test");
@@ -130,7 +140,7 @@ router.post("/login-action", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = '${param.id}' AND password = '${cipher(param.password)}'`, (err, result) => {
+        connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = ${connection.escape(param.id)} AND password = ${connection.escape(cipher(param.password))}`, (err, result) => {
           if(err) throw err;
 
           if(result.length > 0) {

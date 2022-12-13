@@ -229,7 +229,11 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
                 scheduleTrim += todo.length - 1;
               }
               $schedule.classList.add("schedule-start");
-              $p.innerText = thisSchedule.name;
+
+              setTimeout(e => {
+                $p.style.width = $p.clientWidth;
+                $p.innerText = thisSchedule.name;
+              }, 10);
             }
             if((thisSchedule.endDate.year == year && thisSchedule.endDate.month == month && thisSchedule.endDate.date == date) || day == 6){
               $schedule.classList.add("schedule-end");

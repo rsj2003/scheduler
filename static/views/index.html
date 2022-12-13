@@ -23,6 +23,7 @@
               <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
             </div>
             <button id="logout">logout</button>
+            <button id="information">Information</button>
           </div>
           <div id="today-todo">
             <div id="todo-header">
@@ -38,9 +39,6 @@
     </div>
     <div id="main">
       <div id="body">
-        <!-- <div id="header">
-          
-        </div> -->
         <div id="calendar-area">
           <div id="calendar-header">
             <div id="month-area">
@@ -86,8 +84,8 @@
         <div id="calendar-side">
           <div id="cal-side-toggle" class="toggle-bar"><span class="bar"></span></div>
           <div id="open-create-team">Create Team</div>
-          <div id="open-invite-team">Invite</div>
-          <div id="open-request-team">Request<span id="request-count">0</span></div>
+          <div id="open-invite-team">Invite Team</div>
+          <div id="open-request-team">Request Team<span id="request-count">0</span></div>
           <div id="team-list" class="scroll-bar"></div>
         </div>
       </div>

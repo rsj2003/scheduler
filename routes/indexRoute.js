@@ -79,7 +79,6 @@ router.post("/register-action", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        console.log(connection.escape(param.password));
         connection.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result) => {
           if(err) throw err;
 
@@ -237,7 +236,7 @@ router.post("/add-schedule", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${param.name}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result) => {
+        connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES('${connection.escape(param.name)}', '${param.color}', '${param.content}', ${req.session.user.no}, '${param.group}', FALSE, '${param.start}', '${param.end}', now(), now());`, (err, result) => {
           if(err) throw err;
 
           res.send({state: "SUCCESS"});

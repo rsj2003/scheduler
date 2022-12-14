@@ -22,8 +22,10 @@
               <div id="id"><% if(user.name) { %>name: <% }else { %>id: <% } %><span><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
               <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
             </div>
-            <button id="logout">logout</button>
-            <button id="information">Information</button>
+            <div id="user-buttons">
+              <button id="logout">logout</button>
+              <button id="information">Information</button>
+            </div>
           </div>
           <div id="today-todo">
             <div id="todo-header">

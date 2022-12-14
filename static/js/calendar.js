@@ -108,7 +108,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
 
         console.log(month, date, rows - 1, insert - scheduleTrim);
 
-        if(rows - 1 == insert - scheduleTrim && more == false) {
+        if(rows - 1 <= insert - scheduleTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
           if(!$schedule) break;
           const $background = $schedule.querySelector("span");

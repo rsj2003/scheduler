@@ -192,8 +192,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           break;
         }else {
           if(i + 1 <= scheduleTrim) {
-            if(thisSchedule.startDate == "dummy") continue;
-            else scheduleTrim = 0;
+            if(thisSchedule.startDate != "dummy") scheduleTrim = 0;
           }
           const $schedule = document.createElement("span");
           const $background = document.createElement("span");

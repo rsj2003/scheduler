@@ -99,13 +99,14 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
         if(disable.indexOf(thisSchedule.type) > -1) continue;
 
         insert++;
-        console.log(month, date, scheduleTrim, scheduleTrimList);
 
         if(rows - 1 <= insert - scheduleTrim && more !== false) {
           moreCount++;
           if(moreCount + (rows) > moreHeight) moreHeight = moreCount + (rows);
           $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
         }
+
+        console.log(month, date, rows - 1, insert - scheduleTrim);
 
         if(rows - 1 == insert - scheduleTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
@@ -152,9 +153,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               for(let j = 0; j < $moreDates.length; j++) {
                 $moreDates[j].style.gridTemplateRows = `repeat(${moreHeight - 1}, 1fr)`;
               }
-
-              console.log($schedule.clientHeight);
-              console.log(moreStartDate);
 
               $moreCalendar.append($calendarLine);
             }
@@ -219,15 +217,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
             $p.style.color = getTextColorByBackgroundColor(thisSchedule.color);
 
             if((thisSchedule.startDate.year == year && thisSchedule.startDate.month == month && thisSchedule.startDate.date == date) || day == 0 || $prevSchedule) {
-              // if(todo.length > 0 && todo.indexOf(1) == insert - 1) {
-              //   const $dummies = $calendarDate.querySelectorAll(".schedule");
-
-              //   for(let i = 0; i < $dummies.length; i++) {
-              //     $dummies[i].remove();
-              //   }
-
-              //   scheduleTrim += todo.length - 1;
-              // }
               $schedule.classList.add("schedule-start");
               $p.innerText = thisSchedule.name;
             }
@@ -462,8 +451,6 @@ const loadSchedules = e => {
           return 0;
         }
       })
-
-      console.log(request);
 
       for(let i = 0; i < request.length; i++) {
         let schedule = request[i];

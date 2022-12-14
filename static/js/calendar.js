@@ -298,6 +298,8 @@ const setCalendar = (year, month, $calendar = $date) => {
     $color.classList.add("todo-color");
     $p.classList.add("todo-name");
 
+    $item.dataset.hoverColor = getHoverColorByBackgroundColor(todoItem.color);
+    $item.dataset.no = todoItem.no;
     $color.style.background = todoItem.color;
     $p.innerText = todoItem.name;
 

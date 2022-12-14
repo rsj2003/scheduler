@@ -85,21 +85,25 @@ router.post("/register-action", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result) => {
-          if(err) throw err;
-
-          if(result.length > 0) {
-            res.send({alert: "이미 사용중인 id입니다."});
-          }else {
-            connection.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES(${connection.escape(param.id)}, ${connection.escape(param.email)}, ${connection.escape(cipher(param.password))}, FALSE, now(), now());`, (err, result) => {
-              if(err) throw err;
-    
-              console.log("register");
-              console.log({id: param.id, email: param.email});
-              res.send({state: "SUCCESS", id: param.id});
-            })
-          }
-        })
+        try{
+          connection.query(`SELECT id FROM user WHERE id = '${param.id}'`, (err, result) => {
+            if(err) throw err;
+  
+            if(result.length > 0) {
+              res.send({alert: "이미 사용중인 id입니다."});
+            }else {
+              connection.query(`INSERT INTO user(id, email, password, alert, create_date, update_date) VALUES(${connection.escape(param.id)}, ${connection.escape(param.email)}, ${connection.escape(cipher(param.password))}, FALSE, now(), now());`, (err, result) => {
+                if(err) throw err;
+      
+                console.log("register");
+                console.log({id: param.id, email: param.email});
+                res.send({state: "SUCCESS", id: param.id});
+              })
+            }
+          })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
 
         connection.release();
       }
@@ -140,26 +144,30 @@ router.post("/login-action", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = ${connection.escape(param.id)} AND password = ${connection.escape(cipher(param.password))}`, (err, result) => {
-          if(err) throw err;
-
-          if(result.length > 0) {
-            let account = result[0];
-
-            connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${connection.escape(account.no)}`, (err, result) => {
-              if(err) throw err;
-          
-              account.team = result;
-
-              console.log("login");
-              console.log({no: account.no, id: account.id, email: account.email, name: account.name, cellNo: account.cellNo});
-              req.session.user = account;
-              res.send({state: "SUCCESS", user: req.session.user});
-            })
-          }else {
-            res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
-          }
-        })
+        try{
+          connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = ${connection.escape(param.id)} AND password = ${connection.escape(cipher(param.password))}`, (err, result) => {
+            if(err) throw err;
+  
+            if(result.length > 0) {
+              let account = result[0];
+  
+              connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${connection.escape(account.no)}`, (err, result) => {
+                if(err) throw err;
+            
+                account.team = result;
+  
+                console.log("login");
+                console.log({no: account.no, id: account.id, email: account.email, name: account.name, cellNo: account.cellNo});
+                req.session.user = account;
+                res.send({state: "SUCCESS", user: req.session.user});
+              })
+            }else {
+              res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
+            }
+          })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
 
         connection.release();
       }
@@ -186,18 +194,22 @@ router.post("/get-schedules", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
-      const teamList = req.session.user.team;
-    
-      for(let i = 0; i < teamList.length; i++) {
-        sql += ` OR type = ${teamList[i].no}`;
+      try{
+        let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
+        const teamList = req.session.user.team;
+      
+        for(let i = 0; i < teamList.length; i++) {
+          sql += ` OR type = ${teamList[i].no}`;
+        }
+  
+        connection.query(sql, (err, result) => {
+          if(err) throw err;
+  
+          res.send({state: "SUCCESS", result: result});
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
       }
-
-      connection.query(sql, (err, result) => {
-        if(err) throw err;
-
-        res.send({state: "SUCCESS", result: result});
-      })
 
       connection.release();
     }
@@ -235,11 +247,17 @@ router.post("/add-schedule", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES(${connection.escape(param.name)}, ${connection.escape(param.color)}, ${connection.escape(param.content)}, ${connection.escape(req.session.user.no)}, ${connection.escape(param.group)}, FALSE, ${connection.escape(param.start)}, ${connection.escape(param.end)}, now(), now());`, (err, result) => {
-          if(err) throw err;
+        try{
+          connection.query(`INSERT INTO schedule(name, color, content, create_user, type, alert, start_date, end_date, create_date, update_date) VALUES(${connection.escape(param.name)}, ${connection.escape(param.color)}, ${connection.escape(param.content)}, ${connection.escape(req.session.user.no)}, ${connection.escape(param.group)}, FALSE, ${connection.escape(param.start)}, ${connection.escape(param.end)}, now(), now());`, (err, result) => {
+            if(err) throw err;
+  
+            res.send({state: "SUCCESS"});
+          })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
 
-          res.send({state: "SUCCESS"});
-        })
+        connection.release();
       }
     })
   }
@@ -251,36 +269,40 @@ router.post("/get-team", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
-        if(err) throw err;
-
-        const teamList = result;
-        let loadTeamCount = 0;
-
-        if(teamList.length > 0) {
-          for(let i = 0; i < teamList.length; i++) {
-            const team = teamList[i];
+      try{
+        connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
+          if(err) throw err;
   
-            connection.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${connection.escape(team.no)}`, (err, result) => {
-              if(err) throw err;
+          const teamList = result;
+          let loadTeamCount = 0;
   
-              loadTeamCount++;
-              team.member = result;
-        
-              if(loadTeamCount == teamList.length) {
-                req.session.user.team = teamList;
+          if(teamList.length > 0) {
+            for(let i = 0; i < teamList.length; i++) {
+              const team = teamList[i];
+    
+              connection.query(`SELECT user.user_no as no, id, email, name, cell_no, position FROM user, member WHERE member.user_no = user.user_no AND group_no = ${connection.escape(team.no)}`, (err, result) => {
+                if(err) throw err;
+    
+                loadTeamCount++;
+                team.member = result;
+          
+                if(loadTeamCount == teamList.length) {
+                  req.session.user.team = teamList;
+    
+                  res.send({state: "SUCCESS", result: teamList});
+                }
+              })
+            }
+          }else {
+            req.session.user.team = [];
   
-                res.send({state: "SUCCESS", result: teamList});
-              }
-            })
+            res.send({state: "SUCCESS", result: []});
           }
-        }else {
-          req.session.user.team = [];
-
-          res.send({state: "SUCCESS", result: []});
-        }
-
-      })
+  
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
       
       connection.release();
     }
@@ -310,25 +332,29 @@ router.post("/create-team", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`INSERT INTO scheduler.group(name, color, create_date, update_date) VALUES(${connection.escape(exCode)}, ${connection.escape(param.color)}, now(), now())`, (err, result) => {
-          if(err) throw err;
-
-          connection.query(`SELECT group_no as no FROM scheduler.group WHERE name = ${connection.escape(exCode)}`, (err, result) => {
+        try{
+          connection.query(`INSERT INTO scheduler.group(name, color, create_date, update_date) VALUES(${connection.escape(exCode)}, ${connection.escape(param.color)}, now(), now())`, (err, result) => {
             if(err) throw err;
-
-            const groupNo = result[0].no;
-
-            connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'leader', FALSE, now(), now())`, (err, result) => {
+  
+            connection.query(`SELECT group_no as no FROM scheduler.group WHERE name = ${connection.escape(exCode)}`, (err, result) => {
               if(err) throw err;
   
-              connection.query(`UPDATE scheduler.group SET name = ${connection.escape(param.name)} WHERE group_no = ${connection.escape(groupNo)}`, (err, result) => {
+              const groupNo = result[0].no;
+  
+              connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'leader', FALSE, now(), now())`, (err, result) => {
                 if(err) throw err;
     
-                res.send({state: "SUCCESS"});
+                connection.query(`UPDATE scheduler.group SET name = ${connection.escape(param.name)} WHERE group_no = ${connection.escape(groupNo)}`, (err, result) => {
+                  if(err) throw err;
+      
+                  res.send({state: "SUCCESS"});
+                })
               })
             })
           })
-        })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
         
         connection.release();
       }
@@ -362,54 +388,58 @@ router.post("/invite-team", function(req, res, next) {
     pool.getConnection((err, connection) => {
       if(err) throw err;
       else {
-        connection.query(`SELECT user_no as no FROM user WHERE id = ${connection.escape(param.uid)}`, (err, result) => {
-          if(err) throw err;
-          
-          if(result.length > 0) {
-            let insertInviteCount = 0;
-
-            const userNo = result[0].no;
+        try{
+          connection.query(`SELECT user_no as no FROM user WHERE id = ${connection.escape(param.uid)}`, (err, result) => {
+            if(err) throw err;
             
-            for(let i = 0; i < param.no.length; i++) {
-              const groupNo = param.no[i];
-              connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(userNo)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-                if(err) throw err;
-                
-                if(result.length == 0) {
-                  connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(userNo)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-                    if(err) throw err;
-                    
-                    if(result.length == 0) {
-                      connection.query(`INSERT INTO invite(group_no, user_no, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(userNo)}, now(), now())`, (err, result) => {
-                        if(err) throw err;
-                        
+            if(result.length > 0) {
+              let insertInviteCount = 0;
+  
+              const userNo = result[0].no;
+              
+              for(let i = 0; i < param.no.length; i++) {
+                const groupNo = param.no[i];
+                connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(userNo)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+                  if(err) throw err;
+                  
+                  if(result.length == 0) {
+                    connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(userNo)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+                      if(err) throw err;
+                      
+                      if(result.length == 0) {
+                        connection.query(`INSERT INTO invite(group_no, user_no, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(userNo)}, now(), now())`, (err, result) => {
+                          if(err) throw err;
+                          
+                          insertInviteCount++;
+  
+                          if(insertInviteCount == param.no.length) {
+                            res.send({state: "SUCCESS"});
+                          }
+                        })
+                      }else {
                         insertInviteCount++;
-
+  
                         if(insertInviteCount == param.no.length) {
                           res.send({state: "SUCCESS"});
                         }
-                      })
-                    }else {
-                      insertInviteCount++;
-
-                      if(insertInviteCount == param.no.length) {
-                        res.send({state: "SUCCESS"});
                       }
+                    })
+                  }else {
+                    insertInviteCount++;
+  
+                    if(insertInviteCount == param.no.length) {
+                      res.send({state: "SUCCESS"});
                     }
-                  })
-                }else {
-                  insertInviteCount++;
-
-                  if(insertInviteCount == param.no.length) {
-                    res.send({state: "SUCCESS"});
                   }
-                }
-              })
+                })
+              }
+            }else {
+              res.send({alert: "존재하지 않는 id입니다."});
             }
-          }else {
-            res.send({alert: "존재하지 않는 id입니다."});
-          }
-        })
+          })
+        }catch(err ){
+          res.send({alert: "오류가 발생했습니다."});
+        }
           
         connection.release();
       }
@@ -421,11 +451,15 @@ router.post("/get-request", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT gr.group_no as no, gr.name as name, gr.color as color FROM invite inv, scheduler.group gr where gr.group_no = inv.group_no AND user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
-        if(err) throw err;
-
-        res.send({state: "SUCCESS", result: result});
-      })
+      try{
+        connection.query(`SELECT gr.group_no as no, gr.name as name, gr.color as color FROM invite inv, scheduler.group gr where gr.group_no = inv.group_no AND user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
+          if(err) throw err;
+  
+          res.send({state: "SUCCESS", result: result});
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
       
       connection.release();
     }
@@ -438,11 +472,15 @@ router.post("/get-request-count", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT count(*) as count FROM invite where user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
-        if(err) throw err;
-
-        res.send({state: "SUCCESS", result: result[0]});
-      })
+      try{
+        connection.query(`SELECT count(*) as count FROM invite where user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
+          if(err) throw err;
+  
+          res.send({state: "SUCCESS", result: result[0]});
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
       
       connection.release();
     }
@@ -464,33 +502,37 @@ router.post("/accept-request", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-        if(err) throw err;
-        
-        if(result.length > 0) {
-          connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-            if(err) throw err;
-    
-            let memberLenth = result.length;
-
-            connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+      try{
+        connection.query(`SELECT invite_no FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+          if(err) throw err;
+          
+          if(result.length > 0) {
+            connection.query(`SELECT member_no FROM member WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
               if(err) throw err;
       
-              if(memberLenth == 0) {
-                connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'member', FALSE, now(), now())`, (err, result) => {
-                  if(err) throw err;
-          
-                  res.send({state: "SUCCESS"});
-                })
-              }else {
-                res.send({alert: "이미 가입된 팀입니다."});
-              }
+              let memberLenth = result.length;
+  
+              connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+                if(err) throw err;
+        
+                if(memberLenth == 0) {
+                  connection.query(`INSERT INTO member(group_no, user_no, position, alert, create_date, update_date) VALUES(${connection.escape(groupNo)}, ${connection.escape(req.session.user.no)}, 'member', FALSE, now(), now())`, (err, result) => {
+                    if(err) throw err;
+            
+                    res.send({state: "SUCCESS"});
+                  })
+                }else {
+                  res.send({alert: "이미 가입된 팀입니다."});
+                }
+              })
             })
-          })
-        }else {
-          res.send({alert: "존재하지 않는 초대 입니다."});
-        }
-      })
+          }else {
+            res.send({alert: "존재하지 않는 초대 입니다."});
+          }
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
       
       connection.release();
     }
@@ -512,11 +554,15 @@ router.post("/refuse-request", function(req, res, next) {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
-        if(err) throw err;
-        
-        res.send({state: "SUCCESS"});
-      })
+      try{
+        connection.query(`DELETE FROM invite WHERE user_no = ${connection.escape(req.session.user.no)} AND group_no = ${connection.escape(groupNo)}`, (err, result) => {
+          if(err) throw err;
+          
+          res.send({state: "SUCCESS"});
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
       
       connection.release();
     }
@@ -527,9 +573,12 @@ const DBfunction = e => {
   pool.getConnection((err, connection) => {
     if(err) throw err;
     else {
-      connection.query(`SELECT 1`, (err, result) => {
-        if(err) throw err;
-      })
+      try {
+        connection.query(`SELECT 1`, (err, result) => {
+          if(err) throw err;
+        })
+      }catch(err) {
+      }
        
       connection.release();
     }

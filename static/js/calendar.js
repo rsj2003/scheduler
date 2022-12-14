@@ -80,9 +80,11 @@ const openModifySchedule = (target, scheduleData) => {
 
       for(let i = 0; i < user.team.length; i++) {
         let team = user.team[i];
-        for(let j = 0; j < team.member.length; j++) {
-          let member = team.member[j];
-          if(member.no == user.no && member.position == "leader") isLeader = true;
+        if(team.no == scheduleData.type) {
+          for(let j = 0; j < team.member.length; j++) {
+            let member = team.member[j];
+            if(member.no == user.no && member.position == "leader") isLeader = true;
+          }
         }
       }
 

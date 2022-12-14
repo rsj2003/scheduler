@@ -195,7 +195,7 @@ router.post("/get-schedules", function(req, res, next) {
     if(err) throw err;
     else {
       try{
-        let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date, create_user as createUser as endDate FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
+        let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate, create_user as createUser FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
         const teamList = req.session.user.team;
       
         for(let i = 0; i < teamList.length; i++) {

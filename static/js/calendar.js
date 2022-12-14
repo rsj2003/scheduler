@@ -127,6 +127,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               popupOpened = true;
               $morePop.style.display = "block";
               $popupBackground.style.display = "block";
+              scheduleTrimList = [];
               scheduleTrim = 0;
               moreHeight = 1;
 

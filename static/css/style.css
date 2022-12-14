@@ -139,7 +139,7 @@
 .calendar-date .schedule{width: 100%; height: 100%; cursor: pointer; user-select: none;}
 .calendar-date .schedule p{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .calendar-date .schedule>span{pointer-events: none;}
-.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 1px); transform: translateX(-1px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
+.calendar-date .schedule-date>span, .calendar-date .schedule-more>span{display: flex; width: calc(100% + 2px); transform: translateX(-2px); height: 100%; justify-content: flex-start; align-items: center; padding: 0 4px; border-top: 1px solid #bbb8; border-bottom: 1px solid #bbb8;}
 .calendar-date .schedule-start{overflow: hidden;}
 .calendar-date .schedule-start>span{border-left: 1px solid #bbb8; border-top-left-radius: 5px; border-bottom-left-radius: 5px; width: 100%; transform: translateX(0px);}
 .calendar-date .schedule-end>span{border-right: 1px solid #bbb8; border-top-right-radius: 5px; border-bottom-right-radius: 5px;}
@@ -179,24 +179,30 @@
 
 #popup-background{width: 100%; height: 100%; background: #0002; position: absolute; left: 0; top: 0; z-index: 500; display: none;}
 .popup{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); border: 2px solid #bbb; border-radius: 30px 30px 7px 7px; background: #fff; overflow: hidden; display: none; width: 550px; z-index: 510; max-height: 95%;}
+#add-schedule, #modify-schedule{z-index: 520;}
 .popup-header{width: 100%; height: 60px; background: #7FB77E; color: #fff; font-size: 30px; display: flex; justify-content: center; align-items: center; font-weight: bold;}
 .other-color .popup-header{background: #b88d7f;}
 .popup-content{padding: 20px 60px;}
 .popup-content form{display: flex; flex-direction: column; align-items: flex-start; gap: 10px;}
-.popup-content .input-group{display: grid; grid-template-columns: 63px 1fr; width: 100%; align-items: center;}
-.popup-content .input-name-group{grid-template-columns: 63px 1fr 35px;}
-.popup-content .input-time-group{grid-template-columns: 63px 1fr 20px 1fr;}
+.popup-content .input-group{display: grid; grid-template-columns: 65px 1fr; width: 100%; align-items: center;}
+.popup-content .input-name-group{grid-template-columns: 65px 1fr 35px;}
+.popup-content .input-time-group{grid-template-columns: 65px 1fr 20px 1fr;}
 .popup-content input{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px;}
 .popup-content input[type="color"]{width: 30px; height: 100%; margin-left: 5px;}
+.other-color .popup-content input{border-color: #d7bdb0;}
+.popup .popup-content input.readonly{border-color:#aaa;}
 .popup-content button{background: none; border: 1px solid #7FB77E; color: #7FB77E; font-weight: bold; font-size: 20px; padding: 4px 9px; border-radius: 6px; transition: .2s;}
 .other-color .popup-content button{border-color: #b88d7f; color: #b88d7f;}
+.popup .popup-content button.readonly{border-color:#888; color: #888; pointer-events: none;}
 .popup-content button+button{margin-left: 30px;}
 .popup-content button:hover{color: #fff; background: #7FB77E}
-.other-color .popup-content button:hover{background: #b88d7f;}
+.other-color .popup-content button:hover{color: #fff; background: #b88d7f;}
 .popup-content textarea{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%; height: 84px;}
 .other-color .popup-content textarea{border-color: #d7bdb0;}
+.popup .popup-content textarea.readonly{border-color: #aaa;}
 .popup-content select{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%;}
 .other-color .popup-content select{border-color: #d7bdb0;}
+.popup .popup-content select.readonly{border-color: #aaa;}
 .popup-content .between-time{display: inline-block; text-align: center;}
 .popup-content .alert{width: 100%; text-align: center; padding-top: 14px; height: 30px;}
 .popup-content .input-buttons{display: flex; justify-content: center; align-items: center; width: 100%;}
@@ -223,15 +229,18 @@
 .scroll-bar::-webkit-scrollbar-thumb{background: #8888; border-radius: 10px; background-clip: padding-box; border: 3px solid #0000;}
 
 #team-list .team-item{width: 100%; height: auto; color: #888; display: flex; flex-direction: column; justify-content: flex-start; align-items: center;}
-#team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 26px 1fr 26px; align-items: center;}
+#team-list .team-header{padding: 3px 5px 3px 2px; border: #bbb 1px solid; border-radius: 3px; width: 100%; height: 34px; margin-bottom: 5px; display: grid; grid-template-columns: 26px 1fr 26px 26px; align-items: center;}
 #team-list .team-icon{width: 26px; height: 26px; display: block; clip-path: polygon(37.73% 28.76%, 74.52% 50%, 37.73% 71.24%, 37.73% 28.76%); transition: .2s; transform: translateX(-10%); cursor: pointer;}
 #team-list .team-icon.active{transform: translateX(-10%) rotate(90deg);}
 #team-list .team-content{width: 100%; height: auto; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-bottom: 10px;}
-#team-list .member-item{display: grid; grid-template-columns: 30px 1fr; width: 100%;}
+#team-list .member-item{display: grid; grid-template-columns: 30px 1fr; width: 100%; padding-right: 5px;}
 #team-list .list-ui{width: 13px; height: calc(100% + 2px); border-left: 1px solid #888; border-bottom: 1px solid #888; transform: translate(10px, calc(-30% - 1px));}
+#team-list .leader{grid-template-columns: 30px 1fr 24px;}
 #team-list .leader .list-ui{height: 60%; transform: translate(10px, calc(100% / 6));}
 #team-list .member-item:last-of-type .list-ui{border-bottom-left-radius: 7px;}
+#team-list .member-user{font-weight: bold;}
 #team-list .team-show{display: none;}
+#team-list .team-setting{cursor: pointer;}
 #team-list .team-show-label{margin: 3px; border: 2px solid; padding: 2px; display: block; width: 20px; height: 20px; margin: 3px; border-radius: 7px; cursor: pointer;}
 #team-list .team-show-label span{display: none; width: 100%; height: 100%; border-radius: 3px;}
 #team-list .team-show:checked ~ .team-show-label span{display: block;}

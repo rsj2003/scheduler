@@ -257,6 +257,7 @@ let schedules = [];
 let moreHoverIdx = 0;
 let moreHeight = 0;
 let todayDoList = [];
+let morePopupOpened = false;
 
 
 // login.js

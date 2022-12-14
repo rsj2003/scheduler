@@ -124,15 +124,18 @@ const loadTeam = (invite = false) => {
         const $header = document.createElement("div");
         const $content = document.createElement("div");
         const $headerIcon = document.createElement("span");
+        const $settingIcon = document.createElement("img");
         const $teamName = document.createElement("p");
         const $teamShow = document.createElement("input");
         const $teamShowLabel = document.createElement("label");
         const $teamShowLabelCheck = document.createElement("span");
+        let settingSrc = "/img/setting";
 
         $item.classList.add("team-item");
         $header.classList.add("team-header");
         $content.classList.add("team-content");
         $headerIcon.classList.add("team-icon");
+        $settingIcon.classList.add("team-setting");
         $headerIcon.classList.add("active");
         $teamShow.classList.add("team-show");
         $teamShowLabel.classList.add("team-show-label");
@@ -156,6 +159,13 @@ const loadTeam = (invite = false) => {
         $header.append($teamName);
         $header.style.background = data.color;
         $header.style.color = getTextColorByBackgroundColor(data.color);
+
+        if(getTextColorByBackgroundColor(data.color) == "#333") settingSrc += "-black";
+        settingSrc += ".png";
+
+        $settingIcon.src = settingSrc;
+
+        $header.append($settingIcon);
 
         $teamShow.id = `team-show-${i}`;
         $teamShow.type = "checkbox";
@@ -208,13 +218,22 @@ const loadTeam = (invite = false) => {
           $listUi.classList.add("list-ui");
           $memberName.classList.add("member-name");
 
+          if(member.id == user.id) $memberItem.classList.add("member-user");
+
           if(member.name) $memberName.innerText = member.name;
           else $memberName.innerText = member.id;
           $memberItem.append($listUi);
           $memberItem.append($memberName);
 
           if(member.position == "leader") {
+            const $leaderIcon = document.createElement("img");
+
             $memberItem.classList.add("leader");
+            $leaderIcon.classList.add("leader-icon");
+    
+            $leaderIcon.src = "/img/leader.png";
+
+            $memberItem.append($leaderIcon);
 
             $content.prepend($memberItem);
           }else {

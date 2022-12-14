@@ -9,7 +9,13 @@ const loginToMain = e => {
   $todayDate.style.right = "80%";
   $sideToggle.style.transition = "0s";
 
-  $userId.innerText = user.id;
+  if(user.name) {
+    $userIdHeader.innerText = `name: `;
+    $userIdContent.innerText = user.name;
+  }else {
+    $userIdHeader.innerText = `id: `;
+    $userIdContent.innerText = user.id;
+  }
   $userEmail.innerText = user.email;
 
   setTimeout(e => {

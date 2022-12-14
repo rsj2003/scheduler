@@ -19,8 +19,8 @@
           <div id="side-toggle" class="toggle-bar"><span class="bar"></span></div>
           <div id="user-data">
             <div id="user">
-              <div id="id"><% if(user.name) { %>name: <% }else { %>id: <% } %><span><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
-              <div id="email">email: <span><% if(user) { %><%= user.email %><% } %></span></div>
+              <div id="id"><span class="user-header"><% if(user.name) { %>name: <% }else { %>id: <% } %></span><span class="user-content"><% if(user) { if(user.name) { %><%= user.name %><% }else { %><%= user.id %><% }} %></span></div>
+              <div id="email">email: <span class="user-content"><% if(user) { %><%= user.email %><% } %></span></div>
             </div>
             <div id="user-buttons">
               <button id="logout">logout</button>
@@ -289,15 +289,15 @@
     <div class="popup-header">
       <p>User Information</p>
     </div>
-    <div class="pop-content">
-      <form id="popup-user" class="popup-form">
+    <div class="popup-content">
+      <form id="user-pop-form" class="popup-form">
         <span class="input-group">
           <span>Id</span>
-          <input type="text" name="id" autocomplete="off" readonly>
+          <input type="text" class="readonly" name="id" autocomplete="off" readonly>
         </span>
         <span class="input-group">
           <span>Email</span>
-          <input type="text" name="email" autocomplete="off" readonly>
+          <input type="text" class="readonly" name="email" autocomplete="off" readonly>
         </span>
         <span class="input-group">
           <span>Name</span>
@@ -309,7 +309,7 @@
         </span>
         <p class="alert"></p>
         <span class="input-buttons">
-          <button id="information-button">Save</button>
+          <button id="user-pop-button">Save</button>
           <button class="close-button">Cancle</button>
         </span>
       </form>

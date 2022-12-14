@@ -55,13 +55,27 @@ for(let i = 0; i < $closeButton.length; i++) {
   
   el.addEventListener("click", e => {
     e.preventDefault();
-    popupOpened = false;
+    
+    if(popupOpened == "more") {
+      morePopupOpened = false;
+    }
+
+    if(morePopupOpened) {
+      popupOpened = "more";
+    }else {
+      popupOpened = false;
+    }
 
     resetAlert();
-    $popupBackground.style.display = "none";
+    
+    if(morePopupOpened) {
+      $addSchedule.style.display = "none";
+    }else {
+      $popupBackground.style.display = "none";
 
-    for(let j = 0; j < $popup.length; j++) {
-      $popup[j].style.display = "none";
+      for(let j = 0; j < $popup.length; j++) {
+        $popup[j].style.display = "none";
+      }
     }
   })
 }
@@ -121,4 +135,16 @@ const indexPageLoaded = e => {
 
     setCalendar(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1);
   })
+}
+
+const getTextColorByBackgroundColor = color => {
+  const c = color.substring(1);
+  const rgb = parseInt(c, 16);
+  const r = (rgb >> 16) & 0xff;
+  const g = (rgb >>  8) & 0xff;
+  const b = (rgb >>  0) & 0xff;
+
+  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+  return luma < 190 ? "#fff" : "#333";
 }

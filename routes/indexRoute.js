@@ -195,7 +195,7 @@ router.post("/get-schedules", function(req, res, next) {
     if(err) throw err;
     else {
       try{
-        let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
+        let sql = `SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date, create_user as createUser as endDate FROM schedule where create_user = ${connection.escape(req.session.user.no)}`;
         const teamList = req.session.user.team;
       
         for(let i = 0; i < teamList.length; i++) {
@@ -567,6 +567,58 @@ router.post("/refuse-request", function(req, res, next) {
       connection.release();
     }
   })
+})
+
+router.post("/modify-user", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.name = param.name.trim();
+  param.cellNo = param.cellNo.trim();
+
+  if(param.name.length > 25) {
+    res.send({alert: "이름 길이가 너무 깁니다."});
+  }else if(param.cellNo.length > 25) {
+    res.send({alert: "전화번호 길이가 너무 깁니다."});
+  }else if(param.cellNo.match(/[^0-9|\-]/g)) {
+    res.send({alert: "전화번호가 잘못되었습니다."});
+  }else {
+    pool.getConnection((err, connection) => {
+      if(err) throw err;
+      else {
+        try{
+          let sql = `UPDATE user SET`;
+
+          if(param.name != "") sql += ` name = ${connection.escape(param.name)}`;
+          if(param.name != "" && param.cellNo != "" ) sql += `, `;
+          if(param.cellNo != "") sql += ` cell_no = ${connection.escape(param.cellNo)}`;
+
+          if(param.name == "" && param.cellNo == "" ) {
+            res.send({state: "SUCCESS"});
+            return;
+          }
+
+          sql += ` WHERE group_no = ${connection.escape(req.session.user.no)}`;
+
+          connection.query(sql, (err, result) => {
+            if(err) throw err;
+            
+            res.send({state: "SUCCESS"});
+          })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
+        
+        connection.release();
+      }
+    })
+  }
 })
 
 const DBfunction = e => {

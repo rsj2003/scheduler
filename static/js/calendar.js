@@ -1,15 +1,3 @@
-const getTextColorByBackgroundColor = color => {
-  const c = color.substring(1);
-  const rgb = parseInt(c, 16);
-  const r = (rgb >> 16) & 0xff;
-  const g = (rgb >>  8) & 0xff;
-  const b = (rgb >>  0) & 0xff;
-
-  const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-  return luma < 190 ? "#fff" : "#333";
-}
-
 const getHoverColorByBackgroundColor = color => {
   const c = color.substring(1);
   const rgb = parseInt(c, 16);
@@ -35,7 +23,7 @@ const getHoverColorByBackgroundColor = color => {
 }
 
 const openAddSchedule = thisDate => {
-  if(!popupOpened) {
+  if(popupOpened != true) {
     popupOpened = true;
 
     $addSchedule.style.display = "block";
@@ -51,6 +39,61 @@ const openAddSchedule = thisDate => {
     $addScheduleForm.start.value = `${thisDate.year}-${thisDate.month}-${thisDate.date}`;
     $addScheduleForm.end.value = `${thisDate.year}-${thisDate.month}-${thisDate.date}`;
     $addScheduleForm.group.value = -1;
+  }
+}
+
+const openModifySchedule = (target, scheduleData) => {
+  if(target.classList.contains("schedule-more")) return;
+  if(popupOpened != true) {
+    popupOpened = true;
+
+    $modifySchedule.style.display = "block";
+    $popupBackground.style.display = "block";
+    
+    appendTeam($modifyScheduleForm.group);
+
+    $modifyScheduleForm.name.value = scheduleData.name;
+    $modifyScheduleForm.color.value = scheduleData.color;
+    $modifyScheduleForm.content.value = scheduleData.content;
+    $modifyScheduleForm.start.value = `${scheduleData.startDate.year}-${scheduleData.startDate.month}-${scheduleData.startDate.date.toString().length > 1 ? scheduleData.startDate.date : "0" + scheduleData.startDate.date.toString()}`;
+    $modifyScheduleForm.end.value = `${scheduleData.endDate.year}-${scheduleData.endDate.month}-${scheduleData.endDate.date.toString().length > 1 ? scheduleData.endDate.date : "0" + scheduleData.endDate.date.toString()}`;
+    $modifyScheduleForm.group.value = scheduleData.type;
+
+    $modifyScheduleForm.name.readOnly = true;
+    $modifyScheduleForm.color.style.pointerEvents = "none";
+    $modifyScheduleForm.content.readOnly = true;
+    $modifyScheduleForm.start.readOnly = true;
+    $modifyScheduleForm.end.readOnly = true;
+    $modifyScheduleForm.group.style.pointerEvents = "none";
+
+    $modifyScheduleForm.name.classList.add("readonly");
+    $modifyScheduleForm.color.classList.add("readonly");
+    $modifyScheduleForm.content.classList.add("readonly");
+    $modifyScheduleForm.start.classList.add("readonly");
+    $modifyScheduleForm.end.classList.add("readonly");
+    $modifyScheduleForm.group.classList.add("readonly");
+
+    $deleteScheduleButton.classList.add("readonly");
+
+    if(scheduleData.createUser != user.no) {
+      let isLeader = false;
+
+      for(let i = 0; i < user.team.length; i++) {
+        let team = user.team[i];
+        for(let j = 0; j < team.member.length; j++) {
+          let member = team.member[j];
+          if(member.no == user.no && member.position == "leader") isLeader = true;
+        }
+      }
+
+      if(!isLeader) {
+        $modifyScheduleButton.classList.add("readonly");
+      }else {
+        $modifyScheduleButton.classList.remove("readonly");
+      }
+    }else {
+      $modifyScheduleButton.classList.remove("readonly");
+    }
   }
 }
 
@@ -106,8 +149,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
         }
 
-        console.log(month, date, rows - 1, insert - scheduleTrim);
-
         if(rows - 1 <= insert - scheduleTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
           if(!$schedule) break;
@@ -126,7 +167,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
 
           $schedule.addEventListener("click", e => {
             if(!popupOpened) {
-              popupOpened = true;
+              popupOpened = "more";
+              morePopupOpened = true;
               $morePop.style.display = "block";
               $popupBackground.style.display = "block";
               scheduleTrimList = [];
@@ -197,6 +239,10 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           const $p = document.createElement("p");
           
           $schedule.classList.add("schedule");
+
+          $schedule.addEventListener("click", e => {
+            openModifySchedule($schedule, thisSchedule);
+          })
 
           if(thisSchedule.startDate !== "dummy") {
             let $prevSchedule = false;
@@ -297,6 +343,10 @@ const setCalendar = (year, month, $calendar = $date) => {
     $item.classList.add("todo-item");
     $color.classList.add("todo-color");
     $p.classList.add("todo-name");
+
+    $item.addEventListener("click", e => {
+      openModifySchedule($item, todoItem);
+    })
 
     $item.dataset.hoverColor = getHoverColorByBackgroundColor(todoItem.color);
     $item.dataset.no = todoItem.no;
@@ -734,8 +784,9 @@ $addScheduleButton.addEventListener("click", e => {
   .then(res => {
     if(res.state == "SUCCESS") {
       popupOpened = false;
-      $addSchedule.style.display = "none";
+      morePopupOpened = false;
       $popupBackground.style.display = "none";
+      $addSchedule.style.display = "none";
       resetAlert();
       loadSchedules();
     }else {

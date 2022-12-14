@@ -4,8 +4,9 @@ const $backgroundGroup = document.querySelector("#background-group");
 const $alert = document.querySelectorAll(".alert");
 const $alertPop = document.querySelectorAll(".alert-pop");
 const $closeButton = document.querySelectorAll(".close-button");
-const $userId = document.querySelector("#id span");
-const $userEmail = document.querySelector("#email span");
+const $userIdHeader = document.querySelector("#id .user-header");
+const $userIdContent = document.querySelector("#id .user-content");
+const $userEmail = document.querySelector("#email .user-content");
 const $popup = document.querySelectorAll(".popup");
 const $popupBackground = document.querySelector("#popup-background");
 const $calendarSide = document.querySelector("#calendar-side");
@@ -34,6 +35,10 @@ const $toggleTextArea = document.querySelector("#selected .toggle-text-area");
 const $morePop = document.querySelector("#more-pop");
 const $moreCalendar = document.querySelector("#more-calendar");
 const $todoContent = document.querySelector("#todo-content");
+const $modifySchedule = document.querySelector("#modify-schedule");
+const $modifyScheduleForm = document.querySelector("#modify-schedule-form");
+const $modifyScheduleButton = document.querySelector("#modify-schedule-button");
+const $deleteScheduleButton = document.querySelector("#delete-schedule-button");
 
 
 // team.js
@@ -52,6 +57,13 @@ const $inviteTeamForm = document.querySelector("#invite-team-form");
 const $requestTeamForm = document.querySelector("#request-team-form");
 const $createTeamButton = document.querySelector("#create-team-button");
 const $inviteTeamButton = document.querySelector("#invite-team-button");
+
+
+// user.js
+const $information = document.querySelector("#information");
+const $userPop = document.querySelector("#user-pop");
+const $userPopForm = document.querySelector("#user-pop-form");
+const $userPopButton = document.querySelector("#user-pop-button");
 
 
 // login.js

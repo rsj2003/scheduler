@@ -99,6 +99,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
         if(disable.indexOf(thisSchedule.type) > -1) continue;
 
         insert++;
+        console.log(month, date, scheduleTrim, scheduleTrimList);
 
         if(rows - 1 <= insert - scheduleTrim && more !== false) {
           moreCount++;
@@ -243,7 +244,6 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) {
                 scheduleTrim++;
 
-                console.log(month, date, scheduleTrim, scheduleTrimList);
                 continue;
               }
               todo.push(0);

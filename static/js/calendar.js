@@ -135,6 +135,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
       const day = new Date(year, month - 1, date).getDay();
       let insert = 0;
       let todo = [];
+      let nowTrim = 0;
       
       for(let i = 0; i < schedule.length; i++) {
         const thisSchedule = schedule[i];
@@ -145,15 +146,15 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
 
         insert++;
 
-        if(rows - 1 <= insert - scheduleTrim && more !== false) {
+        if(rows - 1 <= insert - nowTrim && more !== false) {
           moreCount++;
           if(moreCount + (rows) > moreHeight) moreHeight = moreCount + (rows);
           $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
         }
 
-        console.log(month, date, rows, insert, scheduleTrim, thisSchedule, scheduleTrimList);
+        console.log(month, date, rows, insert, nowTrim, thisSchedule, scheduleTrimList);
 
-        if(rows - 1 <= insert - scheduleTrim && more == false) {
+        if(rows - 1 <= insert - nowTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
           if(!$schedule) break;
           const $background = $schedule.querySelector("span");
@@ -235,8 +236,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
   
           break;
         }else {
-          if(i + 1 <= scheduleTrim) {
-            if(thisSchedule.startDate != "dummy") scheduleTrim = 0;
+          if(i + 1 <= nowTrim) {
+            if(thisSchedule.startDate != "dummy") nowTrim = 0;
           }
           const $schedule = document.createElement("span");
           const $background = document.createElement("span");
@@ -254,7 +255,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
 
             if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) scheduleTrimList.splice(scheduleTrimList.indexOf(thisSchedule.idx), scheduleTrimList.length);
 
-            if($prevDate && rows - 2 == insert - scheduleTrim) {
+            if($prevDate && rows - 2 == insert - nowTrim) {
               $prevSchedule = $prevDate.querySelector(".schedule-more");
             }
 
@@ -276,11 +277,13 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           }else {
             if(day == 0) {
               scheduleTrimList.push(thisSchedule.idx);
-              scheduleTrim++;
+              nowTrim++;
               continue;
             }else {
               if(scheduleTrimList.indexOf(thisSchedule.idx) > -1) {
-                scheduleTrim++;
+                if(i + 1 > nowTrim) {
+                  nowTrim++;
+                }
 
                 continue;
               }

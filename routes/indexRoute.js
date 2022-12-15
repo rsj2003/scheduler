@@ -627,16 +627,7 @@ router.post("/modify-user", function(req, res, next) {
       if(err) throw err;
       else {
         try{
-          let sql = `UPDATE user SET`;
-
-          if(param.name != "") sql += ` name = ${connection.escape(param.name)}`;
-          if(param.name != "" && param.cellNo != "" ) sql += `, `;
-          if(param.cellNo != "") sql += ` cell_no = ${connection.escape(param.cellNo)}`;
-
-          if(param.name == "" && param.cellNo == "" ) {
-            res.send({state: "SUCCESS"});
-            return;
-          }
+          let sql = `UPDATE user SET name = ${connection.escape(param.name)}, cell_no = ${connection.escape(param.cellNo)}`;
 
           sql += ` WHERE user_no = ${connection.escape(req.session.user.no)}`;
 

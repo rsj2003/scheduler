@@ -604,7 +604,7 @@ router.post("/modify-user", function(req, res, next) {
             return;
           }
 
-          sql += ` WHERE group_no = ${connection.escape(req.session.user.no)}`;
+          sql += ` WHERE user_no = ${connection.escape(req.session.user.no)}`;
 
           connection.query(sql, (err, result) => {
             if(err) throw err;

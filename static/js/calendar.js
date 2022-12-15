@@ -134,6 +134,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
       const schedule = schedules[year][month][date * 1];
       const day = new Date(year, month - 1, date).getDay();
       let insert = 0;
+      let dummyInsert = 0;
       let todo = [];
       let nowTrim = 0;
       
@@ -160,6 +161,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           const $background = $schedule.querySelector("span");
           const $p = $schedule.querySelector("p");
           const no = $schedule.dataset.no;
+
+          dummyInsert = 0;
   
           $schedule.classList.remove(`schedule-no-${no}`);
           $schedule.classList.remove("dummy");
@@ -290,6 +293,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               todo.push(0);
             }
 
+            dummyInsert++;
+
             $schedule.classList.add("dummy");
           }
           
@@ -300,7 +305,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
       }
 
       scheduleTrim = false;
-      if(insert == 0) scheduleTrim = true;
+      if(insert - dummyInsert == 0) scheduleTrim = true;
     }
   }
 
@@ -501,6 +506,19 @@ const loadSchedules = e => {
       loadRequestCount();
 
       if(request == "test") request = JSON.parse(JSON.stringify(schedulesData));
+
+      request = request.sort((a, b) => {
+        let x = a.endDate;
+        let y = b.endDate;
+
+        if(x > y) {
+          return -1;
+        }else if(x < y) {
+          return 1;
+        }else {
+          return 0;
+        }
+      })
 
       request = request.sort((a, b) => {
         let x = a.startDate;

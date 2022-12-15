@@ -177,7 +177,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               $morePop.style.display = "block";
               $popupBackground.style.display = "block";
               scheduleTrimList = [];
-              scheduleTrim = 0;
+              scheduleTrim = true;
               moreHeight = 1;
 
               const moreStartDate = new Date(year, month - 1, date - day);
@@ -275,7 +275,7 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
               $schedule.classList.add("schedule-end");
             }
           }else {
-            if(day == 0) {
+            if(day == 0 || scheduleTrim == true) {
               scheduleTrimList.push(thisSchedule.idx);
               nowTrim++;
               continue;
@@ -298,8 +298,12 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           $calendarDate.append($schedule);
         }
       }
+
+      scheduleTrim = false;
+      if(insert == 0) scheduleTrim = true;
     }
   }
+
 
   $line.append($calendarDate);
 }
@@ -315,7 +319,7 @@ const setCalendar = (year, month, $calendar = $date) => {
   let nowMonth = 1;
   let nowDates = 0;
   let thisMonthLine = 0;
-  scheduleTrim = 0;
+  scheduleTrim = true;
   moreHoverIdx = 0;
   scheduleTrimList = [];
 

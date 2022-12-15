@@ -151,6 +151,8 @@ const colIntoLine = ($line, year, month, date, classList, lineHeight, more = fal
           $line.style.height = `${thisHeight + (thisHeight / (rows - 1) * (moreHeight - rows))}px`;
         }
 
+        console.log(month, date, rows, insert, scheduleTrim);
+
         if(rows - 1 <= insert - scheduleTrim && more == false) {
           const $schedule = $calendarDate.querySelector(".schedule:last-of-type");
           if(!$schedule) break;

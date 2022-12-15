@@ -70,6 +70,7 @@ for(let i = 0; i < $closeButton.length; i++) {
     
     if(morePopupOpened) {
       $addSchedule.style.display = "none";
+      $modifySchedule.style.display = "none";
     }else {
       $popupBackground.style.display = "none";
 

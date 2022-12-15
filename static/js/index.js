@@ -83,13 +83,28 @@ for(let i = 0; i < $closeButton.length; i++) {
 
 $popupBackground.addEventListener("click", e => {
   e.preventDefault();
-  popupOpened = false;
+  
+  if(popupOpened == "more") {
+    morePopupOpened = false;
+  }
+
+  if(morePopupOpened) {
+    popupOpened = "more";
+  }else {
+    popupOpened = false;
+  }
 
   resetAlert();
-  $popupBackground.style.display = "none";
+  
+  if(morePopupOpened) {
+    $addSchedule.style.display = "none";
+    $modifySchedule.style.display = "none";
+  }else {
+    $popupBackground.style.display = "none";
 
-  for(let j = 0; j < $popup.length; j++) {
-    $popup[j].style.display = "none";
+    for(let j = 0; j < $popup.length; j++) {
+      $popup[j].style.display = "none";
+    }
   }
 })
 

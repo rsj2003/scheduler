@@ -58,27 +58,24 @@ router.post("/userData-action", function(req, res, next) {
                 if(err) throw err;
             
                 account.team = result;
-  
-                console.log("login");
-                console.log({no: account.no, id: account.id, email: account.email, name: account.name, cellNo: account.cellNo});
                 req.session.user = account;
-                res.send({state: "SUCCESS", user: req.session.user});
+
+                res.send({user: account});
               })
             }else {
-              res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
+              res.send({alert: "id와 비밀번호가 일치하지 않습니다.", user: {}});
             }
           })
         }catch(err) {
-          res.send({alert: "오류가 발생했습니다."});
+          res.send({alert: "오류가 발생했습니다.", user: {}});
         }
 
         connection.release();
       }
     })
-    result = req.session.user;
+  }else {
+    res.send({user: {}});
   }
-
-  res.send({user: result});
 })
 
 router.post("/register-action", function(req, res, next) {

@@ -824,6 +824,26 @@ $addScheduleButton.addEventListener("click", e => {
   })
 })
 
+$modifyScheduleButton.addEventListener("click", e => {
+  e.preventDefault();
+
+  $modifyScheduleForm.name.readOnly = false;
+  $modifyScheduleForm.color.style.pointerEvents = "";
+  $modifyScheduleForm.content.readOnly = false;
+  $modifyScheduleForm.start.readOnly = false;
+  $modifyScheduleForm.end.readOnly = false;
+  $modifyScheduleForm.group.style.pointerEvents = "";
+
+  $modifyScheduleForm.name.classList.remove("readonly");
+  $modifyScheduleForm.color.classList.remove("readonly");
+  $modifyScheduleForm.content.classList.remove("readonly");
+  $modifyScheduleForm.start.classList.remove("readonly");
+  $modifyScheduleForm.end.classList.remove("readonly");
+  $modifyScheduleForm.group.classList.remove("readonly");
+
+  $deleteScheduleButton.classList.remove("readonly");
+})
+
 document.addEventListener("mousemove", e => {
   const target = e.target;
   const no = target.dataset.no;

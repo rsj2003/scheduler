@@ -8,6 +8,15 @@ const getUser = (openInfomationPop = false) => {
     if(res.user.id) {
       user = res.user;
 
+      if(user.name) {
+        $userIdHeader.innerText = `name: `;
+        $userIdContent.innerText = user.name;
+      }else {
+        $userIdHeader.innerText = `id: `;
+        $userIdContent.innerText = user.id;
+      }
+      $userEmail.innerText = user.email;
+
       if(!popupOpened && openInfomationPop) {
         popupOpened = true;
 
@@ -15,15 +24,6 @@ const getUser = (openInfomationPop = false) => {
         $userPopForm.email.value = user.email;
         $userPopForm.name.value = user.name;
         $userPopForm.cell.value = user.cellNo;
-        
-        if(user.name) {
-          $userIdHeader.innerText = `name: `;
-          $userIdContent.innerText = user.name;
-        }else {
-          $userIdHeader.innerText = `id: `;
-          $userIdContent.innerText = user.id;
-        }
-        $userEmail.innerText = user.email;
 
         $userPop.style.display = "block";
         $popupBackground.style.display = "block";
@@ -55,7 +55,7 @@ $userPopButton.addEventListener("click", e => {
     if(res.state == "SUCCESS") {
       popupOpened = false;
       
-      $inviteTeam.style.display = "none";
+      $userPop.style.display = "none";
       $popupBackground.style.display = "none";
 
       resetAlert();

@@ -38,6 +38,43 @@ router.post("/userData-action", function(req, res, next) {
   let result = {};
 
   if(req.session.user) {
+    if(req.session.user.id == "login-test") {
+      req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0, team: []};
+      res.send({user: req.session.user});
+      return;
+    }
+
+    pool.getConnection((err, connection) => {
+      if(err) throw err;
+      else {
+        try{
+          connection.query(`SELECT user_no as no, id, email, name, cell_no as cellNo, alert FROM user WHERE id = ${connection.escape(req.session.user.id)} AND user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
+            if(err) throw err;
+  
+            if(result.length > 0) {
+              let account = result[0];
+  
+              connection.query(`SELECT gr.group_no as no, gr.name as name, color, position, alert FROM scheduler.group gr, member where gr.group_no = member.group_no AND member.user_no = ${connection.escape(account.no)}`, (err, result) => {
+                if(err) throw err;
+            
+                account.team = result;
+  
+                console.log("login");
+                console.log({no: account.no, id: account.id, email: account.email, name: account.name, cellNo: account.cellNo});
+                req.session.user = account;
+                res.send({state: "SUCCESS", user: req.session.user});
+              })
+            }else {
+              res.send({alert: "id와 비밀번호가 일치하지 않습니다."});
+            }
+          })
+        }catch(err) {
+          res.send({alert: "오류가 발생했습니다."});
+        }
+
+        connection.release();
+      }
+    })
     result = req.session.user;
   }
 

@@ -17,9 +17,10 @@
 #form-background{background: #fff;}
 #background .grid, #form-background .grid{position: absolute; left: 0; top: 0; height: 100%; box-shadow: 0 0 20px #3333; z-index: 1;}
 #background .grid{width: calc(50% - 105px);}
-#background .grid-background{position: absolute; left: 0; top: 0; height: 100%; background: #fffa; width: calc(50% - 105px);}
+#background .grid-background{position: absolute; left: 0; top: 0; height: 100%; background: #fffa; width: calc(50% - 105px); overflow: hidden;}
+#background-canvas{position: absolute; left: 0; top: 0;}
 #form-background .grid{width: calc(50% - 100px);}
-.page-loaded #background .grid, .page-loaded #form-background .grid, .page-loaded #background .grid-background{transition: .8s;}
+.page-loaded #background .grid, .page-loaded #form-background .grid, .page-loaded #background .grid-background, .page-loaded #background-canvas{transition: .8s;}
 #background .grid{background: #7FB77E;}
 #form-background .grid{width: calc(50% - 100px); background: #B1D7B4; overflow: hidden; z-index: 5;}
 .register #background .grid{width: calc(50% + 105px);}
@@ -87,13 +88,13 @@
 #wrap.main.page-loaded #user-data{transition: .8s .5s; opacity: 1; pointer-events: unset; transform: scale(1);}
 #user-data #user{width: 100%;}
 #user-data #user-buttons{width: 100%; display: flex; justify-content: flex-start; gap: 7px;}
-#user-data button{border: none; background: none; padding-top: 9px; font-size: 14px; color: #777; transition: .15s;}
-#user-data button:hover{color: #555;}
+#user-data button{border: none; background: none; font-size: 14px; color: #888; transition: .15s;}
+#user-data button:hover{color: #444;}
 #user-data div{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 #today-todo{display: grid; width: 100%; height: calc(100% - 150px); grid-template-columns: 1fr; grid-template-rows: 60px 1fr; margin-top: 25px; border-radius: 20px; overflow: hidden; transform: scale(.9); pointer-events: none; opacity: 0; box-shadow: 0 0 10px #3336; user-select: none;}
 #wrap.main.page-loaded #today-todo{transition: .8s .75s; opacity: 1; pointer-events: unset; transform: scale(1);}
-#todo-header{background: #B1D7B499; display: flex; font-size: 24px; color: #fff; justify-content: center; align-items: center;}
+#todo-header{background: #B1D7B4; display: flex; font-size: 24px; color: #fff; justify-content: center; align-items: center;}
 #todo-content{background: #fff9; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; gap: 5px; padding: 10px;}
 #todo-content p{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .todo-item{width: 100%; display: grid; grid-template-columns: 30px 1fr; align-items: center; cursor: pointer; border-radius: 5px; padding: 5px;}
@@ -244,7 +245,8 @@
 #team-list .member-item:last-of-type .list-ui{border-bottom-left-radius: 7px;}
 #team-list .member-user{font-weight: bold;}
 #team-list .team-show{display: none;}
-#team-list .team-setting{cursor: pointer;}
+/* #team-list .team-setting{cursor: pointer;} */
+#team-list .team-setting{opacity: 0; pointer-events: none;}
 #team-list .team-show-label{margin: 3px; border: 2px solid; padding: 2px; display: block; width: 20px; height: 20px; margin: 3px; border-radius: 7px; cursor: pointer;}
 #team-list .team-show-label span{display: none; width: 100%; height: 100%; border-radius: 3px;}
 #team-list .team-show:checked ~ .team-show-label span{display: block;}

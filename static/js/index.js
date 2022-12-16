@@ -19,16 +19,19 @@ const setAlert = alert => {
 $sideToggle.addEventListener("click", e => {
   if(page.w < 1600) {
     $backgroundGroup.style.transition = ".8s";
+    $backgroundCanvas.style.transition = ".8s";
     $inputWrap.style.transition = ".8s";
     setTimeout(e => {
       if(leftSideOpen) {
         leftSideOpen = false;
         $backgroundGroup.style.left = "-300px";
+        $backgroundCanvas.style.left = "300px";
         $inputWrap.style.left = "-150px";
         $sideToggle.style.right = "-36px";
       }else {
         leftSideOpen = true;
         $backgroundGroup.style.left = "0";
+        $backgroundCanvas.style.left = "0";
         $inputWrap.style.left = "150px";
         $sideToggle.style.right = "-18px";
       }
@@ -110,10 +113,12 @@ $popupBackground.addEventListener("click", e => {
 
 const resizeLeftSide = e => {
   $backgroundGroup.style.transition = "0s";
+  $backgroundCanvas.style.transition = "0s";
   $inputWrap.style.transition = "0s";
   setTimeout(e => {
     if(page.w < 1600) {
       $backgroundGroup.style.left = "-300px";
+      $backgroundCanvas.style.left = "300px";
       $inputWrap.style.left = "-150px";
     }
   }, 1)
@@ -134,15 +139,18 @@ const indexPageLoaded = e => {
       }
   
       $backgroundGroup.style.transition = "0s";
+      $backgroundCanvas.style.transition = "0s";
       $inputWrap.style.transition = "0s";
       setTimeout(e => {
         if(page.w >= 1600) {
           leftSideOpen = false;
           $backgroundGroup.style.left = "0";
+          $backgroundCanvas.style.left = "0";
           $inputWrap.style.left = "150px";
           $sideToggle.style.right = "-18px";
         }else if(!leftSideOpen) {
           $backgroundGroup.style.left = "-300px";
+          $backgroundCanvas.style.left = "300px";
           $inputWrap.style.left = "-150px";
           $sideToggle.style.right = "-36px";
         }

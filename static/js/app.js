@@ -33,6 +33,8 @@ const app = e => {
   page.x = page.w / 2;
   page.y = page.h / 2;
 
+  canvasLoad();
+
   indexPageLoaded();
 
   getUser();

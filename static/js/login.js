@@ -28,6 +28,7 @@ const loginToMain = e => {
       $backgroundGrid.style.boxShadow = "0 0 20px #0000";
       $backgroundGridBackground.style.width = "calc(100% - 300px)";
       $backgroundGridBackground.style.left = "300px";
+      $backgroundCanvas.style.left = "-300px";
       $registerForm.style.display = "none";
       $loginGroup.style.display = "none";
       $registerGroup.style.left = "-75px";
@@ -64,6 +65,7 @@ const loginToMain = e => {
         
         setTimeout(e => {
           $backgroundGridBackground.style.left = "0";
+          $backgroundCanvas.style.left = "0";
           $backgroundGridBackground.style.width = "300px";
           $backgroundGridBackground.style.boxShadow = "box-shadow: 0 0 20px #3333";
           $wrap.classList.add("main");

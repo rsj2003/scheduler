@@ -266,3 +266,10 @@ let deleteNo = -1;
 // login.js
 let isLogined = false;
 let user = {};
+
+
+// canvas.js
+const PI = Math.PI;
+let backgroundParticle = [];
+let particleType = 0;
+let letFrame = 0;

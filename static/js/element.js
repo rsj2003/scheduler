@@ -80,3 +80,8 @@ const $inputWrap = document.querySelector("#input-wrap");
 const $logout = document.querySelector("#logout");
 const $backgroundGrid = document.querySelector("#background .grid");
 const $backgroundGridBackground = document.querySelector("#background .grid-background");
+
+
+// canvas.js
+const $backgroundCanvas = document.querySelector("#background-canvas");
+const backgroundCtx = $backgroundCanvas.getContext("2d");

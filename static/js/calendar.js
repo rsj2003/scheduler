@@ -480,10 +480,12 @@ const logined = e => {
   
           if(page.w < 1600) {
             $backgroundGroup.style.transition = ".8s";
+            $backgroundCanvas.style.transition = ".8s";
             $inputWrap.style.transition = ".8s";
             setTimeout(e => {
               $backgroundGroup.style.left = "-300px";
               $inputWrap.style.left = "-150px";
+              $backgroundCanvas.style.left = "300px";
               $sideToggle.style.right = "-36px";
             }, 250);
           }

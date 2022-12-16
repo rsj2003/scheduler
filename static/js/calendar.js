@@ -820,7 +820,7 @@ $addScheduleButton.addEventListener("click", e => {
       popupOpened = false;
       morePopupOpened = false;
       $popupBackground.style.display = "none";
-      $moreCalendar.style.display = "none";
+      $morePop.style.display = "none";
       $addSchedule.style.display = "none";
       resetAlert();
       loadSchedules();
@@ -856,7 +856,7 @@ $modifyScheduleButton.addEventListener("click", e => {
         morePopupOpened = false;
 
         $popupBackground.style.display = "none";
-        $moreCalendar.style.display = "none";
+        $morePop.style.display = "none";
         $modifySchedule.style.display = "none";
         $modifyScheduleButton.classList.remove("active");
         $deleteScheduleButton.classList.remove("active");
@@ -916,7 +916,7 @@ $deleteScheduleButton.addEventListener("click", e => {
           deleteNo = -1;
 
           $popupBackground.style.display = "none";
-          $moreCalendar.style.display = "none";
+          $morePop.style.display = "none";
           $modifySchedule.style.display = "none";
           $deleteScheduleButton.classList.remove("active");
 

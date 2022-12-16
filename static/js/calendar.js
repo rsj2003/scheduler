@@ -820,6 +820,7 @@ $addScheduleButton.addEventListener("click", e => {
       popupOpened = false;
       morePopupOpened = false;
       $popupBackground.style.display = "none";
+      $moreCalendar.style.display = "none";
       $addSchedule.style.display = "none";
       resetAlert();
       loadSchedules();
@@ -835,7 +836,39 @@ $modifyScheduleButton.addEventListener("click", e => {
   e.preventDefault();
 
   if(modifing) {
+    const form = $modifyScheduleForm;
 
+    fetch("/modify-schedule", {
+      method: "POST",
+      body: JSON.stringify({
+        no: modifySchedule.no,
+        name: form.name.value,
+        color: form.color.value,
+        content: form.content.value,
+        start: form.start.value,
+        end: form.end.value
+      })
+    })
+    .then(req => req.json())
+    .then(res => {
+      if(res.state == "SUCCESS") {
+        popupOpened = false;
+        morePopupOpened = false;
+
+        $popupBackground.style.display = "none";
+        $moreCalendar.style.display = "none";
+        $modifySchedule.style.display = "none";
+        $modifyScheduleButton.classList.remove("active");
+        $deleteScheduleButton.classList.remove("active");
+
+        resetAlert();
+        loadSchedules();
+      }else {
+        if(res.alert) {
+          setAlert(res.alert);
+        }
+      }
+    })
   }else {
     modifing = true;
 
@@ -881,8 +914,9 @@ $deleteScheduleButton.addEventListener("click", e => {
           popupOpened = false;
           morePopupOpened = false;
           deleteNo = -1;
-          
+
           $popupBackground.style.display = "none";
+          $moreCalendar.style.display = "none";
           $modifySchedule.style.display = "none";
           $deleteScheduleButton.classList.remove("active");
 

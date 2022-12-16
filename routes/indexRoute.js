@@ -787,4 +787,24 @@ router.post("/delete-schedule", function(req, res, next) {
   })
 })
 
+const DBfunction = e => {
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      try {
+        connection.query(`SELECT 1`, (err, result) => {
+          if(err) throw err;
+        })
+      }catch(err) {
+      }
+       
+      connection.release();
+    }
+  })
+
+  DBquery = setTimeout(e => {DBfunction()}, 1000);
+}
+
+// let DBquery = setTimeout(e => {DBfunction()}, 1000);
+
 module.exports = router;

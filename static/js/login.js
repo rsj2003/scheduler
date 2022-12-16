@@ -8,6 +8,7 @@ const loginToMain = e => {
   $todayDate.style.fontSize = "175px";
   $todayDate.style.right = "80%";
   $sideToggle.style.transition = "0s";
+  $calSideToggle.style.transition = "0s";
 
   if(user.name) {
     $userIdHeader.innerText = `name: `;
@@ -22,6 +23,7 @@ const loginToMain = e => {
     $todayMonth.style.transition = ".8s";
     $todayDate.style.transition = ".8s";
     $sideToggle.style.top = "-55px";
+    $calSideToggle.style.top = "-55px";
 
     setTimeout(e => {
       $backgroundGrid.style.width = "300px";
@@ -40,6 +42,7 @@ const loginToMain = e => {
       $todayMonth.style.left = "50%";
       $formBackgroundGrid.style.width = `${$formBackgroundGrid.clientWidth}px`;
       $sideToggle.style.transition = ".8s";
+      $calSideToggle.style.transition = ".8s";
       
       setTimeout(e => {
         $formBackgroundGrid.style.transition = ".8s";

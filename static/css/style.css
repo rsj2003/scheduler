@@ -169,7 +169,7 @@
 #calendar-side>#team-list{height: 100%; background: #fff9; cursor: default; flex-direction: column; justify-content: flex-start; padding: 10px; gap: 10px;}
 #calendar-side #open-request-team{position: relative;}
 #calendar-side #request-count{position: absolute; background: #94cf93; color: #fff; padding: 2px 5px; right: 7px; top: 50%; transform: translateY(-50%); border-radius: 4px;}
-#wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: 23px; cursor: pointer; border-radius: 0; box-shadow: none;}
+#wrap .toggle-bar{position: absolute; width: 36px; height: 50px; background: #3330; top: -55px; cursor: pointer; border-radius: 0; box-shadow: none;}
 .toggle-bar .bar{position: absolute; width: 6px; height: 46px; border-radius: 6px; top: 2px;}
 #side-toggle{right: -18px;}
 #cal-side-toggle{left: -18px;}

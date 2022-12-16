@@ -467,7 +467,8 @@ const logined = e => {
     if(page.w < 1600) widthType = 2;
 
     setTimeout(e => {
-      $sideToggle.style.top = "";
+      $sideToggle.style.top = "23px";
+      $calSideToggle.style.top = "23px";
 
       setTimeout(e => {
         $calendarArea.style.opacity = "1";

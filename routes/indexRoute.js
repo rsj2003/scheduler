@@ -168,13 +168,13 @@ router.post("/login-action", function(req, res, next) {
   }else if(param.password.length > 50) {
     res.send({alert: "비밀번호가 잘못되었습니다."});
   }else {
-    if(param.id == "login-test") {
-      console.log("login-test");
-      req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0, team: []};
-      console.log(req.session.user);
-      res.send({state: "SUCCESS", user: req.session.user});
-      return;
-    }
+    // if(param.id == "login-test") {
+    //   console.log("login-test");
+    //   req.session.user = {no: -1, id: "login-test", email: "test-account-email", name: "tester", cellNo: "000", alert: 0, team: []};
+    //   console.log(req.session.user);
+    //   res.send({state: "SUCCESS", user: req.session.user});
+    //   return;
+    // }
 
     pool.getConnection((err, connection) => {
       if(err) throw err;

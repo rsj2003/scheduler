@@ -1,4 +1,4 @@
-const today = new Date();
+let today = new Date();
 const page = {x: 0, y: 0, w: 0, h: 0};
 const schedulesData = [{
   no: 1,

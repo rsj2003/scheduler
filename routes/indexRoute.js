@@ -63,6 +63,7 @@ router.post("/userData-action", function(req, res, next) {
                 res.send({user: account});
               })
             }else {
+              req.session.user = null;
               res.send({alert: "id와 비밀번호가 일치하지 않습니다.", user: {}});
             }
           })

@@ -271,6 +271,8 @@ router.post("/add-schedule", function(req, res, next) {
     res.send({alert: "스케줄 명을 입력해주세요."});
   }else if(param.name.length > 25) {
     res.send({alert: "스케줄 명 길이가 너무 깁니다."});
+  }else if(param.content.length > 500) {
+    res.send({alert: "스케줄 내용 길이가 너무 깁니다."});
   }else if(param.start == "") {
     res.send({alert: "시작 날짜를 입력해주세요."});
   }else if(param.end == "") {
@@ -667,6 +669,8 @@ router.post("/modify-schedule", function(req, res, next) {
     res.send({alert: "스케줄 명을 입력해주세요."});
   }else if(param.name.length > 25) {
     res.send({alert: "스케줄 명 길이가 너무 깁니다."});
+  }else if(param.content.length > 500) {
+    res.send({alert: "스케줄 내용 길이가 너무 깁니다."});
   }else if(param.start == "") {
     res.send({alert: "시작 날짜를 입력해주세요."});
   }else if(param.end == "") {

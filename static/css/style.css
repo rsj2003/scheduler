@@ -191,12 +191,16 @@
 .popup-content input[type="color"]{width: 30px; height: 100%; margin-left: 5px;}
 .other-color .popup-content input{border-color: #d7bdb0;}
 .popup .popup-content input.readonly{border-color:#aaa;}
-.popup-content button{background: none; border: 1px solid #7FB77E; color: #7FB77E; font-weight: bold; font-size: 20px; padding: 4px 9px; border-radius: 6px; transition: .2s;}
+.popup-content button{background: none; border: 1px solid #7FB77E; color: #7FB77E; font-weight: bold; font-size: 20px; padding: 4px 9px; border-radius: 6px; transition: .2s; user-select: none;}
 .other-color .popup-content button{border-color: #b88d7f; color: #b88d7f;}
 .popup .popup-content button.readonly{border-color:#888; color: #888; pointer-events: none;}
+.popup-content button.active{color: #fff; background: #7FB77E;}
+.other-color .popup-content button.active{border-color: #b88d7f; color: #fff; background: #b88d7f;}
 .popup-content button+button{margin-left: 30px;}
-.popup-content button:hover{color: #fff; background: #7FB77E}
+.popup-content button:hover{color: #fff; background: #7FB77E;}
 .other-color .popup-content button:hover{color: #fff; background: #b88d7f;}
+.popup-content button.active:hover{color: #7FB77E; background: #7FB77E00;}
+.other-color .popup-content button.active:hover{color: #b88d7f; background: #b88d7f00;}
 .popup-content textarea{border: 1px solid #B1D7B4; padding: 2px 4px; font-size: 18px; border-radius: 5px; width: 100%; height: 84px;}
 .other-color .popup-content textarea{border-color: #d7bdb0;}
 .popup .popup-content textarea.readonly{border-color: #aaa;}

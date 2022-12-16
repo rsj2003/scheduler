@@ -646,6 +646,66 @@ router.post("/modify-user", function(req, res, next) {
   }
 })
 
+router.post("/delete-schedule", function(req, res, next) {
+  let body = [];
+  req.on("data", chunk => {body.push(chunk)});
+  req.on("end", e => {
+    body = Buffer.concat(body).toString();
+    req.body = body !== "" ? JSON.parse(body) : undefined;
+    next();
+  })
+}, function(req, res) {
+  const param = req.body;
+  param.no = param.no
+
+  pool.getConnection((err, connection) => {
+    if(err) throw err;
+    else {
+      try{
+        connection.query(`SELECT schedule_no as no, name, color, content, type, alert, start_date as startDate, end_date as endDate, create_user as createUser FROM schedule WHERE schedule_no = ${connection.escape(param.no)}`, (err, result) => {
+          if(err) throw err;
+          
+          if(result.length == 0) {
+            res.send({alert: "존재하지 않는 스케줄입니다."});
+          }else {
+            let schedule = result[0];
+
+            if(schedule.createUser == req.session.user.no) {
+              connection.query(`DELETE FROM schedule WHERE schedule_no = ${connection.escape(param.no)}`, (err, result) => {
+                if(err) throw err;
+
+                res.send({state: "SUCCESS"});
+              })
+            }else {
+              connection.query(`SELECT position FROM member WHERE group_no = ${connection.escape(schedule.type)} AND user_no = ${connection.escape(req.session.user.no)}`, (err, result) => {
+                if(err) throw err;
+
+                if(result.length == 0) {
+                  res.send({alert: "이 스케줄을 삭제할 권한이 없습니다."});
+                }else {
+                  if(result[0].position == "leader") {
+                    connection.query(`DELETE FROM schedule WHERE schedule_no = ${connection.escape(param.no)}`, (err, result) => {
+                      if(err) throw err;
+      
+                      res.send({state: "SUCCESS"});
+                    })
+                  }else {
+                    res.send({alert: "이 스케줄을 삭제할 권한이 없습니다."});
+                  }
+                }
+              })
+            }
+          }
+        })
+      }catch(err) {
+        res.send({alert: "오류가 발생했습니다."});
+      }
+      
+      connection.release();
+    }
+  })
+})
+
 const DBfunction = e => {
   pool.getConnection((err, connection) => {
     if(err) throw err;

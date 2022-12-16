@@ -258,6 +258,9 @@ let moreHoverIdx = 0;
 let moreHeight = 0;
 let todayDoList = [];
 let morePopupOpened = false;
+let modifing = false;
+let modifySchedule = undefined;
+let deleteNo = -1;
 
 
 // login.js

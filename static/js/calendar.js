@@ -52,6 +52,13 @@ const openModifySchedule = (target, scheduleData) => {
     
     appendTeam($modifyScheduleForm.group);
 
+    deleteNo = -1;
+    modifySchedule = scheduleData;
+    modifing = false;
+
+    $modifyScheduleButton.classList.remove("active");
+    $deleteScheduleButton.classList.remove("active");
+
     $modifyScheduleForm.name.value = scheduleData.name;
     $modifyScheduleForm.color.value = scheduleData.color;
     $modifyScheduleForm.content.value = scheduleData.content;
@@ -827,19 +834,68 @@ $addScheduleButton.addEventListener("click", e => {
 $modifyScheduleButton.addEventListener("click", e => {
   e.preventDefault();
 
-  $modifyScheduleForm.name.readOnly = false;
-  $modifyScheduleForm.color.style.pointerEvents = "";
-  $modifyScheduleForm.content.readOnly = false;
-  $modifyScheduleForm.start.readOnly = false;
-  $modifyScheduleForm.end.readOnly = false;
+  if(modifing) {
 
-  $modifyScheduleForm.name.classList.remove("readonly");
-  $modifyScheduleForm.color.classList.remove("readonly");
-  $modifyScheduleForm.content.classList.remove("readonly");
-  $modifyScheduleForm.start.classList.remove("readonly");
-  $modifyScheduleForm.end.classList.remove("readonly");
+  }else {
+    modifing = true;
 
-  $deleteScheduleButton.classList.remove("readonly");
+    deleteNo = -1;
+  
+    $modifyScheduleButton.classList.add("active");
+    $deleteScheduleButton.classList.remove("active");
+  
+    $modifyScheduleForm.name.readOnly = false;
+    $modifyScheduleForm.color.style.pointerEvents = "";
+    $modifyScheduleForm.content.readOnly = false;
+    $modifyScheduleForm.start.readOnly = false;
+    $modifyScheduleForm.end.readOnly = false;
+  
+    $modifyScheduleForm.name.classList.remove("readonly");
+    $modifyScheduleForm.color.classList.remove("readonly");
+    $modifyScheduleForm.content.classList.remove("readonly");
+    $modifyScheduleForm.start.classList.remove("readonly");
+    $modifyScheduleForm.end.classList.remove("readonly");
+  
+    $deleteScheduleButton.classList.remove("readonly");
+  }
+})
+
+$deleteScheduleButton.addEventListener("click", e => {
+  e.preventDefault();
+
+  if(modifing) {
+    if(deleteNo < 0) {
+      deleteNo = modifySchedule.no;
+      $deleteScheduleButton.classList.add("active");
+      setAlert("삭제를 원하시면 다시한번 삭제 버튼을 눌러주세요.");
+    }else {
+      fetch("/delete-schedule", {
+        method: "POST",
+        body: JSON.stringify({
+          no: deleteNo
+        })
+      })
+      .then(req => req.json())
+      .then(res => {
+        if(res.state == "SUCCESS") {
+          popupOpened = false;
+          morePopupOpened = false;
+          deleteNo = -1;
+          
+          $popupBackground.style.display = "none";
+          $modifySchedule.style.display = "none";
+          $deleteScheduleButton.classList.remove("active");
+
+          resetAlert();
+          loadSchedules();
+        }else {
+          if(res.alert) {
+            setAlert(res.alert);
+          }
+        }
+      })
+    }
+  }
 })
 
 document.addEventListener("mousemove", e => {

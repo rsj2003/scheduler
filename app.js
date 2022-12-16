@@ -4,14 +4,10 @@ const session = require("express-session")({
   resave: true,
   saveUninitialized: true
 });
-const socket = require("socket.io");
 const http = require("http");
-const fs = require("fs");
-const ios = require("express-socket.io-session");
 const app = express();
 const server = http.createServer(app);
 const port = app.listen(process.env.PORT || 80);
-const io = socket(server);
 
 const userList = [];
 exports.userList = userList;
@@ -43,12 +39,6 @@ function page(url, router = indexRouter) {
 page("/");
 
 module.exports = app;
-
-io.use(ios(session));
-
-io.sockets.on("connection", function(socket) {
-  
-})
 
 server.listen(port, function() {
   console.log("server starting..");
